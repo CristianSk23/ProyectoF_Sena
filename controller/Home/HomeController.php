@@ -1,10 +1,16 @@
 <?php
 include_once "../model/Acceso/AccesoModel.php";
+include_once "../model/Home/HomeModel.php";
 class HomeController
 {
-    public function index()
+    /* public function home()
     {
-        //include_once "../../view/Home/Home.php";
-    }
+
+        $obj = new HomeModel();
+        $resultados = $obj->getProductos();
+
+
+        return $resultados;
+    } */
 }
 
