@@ -13,14 +13,11 @@
                 <div class="menu-desktop">
                     <ul class="main-menu">
                         <li>
-                            <a href="index.html">Home</a>
-                            <ul class="sub-menu">
-                                <li><a href="index.php">Homepage</a></li>
-                            </ul>
+                            <a href="index.php">Inicio</a>
                         </li>
 
                         <li>
-                            <a href="product.html">Shop</a>
+                            <a href="product.php">Comprar</a>
                         </li>
 
                         <li class="label1" data-label1="hot">
@@ -90,17 +87,14 @@
     <div class="menu-mobile">
         <ul class="main-menu-m">
             <li>
-                <a href="index.php">Home</a>
-                <ul class="sub-menu-m">
-                    <li><a href="index.php">Homepage</a></li>
-                </ul>
+                <a href="index.php">Inicio</a>
                 <span class="arrow-main-menu-m">
                     <i class="fa fa-angle-right" aria-hidden="true"></i>
                 </span>
             </li>
 
             <li>
-                <a href="product.html">Shop</a>
+                <a href="product.html">Comprar</a>
             </li>
 
             <li>

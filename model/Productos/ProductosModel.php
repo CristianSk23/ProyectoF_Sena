@@ -26,7 +26,7 @@ class ProductosModel extends MasterModel
         } else {
             return "No se encontraron resultados.";
         }
-        //return $respuesta;
+
     }
 
 }

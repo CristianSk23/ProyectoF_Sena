@@ -269,25 +269,40 @@
 
     /*==================================================================
     [ Show modal1 ]*/
-    /* $('.js-show-modal1').on('click', function (e) {
-        // Si quieres abrir el modal, verifica un atributo o clase específica
-        if ($(this).hasClass('modal-link')) {
-            e.preventDefault();
-            $('.js-modal1').addClass('show-modal1');
-        } else {
-            // Permitir la navegación en otros casos
-            window.location.href = $(this).attr('href');
-        }
-    }); */
-    document.querySelector('.js-show-modal1').addEventListener('click', function () {
-        document.querySelector('.wrap-modal1').classList.add('show-modal');
+    /* document.querySelectorAll('.js-show-modal1').forEach(button => {
+        button.addEventListener('click', function (event) {
+            event.preventDefault();
+            window.location.href = this.getAttribute('href'); // Redirige manualmente
+        });
+    });
+
+
+    $('.js-hide-modal1').on('click', function () {
+        $('.wrap-modal1').removeClass('show-modal');
+    }) */
+
+
+
+    /*  document.querySelectorAll('.js-show-modal1').addEventListener('click', function () {
+ 
+         $('.wrap-modal1').addClass('show-modal');
+     }); */
+
+
+
+    //Los que se estan utilizando
+    document.querySelectorAll('.js-show-modal1').forEach(function (button) {
+        button.addEventListener('click', function (event) {
+            $('.wrap-modal1').addClass('show-modal');
+            //event.preventDefault();
+        });
     });
 
     $('.js-hide-modal1').on('click', function () {
-        $('.js-modal1').removeClass('show-modal1');
+        $('.wrap-modal1').removeClass('show-modal');
     });
 
 
-
+    //
 
 })(jQuery);
