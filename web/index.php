@@ -3,7 +3,7 @@ include_once "../lib/helpers.php";
 include_once "../view/partials/header.php";
 
 echo "<body>";
-echo "<div class='container'>";
+echo "<div class='animsition'>";
 include_once "../view/partials/navbar.php";
 include_once "../view/partials/cart.php";
 if (isset($_GET["modulo"])) {

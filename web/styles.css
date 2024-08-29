@@ -39,6 +39,23 @@
     color: #333;
 }
 
+.login_btn:focus {
+    box-shadow: none !important;
+    outline: 0px !important;
+}
+
+.login_container {
+    padding: 0 2rem;
+}
+
+.dropdown-item {
+    color: #333;
+}
+
+.dropdown-item:hover {
+    background-color: #f8f9fa;
+}
+
 .dropdown-item:hover {
     background-color: #f8f9fa;
 }

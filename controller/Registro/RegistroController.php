@@ -1,5 +1,5 @@
 <?php
-include_once "../../model/Registro/RegistroModel.php";
+include_once "../model/Registro/RegistroModel.php";
 
 class RegistroController {
 

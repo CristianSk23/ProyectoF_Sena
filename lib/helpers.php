@@ -7,10 +7,10 @@ function redirect($url)
         . "</script>";
 }
 
-/* function dd($var){
+function dd($var){
     echo "<pre>";
     die(print_r($var));
-} */
+ }
 
 function getUrl($modulo, $controlador, $funcion, $parametros = false, $pagina = false)
 {
