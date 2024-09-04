@@ -1,14 +1,17 @@
     <!-- Content page -->
     <section class="bg0 p-t-62 p-b-60">
+        <div class="mt-6">
+            <h4 class="display-4">Registro de usuario</h4>
+        </div>
         <div class="container">
             <div class="row">
-                <div class="col-md-8 col-lg-9 p-b-80">
+                <div class="col-md-8 col-lg-9 p-t-60">
                     <div class="p-r-45 p-r-0-lg">
                         <!-- item blog -->
                         <form class="row g-3" id="registro" action="<?php echo getUrl("Configuracion", "Usuario", "registroUsuario"); ?>" method="POST">
                             <div class="col-md-4">
                                 <label for="rol" class="form-label">Rol</label>
-                                <select class="form-select" id="rol" name="rol_id" required>
+                                <select class="form-control" id="rol" name="rol_id" required>
                                     <option selected disabled value="">Seleccione...</option>
 
                                     <?php foreach ($roles as $rol): ?>
@@ -66,16 +69,7 @@
                                     window.location.href = '<?php echo getUrl("Configuracion", "Usuario", "consultarUsuario"); ?>';
                                 });
                             </script>
-                            <!-- <div class="col-md-3">
-                                <button class="btn btn-primary" type="submit">Actualizar</button>
-                              
-                            </div>
-                            <div class="col-md-3">
-                                <button class="btn btn-primary" type="submit">Eliminar</button>
-                              
-                            </div> -->
                         </form>
-
                     </div>
                 </div>
             </div>

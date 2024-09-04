@@ -3,9 +3,9 @@ include_once "../model/MasterModel.php";
 
 class Registromodel extends MasterModel {
 
-    public function RegistrarC($nombre, $apellido,$email, $password) {
+    public function RegistrarCliente($nombre, $apellido,$emailC, $password) {
         // Prepara la consulta SQL para evitar inyecciones SQL
-        $sql = "INSERT INTO usuario (rol_id, usu_nombre, ussu_apellido,usu_correo, usu_contrasenia, usu_estado) 
+        $sql = "INSERT INTO usuario (rol_id, usu_nombre, usu_apellido,usu_correo, usu_contrasenia, usu_estado) 
         VALUES (4,?,?,?, ?,1)";
         // Ejecuta la consulta SQL con parámetros
         $stmt = $this->getConnect()->prepare($sql);
@@ -14,7 +14,7 @@ class Registromodel extends MasterModel {
         }
 
         // Bind de parámetros y ejecución
-        $stmt->bind_param('ssss', $nombre,$apellido, $email, $password);
+        $stmt->bind_param('ssss', $nombre,$apellido, $emailC, $password);
         $respuesta = $stmt->execute();
 
         if (!$respuesta) {
@@ -23,5 +23,7 @@ class Registromodel extends MasterModel {
      
         return $respuesta;
     }
+
+ 
 }
 ?>

@@ -1,6 +1,9 @@
+
 <?php include_once "../lib/helpers.php"; ?>
 
+
 <head>
+
     <link rel="stylesheet" href="styleLogin.css">
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -15,11 +18,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
         integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
         crossorigin="anonymous"></script>
-
-
-
 </head>
-
 
 <section class="vh-100 gradient-custom">
     <div class="container py-5 h-100">
@@ -28,16 +27,13 @@
                 <div class="card bg-dark text-white" style="border-radius: 1rem;">
                     <div class="card-body p-5 text-center">
                         <div class="d-flex justify-content-center">
-
                             <?php
+                            // Mostrar mensajes de error si existen
                             if (isset($_SESSION["error"])) {
                                 ?>
-                                <!--  <p><?php echo "Entrando al primer if del error " ?></p> -->
                                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
                                     <?= $_SESSION['error'] ?>
-                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
-
-                                    </button>
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                 </div>
                                 <?php
                                 unset($_SESSION["error"]);
@@ -47,55 +43,37 @@
                                 ?>
                                 <div class="alert alert-warning alert-dismissible fade show" role="alert">
                                     <?= $_SESSION['errorEmpty'] ?>
-                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
-
-                                    </button>
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                 </div>
                                 <?php
                                 unset($_SESSION["errorEmpty"]);
                             }
-
                             ?>
                         </div>
 
                         <div class="mb-md-5 mt-md-4 pb-5">
                             <form action="<?php echo getUrl("Acceso", "Acceso", "login"); ?>" method="POST">
-
                                 <h2 class="fw-bold mb-2 text-uppercase">Login</h2>
                                 <p class="text-white-50 mb-5">¡Ingresa tu correo y contraseña!</p>
 
-                                <div data-mdb-input-init class="form-outline form-white mb-4">
-                                    <input type="email" id="email" name="email" class="form-control form-control-lg" " />
-                                    <label class=" form-label" for="email" name="email">Correo</label>
+                                <div class="form-outline form-white mb-4">
+                                    <input type="email" id="email" name="email" class="form-control form-control-lg" required />
+                                    <label class="form-label" for="email">Correo</label>
                                 </div>
 
-                                <div data-mdb-input-init class="form-outline form-white mb-4">
-                                    <input type="password" id="password" name="password"
-                                        class="form-control form-control-lg" />
+                                <div class="form-outline form-white mb-4">
+                                    <input type="password" id="password" name="password" class="form-control form-control-lg" required />
                                     <label class="form-label" for="password">Contraseña</label>
                                 </div>
 
-
-
-                                <button data-mdb-button-init data-mdb-ripple-init
-                                    class="btn btn-outline-light btn-lg px-5" type="submit">Ingresar</button>
-
-                                <div class="d-flex justify-content-center text-center mt-4 pt-1">
-                                    <a href="#!" class="text-white"><i class="fab fa-facebook-f fa-lg"></i></a>
-                                    <a href="#!" class="text-white"><i class="fab fa-twitter fa-lg mx-4 px-2"></i></a>
-                                    <a href="#!" class="text-white"><i class="fab fa-google fa-lg"></i></a>
-                                </div>
-
+                                <button class="btn btn-outline-light btn-lg px-5" type="submit">Ingresar</button>
                             </form>
                             <div>
                                 <p class="mb-0">¿No tienes una cuenta?
-                                    <a href="registro.php" class="text-white-50 fw-bold">
-                                        Registrarse
-                                    </a>
+                                    <a href="registro.php" class="text-white-50 fw-bold">Registrarse</a>
                                 </p>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>
