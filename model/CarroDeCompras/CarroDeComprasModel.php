@@ -22,6 +22,7 @@ class CarroDeComprasModel extends MasterModel
 
         if ($respuesta) {
             echo $respuesta;
+            return $respuesta;
         }
     }
 
