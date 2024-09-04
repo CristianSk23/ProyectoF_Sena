@@ -1,4 +1,6 @@
 <?php include_once "../lib/helpers.php"; ?>
+<!DOCTYPE html>
+<html lang="es">
 
 <head>
     <link rel="stylesheet" href="styleLogin.css">
@@ -10,9 +12,6 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
         integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
-        crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
-        integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
         crossorigin="anonymous"></script>
 </head>
 
@@ -49,31 +48,38 @@
 
                         <div class="mb-md-5 mt-md-4 pb-5">
                             <form action="<?php echo getUrl("Registro", "Registro", "RegistrarC", array("id"=>1)); ?>" method="POST">
-                                <!-- Título -->
+                           
+                              <!-- Título -->
                                 <h2 class="fw-bold mb-2 text-uppercase">Registrarse</h2>
 
                                 <!-- Nombre -->
                                 <div data-mdb-input-init class="form-outline mb-4">
                                     <label class="form-label" for="registerName">Nombre</label>
-                                    <input type="text" id="registerName" name="nombre" class="form-control" required />
+                                    <input type="text" id="registerName" name="nombre" class="form-control" required autocomplete="given-name" />
+                                </div>
+
+                                <!--Apellido-->
+                                <div data-mdb-input-init class="form-outline mb-4">
+                                    <label class="form-label" for="registroApellido">Apellido</label>
+                                    <input type="text" id="registroApellido" name="apellido" class="form-control" required autocomplete="family-name" />
                                 </div>
 
                                 <!-- Email -->
                                 <div data-mdb-input-init class="form-outline mb-4">
                                     <label class="form-label" for="registerEmail">Correo</label>
-                                    <input type="email" id="email" name="email" class="form-control" required />
+                                    <input type="email" id="registerEmail" name="emailC" class="form-control" required autocomplete="email" />
                                 </div>
 
                                 <!-- Contraseña -->
                                 <div data-mdb-input-init class="form-outline mb-4">
-                                    <label class="form-label" for="registerPassword">Contraseña</label>
-                                    <input type="password" id="password" name="password" class="form-control" required />
+                                    <label class="form-label" for="password">Contraseña</label>
+                                    <input type="password" id="password" name="password" class="form-control" required autocomplete="new-password" />
                                 </div>
 
                                 <!-- Confirmar Contraseña -->
                                 <div data-mdb-input-init class="form-outline mb-4">
-                                    <label class="form-label" for="registerRepeatPassword">Confirmar Contraseña</label>
-                                    <input type="password" id="repeatPassword" name="repeatPassword" class="form-control" required />
+                                    <label class="form-label" for="repeatPassword">Confirmar Contraseña</label>
+                                    <input type="password" id="repeatPassword" name="repeatPassword" class="form-control" required autocomplete="new-password" />
                                 </div>
 
                                 <!-- Términos -->
