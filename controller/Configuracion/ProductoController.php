@@ -2,10 +2,12 @@
 
 include_once "../model/Configuracion/ProductoModel.php";
 
-Class ProductoController{
+class ProductoController
+{
 
-    public function getInsert(){
-        
+    public function getInsert()
+    {
+
         $categorias = $this->obtenerCategorias();
 
         $generos = $this->obtenerGenero();
@@ -13,10 +15,11 @@ Class ProductoController{
         $tipos = $this->obenerTipo();
 
         include_once "../view/configuracion/producto/registroProducto.php";
-    } 
+    }
 
-    public function postInsert(){
-        
+    public function postInsert()
+    {
+
         $obj = new ProductoModel();
 
         $nombre = $_POST['nombreProducto'];
@@ -24,13 +27,15 @@ Class ProductoController{
         $categoria = $_POST['categoria'];
         $genero = $_POST['genero'];
         $tipo = $_POST['tipo'];
-        
+
         //dd($_POST);
-        
-        if(empty($nombre) || empty($descripcion) || empty($categoria) || empty($genero) 
-        || empty($tipo) || $empty($_FILES)) {
+
+        if (
+            empty($nombre) || empty($descripcion) || empty($categoria) || empty($genero)
+            || empty($tipo) || empty($_FILES)
+        ) {
             $_SESSION['datosIncorrectos'] = "Por favor complete el formulario.";
-            redirect(getUrl("Configuracion",  "Producto", "getInsert"));
+            redirect(getUrl("Configuracion", "Producto", "getInsert"));
         }
 
         // Me muestra si está cargando la imagen y sus características.
@@ -50,18 +55,19 @@ Class ProductoController{
         '$genero', '$categoria', '$ruta', 1 )";
         echo $sql;
         $ejecutar = $obj->insertar($sql);
-        if($ejecutar){
+        if ($ejecutar) {
             redirect(getUrl("Configuracion", "Producto", "getInsert"));
             $_SESSION['success'] = "Registro exitoso.";
-        }else{
+        } else {
             $_SESSION['error'] = "Error al registrar el producto. Inténtalo de nuevo.";
         }
-    
+
     }
 
-    public function obtenerCategorias(){
+    public function obtenerCategorias()
+    {
         $obj = new ProductoModel();
-       // extract($_POST);
+        // extract($_POST);
 
         $sql = "SELECT categoria_id, categoria_nombre FROM categoria";
         $ejecutar = $obj->consultar($sql);
@@ -74,9 +80,10 @@ Class ProductoController{
         return $categorias;
     }
 
-    public function obtenerGenero(){
+    public function obtenerGenero()
+    {
         $obj = new ProductoModel();
-       // extract($_POST);
+        // extract($_POST);
 
         $sql = "SELECT genero_id, genero_nombre FROM genero";
         $ejecutar = $obj->consultar($sql);
@@ -89,9 +96,10 @@ Class ProductoController{
         return $generos;
     }
 
-    public function obenerTipo(){
+    public function obenerTipo()
+    {
         $obj = new ProductoModel();
-       // extract($_POST);
+        // extract($_POST);
 
         $sql = "SELECT tipo_id, tipo_nombre FROM tipoPrenda";
         $ejecutar = $obj->consultar($sql);
@@ -106,7 +114,8 @@ Class ProductoController{
 
 
     // METODOS PARA CONSULTA
-    public function consultar() {
+    public function consultar()
+    {
         $obj = new ProductoModel();
         $sql = "SELECT producto.*, tipoPrenda.tipo_nombre, 
         categoria.categoria_nombre, 
@@ -117,14 +126,15 @@ Class ProductoController{
         JOIN tipoPrenda ON producto.tipo_id = tipoPrenda.tipo_id
         WHERE product_estado != 0 
         ORDER BY product_id DESC";
-        
-        $productos  = $obj->consultar($sql);
+
+        $productos = $obj->consultar($sql);
         include_once "../view/configuracion/producto/consultaProducto.php";
     }
 
-    
-    
-    public function modificar() {
+
+
+    public function modificar()
+    {
 
         $obj = new ProductoModel();
         $id = $_GET['product_id'];
@@ -136,8 +146,8 @@ Class ProductoController{
         JOIN categoria ON producto.categoria_id = categoria.categoria_id
         JOIN tipoPrenda ON producto.tipo_id = tipoPrenda.tipo_id
         WHERE product_id = $id ";
-        
-        $productos  = $obj->consultar($sql);
+
+        $productos = $obj->consultar($sql);
 
         $categorias = $this->obtenerCategorias();
 
@@ -148,7 +158,8 @@ Class ProductoController{
         include_once "../view/configuracion/producto/modificarProducto.php";
     }
 
-    public function modificacion() {
+    public function modificacion()
+    {
         $obj = new ProductoModel();
 
         $nombre = $_POST['nombreProducto'];
@@ -157,10 +168,12 @@ Class ProductoController{
         $genero = $_POST['genero'];
         $tipo = $_POST['tipo'];
 
-        if(empty($nombre) || empty($descripcion) || empty($categoria) || empty($genero) 
-        || empty($tipo) || empty($_FILES)) {
+        if (
+            empty($nombre) || empty($descripcion) || empty($categoria) || empty($genero)
+            || empty($tipo) || empty($_FILES)
+        ) {
             $_SESSION['datosIncorrectos'] = "Por favor complete el formulario.";
-            redirect(getUrl("Configuracion",  "Producto", "modificar"));
+            redirect(getUrl("Configuracion", "Producto", "modificar"));
         }
 
         $tmp_img = $_FILES['tar_img']['name'];
@@ -171,26 +184,28 @@ Class ProductoController{
         '$genero', '$categoria', '$ruta', 1 )";
         echo $sql;
         $ejecutar = $obj->editar($sql);
-        if($ejecutar){
+        if ($ejecutar) {
             redirect(getUrl("Configuracion", "Producto", "modificar"));
             $_SESSION['success'] = "Registro exitoso.";
-        }else{
+        } else {
             $_SESSION['error'] = "Error al registrar el producto. Inténtalo de nuevo.";
         }
     }
-        
-    public function traerId(){
-        
+
+    public function traerId()
+    {
+
     }
-    
-    public function eliminar(){
+
+    public function eliminar()
+    {
         $obj = new ProductoModel();
         $id = $_POST['id'];
-        $sql  = "UPDATE producto SET product_estado = 0 WHERE product_id =$id";
+        $sql = "UPDATE producto SET product_estado = 0 WHERE product_id =$id";
         $ejecutar = $obj->editar($sql);
-        if($ejecutar){
+        if ($ejecutar) {
             echo 1;
-        }else{
+        } else {
             echo 2;
         }
     }
