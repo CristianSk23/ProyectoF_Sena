@@ -19,10 +19,6 @@ class ProductosController
         $obj = new ProductosModel();
         $resultado = $obj->getDetalleProducto($id);
 
-
-
-
-
         include_once "../view/Productos/detalleProductoModal.php";
     }
 

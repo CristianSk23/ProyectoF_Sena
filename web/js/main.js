@@ -303,6 +303,66 @@
     });
 
 
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.getElementById('form-agregar-carrito');
+        const isAuthenticated = form.getAttribute('data-authenticated') === 'true';
+
+        form.addEventListener('submit', function (event) {
+            if (!isAuthenticated) {
+                event.preventDefault();
+                $('#loginModal').modal('show'); // Asumiendo que tienes un modal de Bootstrap con ID 'loginModal'
+            }
+        });
+    });
+
+
+    $(document).ready(function () {
+        $('#form-agregar-carrito').on('submit', function (e) {
+            e.preventDefault(); // Evita que el formulario se envíe de la manera tradicional
+
+            $.ajax({
+                type: 'POST',
+                url: $(this).attr('action'), // Usa la URL definida en el action del formulario
+                data: $(this).serialize(), // Serializa todos los datos del formulario
+                success: function () {
+                    $('#form-agregar-carrito')[0].reset();
+                    $('.js-select2').val('').trigger('change');
+                },
+
+            });
+        });
+    });
+
+
+
+
+
+    $(document).ready(function () {
+        $('.js-show-cart').on('click', function () {
+            var userId = $(this).data('usu_id');
+
+            if (userId) {
+                // Aquí puedes enviar el ID del usuario al servidor mediante AJAX
+                $.ajax({
+                    type: 'POST',
+                    url: '<?php echo getUrl("CarroDeCompras", "CarroDeCompras", "obtenerCarro"); ?>', // Cambia esto por la ruta adecuada
+                    data: { usu_id: userId },
+                    success: function (response) {
+                        // Aquí puedes manejar la respuesta del servidor
+                        console.log('ID del usuario enviado:', userId);
+                    },
+                    error: function (error) {
+                        console.error('Error al enviar el ID del usuario:', error);
+                    }
+                });
+            } else {
+                console.error('No se encontró el ID del usuario.');
+            }
+        });
+    });
+
+
+
     //
 
 })(jQuery);

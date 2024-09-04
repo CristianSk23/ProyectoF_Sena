@@ -1,14 +1,4 @@
 <body class="animsition">
-    /
-
-    <!--  <?php
-
-    include_once "./slider.php";
-
-    ?> -->
-
-
-
     <!-- Banner -->
     <div class="sec-banner bg0 p-t-95 p-b-55">
         <div class="container">

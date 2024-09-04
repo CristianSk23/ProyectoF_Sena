@@ -29,6 +29,7 @@ class AccesoController
                 echo "Con usuarios registrados";
                 foreach ($usuarios as $usuario) {
                     $_SESSION['auth'] = "ok";
+                    $_SESSION['usu_id'] = $usuario["usu_id"];
                     $_SESSION['nombre'] = $usuario["usu_nombre"];
                     $_SESSION['email'] = $usuario["usu_correo"];
                 }
