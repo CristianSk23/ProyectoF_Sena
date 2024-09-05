@@ -162,6 +162,7 @@ class ProductoController
     {
         $obj = new ProductoModel();
 
+        $id = $_POST['id'];
         $nombre = $_POST['nombreProducto'];
         $descripcion = $_POST['descripcionProducto'];
         $categoria = $_POST['categoria'];
@@ -180,22 +181,18 @@ class ProductoController
         $ruta = "images/$tmp_img";
         move_uploaded_file($_FILES['tar_img']['tmp_name'], $ruta);
 
-        $sql = "UPDATE producto SET VALUES(null, '$tipo','$nombre', '$descripcion', 
-        '$genero', '$categoria', '$ruta', 1 )";
+        $sql = "UPDATE producto SET tipo_id='$tipo', product_nombre='$nombre', product_dscripcion='$descripcion', 
+        genero_id='$genero', categoria_id='$categoria', product_img='$ruta' WHERE product_id = $id)";
         echo $sql;
         $ejecutar = $obj->editar($sql);
         if ($ejecutar) {
-            redirect(getUrl("Configuracion", "Producto", "modificar"));
-            $_SESSION['success'] = "Registro exitoso.";
+            redirect(getUrl("Configuracion", "Producto", "consultar"));
+            $_SESSION['success'] = "modificación exitoso.";
         } else {
-            $_SESSION['error'] = "Error al registrar el producto. Inténtalo de nuevo.";
+            $_SESSION['error'] = "Error al modificar el producto. Inténtalo de nuevo.";
         }
     }
 
-    public function traerId()
-    {
-
-    }
 
     public function eliminar()
     {

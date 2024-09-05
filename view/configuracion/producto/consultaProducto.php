@@ -23,7 +23,7 @@
                     <?php foreach ($productos as $producto): ?>
                         <tr>
                             <td  data-id="<?= $producto['product_id'] ?>" style="display: none;"><?= $producto['producto_id'] ?> </td>
-                            <th><?= $producto['product_id']; ?></th>
+                            <td><?= $producto['product_id']; ?></td>
                             <td><?= $producto['tipo_nombre']; ?></td>
                             <td><?= $producto['product_nombre']; ?></td>
                             <td><?= $producto['product_descripcion']; ?></td>
