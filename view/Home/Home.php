@@ -258,11 +258,14 @@
             $resultados = $controller->productos();
             ?>
 
+
             <div class="row isotope-grid">
                 <div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item women">
 
                     <!-- Block2 -->
+
                     <?php foreach ($resultados as $resultado): ?>
+                        <?php $precio = ""; ?>
                         <div class="block2">
                             <div class="block2-pic hov-img0">
                                 <img src="<?= $resultado['product_img']; ?>" alt="IMG-PRODUCT">
@@ -270,12 +273,6 @@
                                     class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1">
                                     Ver detalle
                                 </a>
-
-                                <!--  <button type="button"
-                                    
-                                    class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1">
-                                    Ver detalle
-                                </button> -->
                             </div>
 
                             <div class="block2-txt flex-w flex-t p-t-14">
@@ -283,21 +280,25 @@
                                     <a href="product-detail.html" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
                                         <?= $resultado['product_nombre']; ?>
                                     </a>
+                                    <?php
+                                    if ($resultado["detalles"]) {
+
+                                        $prod_detalle = $resultado["detalles"];
+                                        //var_dump($prod_detalle);
+                                        foreach ($prod_detalle as $detalle) {
+                                            if (isset($detalle["stock_precio"]) && $detalle["stock_precio"] > $precio) {
+                                                $precio = $detalle["stock_precio"];
+                                            }
+                                        }
+                                    }
+                                    ?>
 
                                     <span class="stext-105 cl3">
-                                        <?= $resultado['product_precio']; ?>
-
+                                        $ <?= $precio ?>
                                     </span>
                                 </div>
 
-                                <!--    <div class="block2-txt-child2 flex-r p-t-3">
-                         <a href="#" class="btn-addwish-b2 dis-block pos-relative js-addwish-b2">
-                             <img class="icon-heart1 dis-block trans-04" src="images/icons/icon-heart-01.png"
-                                 alt="ICON">
-                             <img class="icon-heart2 dis-block trans-04 ab-t-l"
-                                 src="images/icons/icon-heart-02.png" alt="ICON">
-                         </a>
-                     </div> -->
+
                             </div>
                         </div>
                     <?php endforeach ?>
@@ -305,7 +306,14 @@
 
             </div>
 
-
+            <!--    <div class="block2-txt-child2 flex-r p-t-3">
+                         <a href="#" class="btn-addwish-b2 dis-block pos-relative js-addwish-b2">
+                             <img class="icon-heart1 dis-block trans-04" src="images/icons/icon-heart-01.png"
+                                 alt="ICON">
+                             <img class="icon-heart2 dis-block trans-04 ab-t-l"
+                                 src="images/icons/icon-heart-02.png" alt="ICON">
+                         </a>
+                     </div> -->
             <!-- Pagination -->
             <div class="flex-c-m flex-w w-full p-t-38">
                 <a href="#" class="flex-c-m how-pagination1 trans-04 m-all-7 active-pagination1">

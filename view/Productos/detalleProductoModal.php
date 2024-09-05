@@ -3,6 +3,7 @@
 
 <?php
 include_once "../view/partials/header.php";
+$precio = "";
 ?>
 
 <body class="animsition">
@@ -61,15 +62,23 @@ include_once "../view/partials/header.php";
                             action="<?php echo getUrl('CarroDeCompras', 'CarroDeCompras', 'agregarProducto'); ?>"
                             method="POST"
                             data-authenticated="<?php echo isset($_SESSION['auth']) ? 'true' : 'false'; ?>">
+                            <?php
+
+                            foreach ($productoConDetalle['detalles'] as $detalle) {
+                                if (isset($detalle["stock_precio"]) && $detalle["stock_precio"] > $precio) {
+                                    $precio = $detalle["stock_precio"];
+                                }
+                            }
+
+                            ?>
                             <input type="hidden" name="product_id" value="<?php echo $resultado['product_id']; ?>">
-                            <input type="hidden" name="product_precio"
-                                value="<?php echo $resultado['product_precio']; ?>">
+                            <input type="hidden" name="product_precio" value="<?php echo $precio; ?>">
                             <h4 class="mtext-105 cl2 js-name-detail p-b-14">
                                 <?php echo $resultado['product_nombre']; ?>
                             </h4>
 
                             <span class="mtext-106 cl2">
-                                $ <?php echo number_format($resultado['product_precio']); ?>
+                                $ <?php echo $precio ?>
                             </span>
 
                             <p class="stext-102 cl3 p-t-23">
