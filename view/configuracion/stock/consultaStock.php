@@ -1,12 +1,13 @@
 <div class="mt-5">
-    <h4 class="display-4">Consulta Productos</h4>
+    <h4 class="display-4">Consulta Stock</h4>
 </div>
 <div class="container">
     <div class="row mt-12">
 
         <table class="table  table-bordered " id="tablaUsuario">
-            <theadstock>
+            <thead>
                 <tr>
+                
                 <th scope="col">Nombre de producto</th>
                 <th scope="col">Talla</th>
                 <th scope="col">Cololr</th>
@@ -14,15 +15,14 @@
                 <th scope="col">Cantidad</th>
                 <th scope="col">Acciones de edicción</th>
                 
-
                 </tr>
-            </theadstock
+            </thead>
             <tbody>
                 <?php if (!empty($stocks)): ?>
                     <?php foreach ($stocks as $stock): ?>
                         <tr>
-                            <td class="idStock" data-usu_id="<?= $stock['stock_id'] ?>" style="display: none;"><?= $stock['stock_id'] ?> </td>
-                            <th><?= $stock['product_nombre']; ?></th>
+                            
+                            <td class="idStock" data-id="<?= $stock['stock_id'] ?>"><?= $stock['product_nombre']; ?></td>
                             <td><?= $stock['stock_talla']; ?></td>
                             <td><?= $stock['stock_color']; ?></td>
                             <td><?= $stock['stock_precio']; ?></td>

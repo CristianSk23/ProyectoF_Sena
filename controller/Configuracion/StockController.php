@@ -145,10 +145,10 @@ Class StockController{
     }
     
     public function eliminar(){
-        $obj = new ProductoModel();
+        $obj = new StockModel();
         $id = $_POST['id'];
         echo $id;
-        $sql  = "UPDATE producto SET product_estado = 0 WHERE product_id =$id";
+        $sql  = "UPDATE stock SET stock_estado = 0 WHERE stock_id =$id";
         $ejecutar = $obj->editar($sql);
         if($ejecutar){
             echo 1;
