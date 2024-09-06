@@ -21,7 +21,7 @@
                         </div>
                         <div class="col-md-6">
                             <label for="apellido" class="labels">Apellido</label>
-                            <input type="text" id="apellido" class="form-control" value="<?= htmlspecialchars($usuario['usu_apellido']); ?>" placeholder="Apellido" readonly>
+                            <input type="text" id="apellido" class="form-control " value="<?= htmlspecialchars($usuario['usu_apellido']); ?>" placeholder="Apellido" readonly>
                         </div>
                     </div>
                     <div class="row mt-3">
@@ -37,7 +37,10 @@
                             <label class="labels" for="telefono">Número de Teléfono</label>
                             <input type="text" id="telefono" class="form-control" placeholder="(Opcional)" value="<?= htmlspecialchars($usuario['usu_telefono']); ?>" readonly>
                         </div>
-                    </div>
+                    </div><br>
+                    <button class="btn btn-primary " id="cambiar-clave">
+                           Cambiar Contraseña
+                        </button>
                 </div>
             </div>
         <?php endforeach; ?>
@@ -95,4 +98,11 @@
 
         });
     }
+
+    
+
+    document.getElementById('cambiar-clave').addEventListener('click', function() {
+        window.location.href = '<?php echo getUrl("Configuracion", "Usuario", "ActualizarClave"); ?>';
+    });
+
 </script>

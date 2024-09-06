@@ -48,7 +48,15 @@ class MasterModel extends Connection
     public function VerificarCorreo($email) {
         $sql= "SELECT usu_correo FROM usuario WHERE usu_correo = '$email'";
         $respuesta = $this->consultar($sql);
-        return $respuesta;
+        $existe = $respuesta->num_rows > 0;
+        return $existe; 
+    }
+
+    public function verificarDocumento($documento){
+        $sql= "SELECT usu_cedula FROM usuario WHERE usu_cedula = '$documento'";
+        $respuesta = $this->consultar($sql);
+        $existe = $respuesta->num_rows > 0;
+        return $existe;
     }
     public function is_valid_email($str)
     {
