@@ -69,7 +69,7 @@
                             </div>
 
                             <div class="col-md-10 mb-3">
-                                <button class="btn btn-primary" type="submit" onclick=''>Registrar</button>
+                                <button class="btn btn-primary" type="submit" >Registrar</button>
 
                             </div>
                             <div class="col-md-10 mb-3">

@@ -1,18 +1,18 @@
-<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
 <div class="container rounded bg-white mt-5 mb-5">
-    <form action="<?php echo getUrl("Configuracion", "Usuario", "ActualizarClave"); ?>">
+    <form action="<?php var_dump(getUrl('Configuracion', 'Usuario', 'ActualizarClave'));?>" method="POST">
         <div class="mb-3">
             <label for="actualClave" class="form-label">Contraseña Actual</label>
-            <input type="password" class="form-control" id="actualClave" aria-describedby="emailHelp">
-          
+            <input type="password" class="form-control" id="actualClave"  name="claveActual">
+     
         </div>
         <div class="mb-3">
-            <label for="nuevaClave" class="form-label">Nueva Contraseña</label>
-            <input type="password" class="form-control" id="nuevaClave">
+            <label for="cambioClave" class="form-label">Nueva Contraseña</label>
+            <input type="password" class="form-control" id="cambioClave" name="claveNueva">
         </div>
         <div class="mb-3">
-            <label for="nuevaClave" class="form-label">Confirmar Contraseña</label>
-            <input type="password" class="form-control" id="nuevaClave">
+            <label for="nuevaClaveConfirmar" class="form-label">Confirmar Contraseña</label>
+            <input type="password" class="form-control" id="nuevaClaveConfirmar" name="reapeatClaveNueva">
         </div>
         <button type="submit" class="btn btn-primary">Actualizar</button>
     </form>

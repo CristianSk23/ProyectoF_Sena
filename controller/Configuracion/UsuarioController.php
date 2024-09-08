@@ -213,11 +213,62 @@ class UsuarioController
         }
     }
 
-    public function ActualizarClave(){
+
+    public function ActualizarClave()
+    {
 
         $obj = new UsuarioModel();
+        $usu_id = $_SESSION['usu_id'];
+        extract($_POST);
 
-        $clave = $_SESSION['password'];
+        // Validaciones
+        if (empty($claveActual) || empty($claveNueva) || empty($reapeatClaveNueva)) {
+            $_SESSION['mensaje'] = "Los campos no pueden estar vacíos.";
+            header("Location: ../view/configuracion/clientes/ViewCambioClave.php");
+            exit();
+        }
+
+        // Verificar si la contraseña actual es correcta
+        if (!$obj->verificarClave($claveActual)) {
+            $_SESSION['mensaje'] = "La contraseña actual no coincide.";
+            header("Location: ../view/configuracion/clientes/ViewCambioClave.php");
+            exit();
+        }
+
+        // Verificar si las nuevas contraseñas coinciden
+        if ($claveNueva !== $reapeatClaveNueva) {
+            $_SESSION['mensaje'] = "Las nuevas contraseñas no coinciden.";
+            header("Location: ../view/configuracion/clientes/ViewCambioClave.php");
+            exit();
+        }
+
+
+        // if(empty ($claveActual) || empty ($claveNueva) || empty ($reapeatClaveNueva)){
+        //     $_SESSION ['mensaje'] = "Los campos no pueden estar vacios";
+        //   }
+
+        // if($clave){
+        //     $_SESSION ['mensaje'] = "La clave actual no coincide";
+        // }
+        // if($claveNueva!= $reapeatClaveNueva){
+        //     $_SESSION ['mensaje'] = "Las claves nuevas no coinciden";
+        // }
+        $sql = "UPDATE usuario SET usu_contrasenia = $claveNueva WHERE usu_id = $usu_id";
+
+        // Ejecutar la consulta
+        $resultado = $obj->editar($sql);
+
+        if ($resultado) {
+            $_SESSION['mensaje'] = "Contraseña actualizada exitosamente.";
+            header("Location: ../view/configuracion/clientes/ViewCambioClave.php");
+            exit();
+        } else {
+            $_SESSION['mensaje'] = "Error al actualizar la contraseña.";
+            header("Location: ../view/configuracion/clientes/ViewCambioClave.php");
+            exit();
+        }
+
+
         include_once "../view/configuracion/clientes/ViewCambioClave.php";
     }
 

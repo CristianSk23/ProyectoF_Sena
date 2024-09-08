@@ -25,7 +25,7 @@ class AccesoController
                     $_SESSION['nombre'] = $usuario["usu_nombre"];
                     $_SESSION['email'] = $usuario["usu_correo"];
                     $_SESSION['rol_id'] = $usuario["rol_id"]; 
-                    $_SESSION['password'] = $usuario["usu_contrasenia"];
+     
                 }
                 redirect("index.php"); 
             } else {
