@@ -39,7 +39,7 @@
 						<a href="contact.html">Contact</a>
 					</li>
 
-					<?php if (isset($_SESSION['usu_id']) && $_SESSION['usu_id'] == 1): ?>
+					<?php if (isset($_SESSION['usu_id']) && $_SESSION['rol_id'] == 1): ?>
 						<li>
 							<a href="#">Configuracion</a>
 							<ul class="sub-menu">

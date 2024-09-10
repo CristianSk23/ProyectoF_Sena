@@ -21,23 +21,35 @@ class UsuarioController
         // Sanitizar datos de entrada
         extract($_POST);
 
+        if (!isset($_SESSION['mensajes'])) {
+            $_SESSION['mensajes'] = [];
+        }
 
 
         if (empty($rol_id) || empty($usu_cedula) || empty($usu_nombre) || empty($usu_apellido) || empty($usu_telefono) || empty($usu_correo) || empty($usu_contrasenia)) {
             $_SESSION['errorEmpty'] = "Todos los campos son requeridos.";
             return;
         }
-
-        /*  $_SESSION['errorEmpty'] = "Todos los campos son requeridos.";
-         */
-        /*  $correo = $obj->VerificarCorreo($usu_correo);
-         if ($correo) {
-             $_SESSION['error'] = "El correo ya existe.";
-             redirect(getUrl("Configuracion", "Usuario", "registrarUsuario"));
-             return;
-         } */
-
-        // Prepara la consulta reemplazando manualmente los parámetros
+     
+        $correo = $obj->VerificarCorreo($usu_correo);
+     
+        if ($correo) {
+            $_SESSION['mensajes'][] = [
+                'mensaje' => "El correo ya existe.",
+                'alert' => "alert-warning"
+            ];
+        
+        }
+        $documento = $obj->VerificarDocumento($usu_cedula);
+        if($documento){
+            $_SESSION['mensajes'][] = [
+                'mensaje' => "El documento ya existe.",
+                'alert' => "alert-warning"
+            ];
+        }
+        
+        redirect(getUrl("Configuracion", "Usuario", "registrarUsuario"));
+      
         $sql = sprintf(
             "INSERT INTO usuario (rol_id, usu_cedula, usu_nombre, usu_apellido, usu_telefono, usu_correo, usu_contrasenia) 
         VALUES ('%d', '%d', '%s', '%s', '%d', '%s', '%s')",
@@ -50,17 +62,18 @@ class UsuarioController
             $usu_contrasenia
         );
 
-        //dd($sql);
-
 
         $ejecutar = $obj->insertar($sql);
 
         if ($ejecutar) {
-            // $id = $obj->lastInsertId('usuario', 'usu_id');
-            // $_SESSION['id'] = $id;
+             $id = $obj->lastInsertId('usuario', 'usu_id');
+             $_SESSION['usu_id'] = $id;
+             $_SESSION['mensaje'] = "El usuario $usu_nombre ha sido registrado";
+             $_SESSION['alert'] = "alert-success";
             redirect(getUrl("Configuracion", "Usuario", "registrarUsuario"));
         } else {
-            $_SESSION['error'] = "Error al registrar el usuario. Inténtalo de nuevo.";
+            $_SESSION['mensaje'] = "Error al registrar el usuario. Inténtalo de nuevo.";
+            $_SESSION['alert'] = "alert-danger";
         }
     }
 
@@ -196,6 +209,67 @@ class UsuarioController
         }
     }
 
+    public function postActualizarClave()
+    {
+    
+        $obj = new UsuarioModel();
+        $usu_id = $_SESSION['usu_id'];
 
+        // Verifica si las claves existen en $_POST
+        $claveActual = isset($_POST['claveActual']) ? $_POST['claveActual'] : '';
+        $claveNueva = isset($_POST['claveNueva']) ? $_POST['claveNueva'] : '';
+        $repeatClaveNueva = isset($_POST['repeatClaveNueva']) ? $_POST['repeatClaveNueva'] : '';
+
+        if (!isset($_SESSION['mensajesC'])) {
+            $_SESSION['mensajesC'] = [];
+        }
+
+
+        // Validaciones
+        if (empty($claveActual) || empty($claveNueva) || empty($repeatClaveNueva)) {
+            $_SESSION['mensaje'] = "Los campos no pueden estar vacíos.";
+        }
+
+   
+
+        // Verificar si las nuevas contraseñas coinciden
+        if ($claveNueva !== $repeatClaveNueva) {
+            $_SESSION['mensajesC'][] = [
+                'mensaje' => "Contraseña nueva no coincide",
+                'alert' => "alert-warning"
+            ];
+        }
+
+        $clave = $obj->verificarClave($claveActual);
+
+        // Verificar si la contraseña actual es correcta
+        if (!$clave) {
+
+            $_SESSION['mensajesC'][] = [
+                'mensaje' => "Clave actual erronea.",
+                'alert' => "alert-warning"
+            ];
+          
+            exit();
+        }
+
+        redirect(getUrl("Configuracion", "Usuario", "postActualizarClave"));
+
+        $sql = "UPDATE usuario SET usu_contrasenia = $claveNueva WHERE usu_id = $usu_id";
+
+        // Ejecutar la consulta
+        $resultado = $obj->editar($sql);
+
+        if ($resultado) {
+            $_SESSION['mensajesC'][] = [
+                'mensaje' => "Cambio de contraseña exitoso",
+                'alert' => "alert-warning"
+            ];
+            redirect(getUrl("Configuracion", "Usuario", "postActualizarClave"));
+        } else {
+            $_SESSION['mensajeSC'] = "Error al actualizar la contraseña.";
+        }
+        include_once "../view/configuracion/clientes/ViewCambioClave.php";
+    }
 
 }

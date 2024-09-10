@@ -37,7 +37,10 @@
                             <label class="labels" for="telefono">Número de Teléfono</label>
                             <input type="text" id="telefono" class="form-control" placeholder="(Opcional)" value="<?= htmlspecialchars($usuario['usu_telefono']); ?>" readonly>
                         </div>
-                    </div>
+                    </div><br>
+                    <a href="../view/configuracion/clientes/ViewCambioClave.php" class="btn btn-primary" id="cambiar-clave">
+                        Cambiar Contraseña
+                    </a>
                 </div>
             </div>
         <?php endforeach; ?>
