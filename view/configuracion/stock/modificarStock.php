@@ -53,7 +53,7 @@
         </div>
 
 
-            <div class="form-group row col-md-5 mt-5">
+            <div class="form-group row col-md-5 mt-2">
                 <div class="form-group col-md-9" id= "copy">
                     <label for="imagen">Agregar foto</label>
                     <input type="file" name="tar_img" id="imageInput" multiple>
@@ -61,12 +61,11 @@
             </div>
         
 
-        <div class="col-12 mt-5" >
+        <div class="col-12 mt-2" >
             <button class="btn btn-primary" type="submit">Registrar</button>
         </div>
+        <div class="col-12 mt-4" >
+        </div>
 
-        
-
-        
     </form>
 <?php endforeach; ?>

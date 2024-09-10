@@ -51,5 +51,9 @@
         <div class="alert alert-success messageSuccess" style="display:none" role="alert">
             El registro se elimino con exito
         </div>
+        <div class="col-12 mt-4" >
+        
+    </div>
+    <div class="col-12 mt-4" >
     </div>
 </div>
