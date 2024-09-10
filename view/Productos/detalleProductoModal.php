@@ -78,7 +78,9 @@ $precio = "";
                             </h4>
 
                             <span class="mtext-106 cl2">
-                                $ <?php echo $precio ?>
+                                $ <?php
+                                $precioConvertido = floatval($precio);
+                                echo number_format($precioConvertido) ?>
                             </span>
 
                             <p class="stext-102 cl3 p-t-23">
@@ -88,6 +90,28 @@ $precio = "";
                             <!--  -->
 
                             <div class="p-t-33">
+
+
+                                <div class="flex-w flex-r-m p-b-10">
+                                    <div class="size-203 flex-c-m respon6">
+                                        Color
+                                    </div>
+                                    <div class="size-204 respon6-next">
+                                        <div class="rs1-select2 bor8 bg0">
+                                            <select class="js-select2" name="color">
+                                                <option value="">Escoge una Opción</option>
+                                                <?php foreach ($coloresUnicos as $detalle): ?>
+                                                    <option value="<?= htmlspecialchars($detalle) ?>">
+                                                        <?= htmlspecialchars($detalle) ?>
+                                                    </option>
+                                                <?php endforeach; ?>
+
+                                            </select>
+                                            <div class="dropDownSelect2"></div>
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <div class="flex-w flex-r-m p-b-10">
                                     <div class="size-203 flex-c-m respon6">
                                         Talla
@@ -97,34 +121,18 @@ $precio = "";
                                         <div class="rs1-select2 bor8 bg0">
                                             <select class="js-select2" name="talla">
                                                 <option value="">Escoge una Opción</option>
-                                                <option value="S">Talla S</option>
-                                                <option value="M">Talla M</option>
-                                                <option value="L">Talla L</option>
-                                                <option value="XL">Talla XL</option>
+                                                <?php foreach ($tallasUnicas as $detalle): ?>
+                                                    <option value="<?= htmlspecialchars($detalle) ?>">
+                                                        <?= htmlspecialchars($detalle) ?>
+                                                    </option>
+                                                <?php endforeach; ?>
                                             </select>
                                             <div class="dropDownSelect2"></div>
                                         </div>
                                     </div>
                                 </div>
 
-                                <div class="flex-w flex-r-m p-b-10">
-                                    <div class="size-203 flex-c-m respon6">
-                                        Color
-                                    </div>
 
-                                    <div class="size-204 respon6-next">
-                                        <div class="rs1-select2 bor8 bg0">
-                                            <select class="js-select2" name="color">
-                                                <option value="">Escoge una Opción</option>
-                                                <option value="Rojo">Rojo</option>
-                                                <option value="Azul">Azúl</option>
-                                                <option value="Blanco">Blanco</option>
-                                                <option value="Gris">Gris</option>
-                                            </select>
-                                            <div class="dropDownSelect2"></div>
-                                        </div>
-                                    </div>
-                                </div>
 
                                 <div class="flex-w flex-r-m p-b-10">
                                     <div class="size-204 flex-w flex-m respon6-next">
