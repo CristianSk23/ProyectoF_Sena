@@ -46,6 +46,7 @@ class UsuarioController
                 'mensaje' => "El documento ya existe.",
                 'alert' => "alert-warning"
             ];
+          
         }
         
         redirect(getUrl("Configuracion", "Usuario", "registrarUsuario"));
@@ -68,8 +69,12 @@ class UsuarioController
         if ($ejecutar) {
              $id = $obj->lastInsertId('usuario', 'usu_id');
              $_SESSION['usu_id'] = $id;
-             $_SESSION['mensaje'] = "El usuario $usu_nombre ha sido registrado";
-             $_SESSION['alert'] = "alert-success";
+             $_SESSION['mensajes'][] = [
+                'mensaje' => "El usuario $usu_nombre ha sido registrado.",
+                'alert' => "alert-warning"
+            ];
+          
+            
             redirect(getUrl("Configuracion", "Usuario", "registrarUsuario"));
         } else {
             $_SESSION['mensaje'] = "Error al registrar el usuario. Inténtalo de nuevo.";
@@ -210,66 +215,72 @@ class UsuarioController
     }
 
     public function postActualizarClave()
-    {
-    
-        $obj = new UsuarioModel();
-        $usu_id = $_SESSION['usu_id'];
+{
+    include_once "../view/configuracion/clientes/ViewCambioClave.php";
+    $obj = new UsuarioModel();
+    $usu_id = $_SESSION['usu_id'];
 
-        // Verifica si las claves existen en $_POST
-        $claveActual = isset($_POST['claveActual']) ? $_POST['claveActual'] : '';
-        $claveNueva = isset($_POST['claveNueva']) ? $_POST['claveNueva'] : '';
-        $repeatClaveNueva = isset($_POST['repeatClaveNueva']) ? $_POST['repeatClaveNueva'] : '';
+    // Verifica si las claves existen en $_POST
+    $claveActual = isset($_POST['claveActual']) ? $_POST['claveActual'] : '';
+    $claveNueva = isset($_POST['claveNueva']) ? $_POST['claveNueva'] : '';
+    $repeatClaveNueva = isset($_POST['repeatClaveNueva']) ? $_POST['repeatClaveNueva'] : '';
 
-        if (!isset($_SESSION['mensajesC'])) {
-            $_SESSION['mensajesC'] = [];
-        }
-
-
-        // Validaciones
-        if (empty($claveActual) || empty($claveNueva) || empty($repeatClaveNueva)) {
-            $_SESSION['mensaje'] = "Los campos no pueden estar vacíos.";
-        }
-
-   
-
-        // Verificar si las nuevas contraseñas coinciden
-        if ($claveNueva !== $repeatClaveNueva) {
-            $_SESSION['mensajesC'][] = [
-                'mensaje' => "Contraseña nueva no coincide",
-                'alert' => "alert-warning"
-            ];
-        }
-
-        $clave = $obj->verificarClave($claveActual);
-
-        // Verificar si la contraseña actual es correcta
-        if (!$clave) {
-
-            $_SESSION['mensajesC'][] = [
-                'mensaje' => "Clave actual erronea.",
-                'alert' => "alert-warning"
-            ];
-          
-            exit();
-        }
-
-        redirect(getUrl("Configuracion", "Usuario", "postActualizarClave"));
-
-        $sql = "UPDATE usuario SET usu_contrasenia = $claveNueva WHERE usu_id = $usu_id";
-
-        // Ejecutar la consulta
-        $resultado = $obj->editar($sql);
-
-        if ($resultado) {
-            $_SESSION['mensajesC'][] = [
-                'mensaje' => "Cambio de contraseña exitoso",
-                'alert' => "alert-warning"
-            ];
-            redirect(getUrl("Configuracion", "Usuario", "postActualizarClave"));
-        } else {
-            $_SESSION['mensajeSC'] = "Error al actualizar la contraseña.";
-        }
-        include_once "../view/configuracion/clientes/ViewCambioClave.php";
+    if (!isset($_SESSION['mensajesC'])) {
+        $_SESSION['mensajesC'] = [];
     }
+
+    $flag = false;
+
+    // Validaciones
+    if (empty($claveActual) || empty($claveNueva) || empty($repeatClaveNueva)) {
+        $_SESSION['errorEmpty'] = "Todos los campos son requeridos.";
+            return;
+    }
+
+
+    $clave = $obj->verificarClave($claveActual);
+    // Verificar si la contraseña actual es correcta
+    if ($clave == 0) {
+        $_SESSION['mensajesC'][] = [
+            'mensaje' => "Clave actual errónea.",
+            'alert' => "alert-warning"
+        ];
+     $flag = true;
+    }
+    // Verificar si las nuevas contraseñas coinciden
+    if ($claveNueva !== $repeatClaveNueva) {
+        $_SESSION['mensajesC'][] = [
+            'mensaje' => "La nueva contraseña no coincide.",
+            'alert' => "alert-warning"
+        ];
+      $flag = true;
+    }
+
+    if($flag){
+
+        include_once "../view/configuracion/clientes/ViewCambioClave.php";
+        return;
+    }
+  
+    $sql = "UPDATE usuario SET usu_contrasenia = '$claveNueva' WHERE usu_id = $usu_id";
+    $resultado = $obj->editar($sql);
+
+    if ($resultado) {
+        $_SESSION['mensajesC'][] = [
+            'mensaje' => "La clave se actualizo.",
+            'alert' => "alert-success"
+        ];
+
+    } else {
+        $_SESSION['mensajesC'][] = [
+            'mensaje' => "Error al actualizar la contraseña.",
+            'alert' => "alert-danger"
+        ];
+    }
+
+    redirect(getUrl("Configuracion", "Usuario", "postActualizarClave"));
+
+  
+}
 
 }

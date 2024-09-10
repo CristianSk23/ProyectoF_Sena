@@ -21,7 +21,7 @@
 
             </div>
             <div class="mb-3">
-                <label for="claveNueva" class="form-label">Nueva Contraseña</label>
+                <label for="cambioClave" class="form-label">Nueva Contraseña</label>
                 <input type="password" class="form-control" id="cambioClave" name="claveNueva" required>
             </div>
             <div class="mb-3">

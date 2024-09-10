@@ -38,9 +38,9 @@
                             <input type="text" id="telefono" class="form-control" placeholder="(Opcional)" value="<?= htmlspecialchars($usuario['usu_telefono']); ?>" readonly>
                         </div>
                     </div><br>
-                    <a href="../view/configuracion/clientes/ViewCambioClave.php" class="btn btn-primary" id="cambiar-clave">
+                    <button  id="btnCambioClave" class="btn btn-primary">
                         Cambiar Contraseña
-                    </a>
+                    </button>
                 </div>
             </div>
         <?php endforeach; ?>
@@ -98,4 +98,7 @@
 
         });
     }
+    document.getElementById('btnCambioClave').addEventListener('click', function() {
+        window.location.href = '<?php echo getUrl("Configuracion", "Usuario", "postActualizarClave"); ?>';
+    });
 </script>
