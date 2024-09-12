@@ -21,6 +21,7 @@ class ProductoController
     {
 
         $obj = new ProductoModel();
+        $obj2 = new ProductoModel();
 
         $nombre = $_POST['nombreProducto'];
         $descripcion = $_POST['descripcionProducto'];
@@ -28,57 +29,80 @@ class ProductoController
         $genero = $_POST['genero'];
         $tipo = $_POST['tipo'];
         
-
-        dd($_FILES);
-
-        
-
-        // Tamaño máximo permitido en bytes (2 MB)
-        $max_size = 2 * 1024 * 1024; // 2MB en bytes
-
-        // Tipos MIME permitidos
-        $allowed_types = ['image/jpeg', 'image/png', 'image/gif'];
-
+        // Validacion si el input esta vacio o no
         if (
             empty($nombre) || empty($descripcion) || empty($categoria) || empty($genero)
-            || empty($tipo) || empty($_FILES)
+            || empty($tipo) 
         ) {
             $_SESSION['datosIncorrectos'] = "Por favor complete el formulario.";
             redirect(getUrl("Configuracion", "Producto", "getInsert"));
         }
 
-         // Obtener información del archivo
-        $file_type = $_FILES['tar_img']['type'];
-        $file_size = $_FILES['tar_img']['size'];
-        $tmp_img = $_FILES['tar_img']['name'];
-        $ruta = "images/$tmp_img";
-
-        // Validar tipo de archivo
-        if (!in_array($file_type, $allowed_types)) {
-            $_SESSION['error'] = "El tipo de archivo no es válido. Solo se permiten JPEG, PNG o GIF.";
-            redirect(getUrl("Configuracion", "Producto", "getInsert"));
-            exit;
-        }
-
-            // Validar tamaño del archivo
-        if ($file_size > $max_size) {
-            $_SESSION['error'] = "El tamaño del archivo es demasiado grande. El límite es 2 MB.";
-            redirect(getUrl("Configuracion", "Producto", "getInsert"));
-            exit;
-        }
+        //dd($_FILES['stock_img']);
         
 
         $sql = "INSERT INTO producto VALUES(null, '$tipo','$nombre', '$descripcion', 
-        '$genero', '$categoria', '$ruta', 1 )";
+        '$genero', '$categoria', 1 )";
         echo $sql;
         $ejecutar = $obj->insertar($sql);
+
+        //Insercion de las imagenes con su respectivas validaciones
         if ($ejecutar) {
+
+            $imagenes = $_FILES['stock_img'];
+            $idProducto = $this->consultarUltimoId();
+
+            for ($i = 0; $i < count($imagenes['name']); $i++){
+                $tmp_img = $imagenes['name'][$i];
+                $nombre = $imagenes['tmp_name'][$i];
+
+                //Tamaño máximo permitido en bytes (2 MB)
+                $max_size = 2 * 1024 * 1024; // 2MB en bytes
+
+                // Tipos MIME permitidos
+                $allowed_types = ['image/jpeg', 'image/png', 'image/gif'];
+
+                $file_type = $imagenes['type'][$i];
+                $file_size = $imagenes['size'][$i];
+
+                // Validar tipo de archivo
+                if (!in_array($file_type, $allowed_types)) {
+                    $_SESSION['error'] = "El tipo de archivo no es válido. Solo se permiten JPEG, PNG o GIF.";
+                    redirect(getUrl("Configuracion", "Producto", "getInsert"));
+                    exit;
+                }
+
+                // Validar tamaño del archivo
+                if ($file_size > $max_size) {
+                    $_SESSION['error'] = "El tamaño del archivo es demasiado grande. El límite es 2 MB.";
+                    redirect(getUrl("Configuracion", "Producto", "getInsert"));
+                    exit;
+                }
+
+                // se mueven las imagenes a la ruta definida
+                $ruta = "images/$tmp_img";
+                move_uploaded_file($nombre, $ruta);
+
+                $sql2 = "INSERT INTO fotos VALUES(null, '$ruta','$idProducto', 1)"; 
+                $ejecutar2 = $obj2->insertar($sql2);
+                
+            }
             redirect(getUrl("Configuracion", "Producto", "getInsert"));
             $_SESSION['success'] = "Registro exitoso.";
         } else {
             $_SESSION['error'] = "Error al registrar el producto. Inténtalo de nuevo.";
         }
+    }
 
+    public function consultarUltimoId(){
+        $obj = new ProductoModel();
+        $sql = "SELECT MAX(product_id) FROM producto";
+        $ejecutar = $obj->consultar($sql);
+        $fila = $ejecutar->fetch_array();
+        $ultimo_id = $fila[0];
+        echo $ultimo_id;
+
+        return $ultimo_id;
     }
 
     public function validarNombree(){
@@ -184,6 +208,7 @@ class ProductoController
     public function modificacion()
     {
         $obj = new ProductoModel();
+        $obj2 = new ProductoModel();
 
         $id = $_POST['id'];
         $nombre = $_POST['nombreProducto'];
@@ -191,59 +216,68 @@ class ProductoController
         $categoria = $_POST['categoria'];
         $genero = $_POST['genero'];
         $tipo = $_POST['tipo'];
-        // Tamaño máximo permitido en bytes (2 MB)
-        $max_size = 2 * 1024 * 1024; // 2MB en bytes
 
-        // Tipos MIME permitidos
-        $allowed_types = ['image/jpeg', 'image/png', 'image/gif'];
 
         if (
             empty($id) ||  empty($descripcion) || empty($categoria) || empty($genero)
-            || empty($tipo) || empty($_FILES['tar_img']['name'])
+            || empty($tipo) 
         ) {
             $_SESSION['datosIncorrectos'] = "Por favor complete el formulario.";
             redirect(getUrl("Configuracion", "Producto", "modificar", array("product_id" => $id)));
         }
 
-         // Obtener información del archivo
-        $file_type = $_FILES['tar_img']['type'];
-        $file_size = $_FILES['tar_img']['size'];
-        $tmp_img = $_FILES['tar_img']['name'];
-        $ruta = "images/$tmp_img";
+        // Continuar con la actualización si la imagen se sube correctamente
+        $sql = "UPDATE producto SET tipo_id ='$tipo', product_nombre ='$nombre', product_descripcion ='$descripcion', 
+        genero_id ='$genero', categoria_id ='$categoria' WHERE product_id = $id";
+        dd($sql);
+        $ejecutar = $obj->editar($sql);
 
-        // Validar tipo de archivo
-        if (!in_array($file_type, $allowed_types)) {
-            $_SESSION['error'] = "El tipo de archivo no es válido. Solo se permiten JPEG, PNG o GIF.";
-            redirect(getUrl("Configuracion", "Producto", "modificar", array("product_id" => $id)));
-            exit;
-        }
+            //Insercion de las imagenes con su respectivas validaciones
+        if ($ejecutar ) {
 
-            // Validar tamaño del archivo
-        if ($file_size > $max_size) {
-            $_SESSION['error'] = "El tamaño del archivo es demasiado grande. El límite es 2 MB.";
-            redirect(getUrl("Configuracion", "Producto", "modificar", array("product_id" => $id)));
-            exit;
-        }
+            $imagenes = $_FILES['stock_img'];
+            $this->EliminarFotos($id);
 
+            for ($i = 0; $i < count($imagenes['name']); $i++){
+                $tmp_img = $imagenes['name'][$i];
+                $nombre = $imagenes['tmp_name'][$i];
 
-        if (move_uploaded_file($_FILES['tar_img']['tmp_name'], $ruta)) {
+                // Tamaño máximo permitido en bytes (2 MB)
+                // $max_size = 2 * 1024 * 1024; // 2MB en bytes
 
-            // Continuar con la actualización si la imagen se sube correctamente
-            $sql = "UPDATE producto SET tipo_id ='$tipo', product_nombre ='$nombre', product_descripcion ='$descripcion', 
-            genero_id ='$genero', categoria_id ='$categoria', product_img ='$ruta' WHERE product_id = $id";
+                // // Tipos MIME permitidos
+                // $allowed_types = ['image/jpeg', 'image/png', 'image/gif'];
 
-            $ejecutar = $obj->editar($sql);
-            if ($ejecutar) {
-                redirect(getUrl("Configuracion", "Producto", "consultar"));
-                $_SESSION['success'] = "modificación exitoso.";
-            } else {
-                $_SESSION['error'] = "Error al modificar el producto. Inténtalo de nuevo.";
+                // $file_type = $imagenes['type'][$i];
+                // $file_size = $imagenes['type'][$i];
+
+                // // Validar tipo de archivo
+                // if (!in_array($file_type, $allowed_types)) {
+                //     $_SESSION['error'] = "El tipo de archivo no es válido. Solo se permiten JPEG, PNG o GIF.";
+                //     redirect(getUrl("Configuracion", "Producto", "getInsert"));
+                //     exit;
+                // }
+
+                // // Validar tamaño del archivo
+                // if ($file_size > $max_size) {
+                //     $_SESSION['error'] = "El tamaño del archivo es demasiado grande. El límite es 2 MB.";
+                //     redirect(getUrl("Configuracion", "Producto", "getInsert"));
+                //     exit;
+                // }
+
+                // se mueven las imagenes a la ruta definida
+                if ($tmp_img){
+                    $ruta = "images/$tmp_img";
+                move_uploaded_file($nombre, $ruta);
+                $sql2 = "INSERT INTO fotos VALUES(null, '$ruta','$id', 1)"; 
+                $ejecutar2 = $obj2->insertar($sql2);
+                }
+                
+                
             }
-        } else {
-            $_SESSION['error'] = "Error al subir la imagen.";
-            redirect(getUrl("Configuracion", "Producto", "modificar", array("product_id" => $id)));
-            
-        }
+        } 
+        redirect(getUrl("Configuracion", "Producto", "consultar"));
+        $_SESSION['success'] = "Registro exitoso.";
 
         
     }
@@ -260,6 +294,12 @@ class ProductoController
         } else {
             echo 2;
         }
+    }
+
+    public function EliminarFotos($id){
+        $obj = new ProductoModel();
+        $sql = "DELETE FROM fotos WHERE product_id = $id";
+        $ejecutar = $obj->eliminar($sql);
     }
 
 

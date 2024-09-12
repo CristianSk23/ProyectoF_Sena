@@ -53,28 +53,11 @@
 
     <!-- Imagen del Producto -->
     <div class="form-group col-md-5 mt-4">
-        <label for="imagen">Agregar Foto del Producto</label>
-        <input type="file" class="form-control" name="tar_img" id="imageInput" required>
+        <label for="imagen">Agregar fotos del producto</label>
+        <input type="file" class="form-control" name="stock_img[]" id="imageInput" multiple required>
     </div>
 
-    <!-- Vista Previa de la Imagen -->
-    <div class="col-md-3 mt-4">
-        <label for="preview">Vista Previa:</label>
-        <img id="preview" src="" alt="Vista previa" width="200px" height="200px" style="display: block; border: 1px solid #ccc; padding: 10px;"/>
-    </div>
-
-    <script>
-        document.getElementById('imageInput').addEventListener('change', function(event) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    document.getElementById('preview').src = e.target.result;
-                };
-                reader.readAsDataURL(file);
-            }
-        });
-    </script>
+    
 
     <!-- Botón de Registro -->
     <div class="col-12 mt-4">
