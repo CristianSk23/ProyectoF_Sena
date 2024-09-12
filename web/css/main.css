@@ -388,7 +388,8 @@ Input, textarea : 14px/1.6 '', Arial, sans-serif;
   -o-transition: all 0.4s;
   -moz-transition: all 0.4s;
 }
-.main-menu > li > a.activeL{
+
+.main-menu>li>a.activeL {
   color: #ffffff;
 }
 
@@ -397,8 +398,9 @@ Input, textarea : 14px/1.6 '', Arial, sans-serif;
 .header-v3 .main-menu>li>a {
   color: #fff;
 }
-.header-v4 .main-menu > li > a{
-  color : black;
+
+.header-v4 .main-menu>li>a {
+  color: black;
 }
 
 /*---------------------------------------------*/
@@ -1650,7 +1652,8 @@ button.mfp-close {
 .tab01 .nav-tabs .nav-item {
   margin: 0px 15px;
 }
-.nav-link{
+
+.nav-link {
   color: white;
 }
 
@@ -1680,6 +1683,7 @@ button.mfp-close {
   color: #333;
   border-color: #797979;
 }
+
 /* Esconder el menú y mostrar el botón toggle en pantallas pequeñas */
 
 
@@ -3783,4 +3787,6 @@ input.num-product::-webkit-inner-spin-button {
 
 }
 
-
+.modal-content {
+  color: black;
+}

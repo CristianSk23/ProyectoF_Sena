@@ -59,7 +59,7 @@ $precio = "";
                 <div class="col-md-6 col-lg-5 p-b-30">
                     <div class="p-r-50 p-t-5 p-lr-0-lg">
                         <form id="form-agregar-carrito"
-                            action="<?php echo getUrl('CarroDeCompras', 'CarroDeCompras', 'agregarProducto'); ?>"
+                            action="<?php echo getUrl('CarroDeCompras', 'CarroDeCompras', 'agregarProducto', false, 'ajax'); ?>"
                             method="POST"
                             data-authenticated="<?php echo isset($_SESSION['auth']) ? 'true' : 'false'; ?>">
                             <?php
@@ -71,7 +71,8 @@ $precio = "";
                             }
 
                             ?>
-                            <input type="hidden" name="product_id" value="<?php echo $resultado['product_id']; ?>">
+                            <input type="hidden" name="product_id" id="product_id"
+                                value="<?php echo $resultado['product_id']; ?>">
                             <input type="hidden" name="product_precio" value="<?php echo $precio; ?>">
                             <h4 class="mtext-105 cl2 js-name-detail p-b-14">
                                 <?php echo $resultado['product_nombre']; ?>
@@ -91,19 +92,23 @@ $precio = "";
 
                             <div class="p-t-33">
 
-
                                 <div class="flex-w flex-r-m p-b-10">
                                     <div class="size-203 flex-c-m respon6">
                                         Color
                                     </div>
                                     <div class="size-204 respon6-next">
                                         <div class="rs1-select2 bor8 bg0">
-                                            <select class="js-select2" name="color">
+                                            <select class="js-select2" name="color" id="color"
+                                                data-url="<?= getUrl('Productos', 'Productos', 'obtenerTalla', false, 'ajax') ?>"
+                                                data-product-id="<?= $resultado['product_id'] ?>">
+                                                >
                                                 <option value="">Escoge una Opción</option>
                                                 <?php foreach ($coloresUnicos as $detalle): ?>
-                                                    <option value="<?= htmlspecialchars($detalle) ?>">
-                                                        <?= htmlspecialchars($detalle) ?>
-                                                    </option>
+                                                    <?php if (isset($detalle)): ?>
+                                                        <option value="<?= htmlspecialchars($detalle) ?>">
+                                                            <?= htmlspecialchars($detalle) ?>
+                                                        </option>
+                                                    <?php endif; ?>
                                                 <?php endforeach; ?>
 
                                             </select>
@@ -119,7 +124,7 @@ $precio = "";
 
                                     <div class="size-204 respon6-next">
                                         <div class="rs1-select2 bor8 bg0">
-                                            <select class="js-select2" name="talla">
+                                            <select class="js-select2" name="talla" id="talla">
                                                 <option value="">Escoge una Opción</option>
                                                 <?php foreach ($tallasUnicas as $detalle): ?>
                                                     <option value="<?= htmlspecialchars($detalle) ?>">
@@ -336,8 +341,8 @@ $precio = "";
 
         <!-- Modal1 -->
         <!-- Modal de Inicio de Sesión -->
-        <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
+        <div class="modal fade" id="loginModal" tabindex="2" aria-labelledby="loginModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="loginModalLabel">Acceso Requerido</h5>
@@ -444,6 +449,17 @@ $precio = "";
                 $('.js-addcart-detail').each(function () {
                     var nameProduct = $(this).parent().parent().parent().parent().find('.js-name-detail').html();
                     $(this).on('click', function () {
+
+                        let color = $('#color').val();
+                        let talla = $('#talla').val();
+
+                        // Verifica si color y talla están vacíos
+                        if (!color || !talla) {
+                            // Muestra un mensaje si faltan datos
+                            swal("Faltan atributos", "Debes seleccionar tanto el color como la talla para agregar el producto al carrito.", "warning");
+                            return; // Detén la ejecución si falta información
+                        }
+
                         if (isAuthenticated) {
                             swal(nameProduct, "Se agregó al carro de compras!", "success");
                         } else {

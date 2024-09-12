@@ -319,12 +319,23 @@
     $(document).ready(function () {
         $('#form-agregar-carrito').on('submit', function (e) {
             e.preventDefault(); // Evita que el formulario se envíe de la manera tradicional
+            let url = $(this).attr('action');
+            let datos = $(this).serialize();
+
+            let color = $('#color').val();
+            let talla = $('#talla').val();
+
+            // Verifica si color y talla están vacíos
+            if (!color || !talla) {
+                return;
+            }
 
             $.ajax({
                 type: 'POST',
-                url: $(this).attr('action'), // Usa la URL definida en el action del formulario
-                data: $(this).serialize(), // Serializa todos los datos del formulario
+                url: url, // Usa la URL definida en el action del formulario
+                data: datos, // Serializa todos los datos del formulario
                 success: function () {
+
                     $('#form-agregar-carrito')[0].reset();
                     $('.js-select2').val('').trigger('change');
                 },
@@ -339,24 +350,123 @@
 
     $(document).ready(function () {
         $('.js-show-cart').on('click', function () {
-            var userId = $(this).data('usu_id');
+            let userId = $(this).data('id-usuario');
+            let url = $(this).data('url');
 
             if (userId) {
-                // Aquí puedes enviar el ID del usuario al servidor mediante AJAX
+                // Enviar el ID del usuario al servidor mediante AJAX
                 $.ajax({
                     type: 'POST',
-                    url: '<?php echo getUrl("CarroDeCompras", "CarroDeCompras", "obtenerCarro"); ?>', // Cambia esto por la ruta adecuada
+                    url: url,
                     data: { usu_id: userId },
                     success: function (response) {
-                        // Aquí puedes manejar la respuesta del servidor
-                        console.log('ID del usuario enviado:', userId);
+                        // Suponiendo que la respuesta es JSON y contiene los productos
+                        let productos = response.productos;
+
+
+                        // Limpiar la lista actual del carrito
+                        $('.header-cart-wrapitem').empty();
+
+                        let total = 0;
+
+                        // Recorrer los productos y agregar cada uno al carrito
+                        productos.forEach(function (item) {
+                            let producto = item.producto;
+                            let stock = item.stock;
+                            console.log(stock);
+
+                            /* let stock = producto.stock[0]; // Accede al primer elemento del array de stock
+                            let precio = stock.stock_precio; */
+
+                            let itemHtml = `
+                            <li class="header-cart-item flex-w flex-t m-b-12">
+                                <div class="header-cart-item-img">
+                                    <img src="${producto.imagen_url}" alt="IMG">
+                                </div>
+                                <div class="header-cart-item-txt p-t-8">
+                                    <a href="#" class="header-cart-item-name m-b-18 hov-cl1 trans-04">
+                                        ${producto.product_nombre}
+                                    </a>
+                                    <span class="header-cart-item-info">
+                                        ${item.cantidad} x $${precio}
+                                    </span>
+                                </div>
+                            </li>`;
+                            $('.header-cart-wrapitem').append(itemHtml);
+
+                            // Actualizar el total
+                            total += producto.product_precio * item.cantidad;
+                        });
+
+
+                        // Actualizar el total en el HTML
+                        $('.header-cart-total').text(`Total: $${total.toFixed(2)}`);
+
+                        // Mostrar el panel del carrito
+                        $('.js-panel-cart').addClass('show-header-cart');
                     },
                     error: function (error) {
-                        console.error('Error al enviar el ID del usuario:', error);
+                        console.error('Error al obtener los productos del carrito:', error);
                     }
                 });
             } else {
                 console.error('No se encontró el ID del usuario.');
+            }
+        });
+    });
+
+
+
+
+
+    //*Para traer las tallas dependiendo el color
+
+    $(document).ready(function () {
+        // Escuchar el evento de cambio en el select de color
+        $('select[name="color"]').change(function () {
+            var colorSeleccionado = $(this).val(); // Obtener el valor seleccionado
+            let url = $(this).attr('data-url'); // Obtener la URL del atributo data-url
+            let productId = $(this).data('product-id'); // Obtener el ID del producto del atributo data-product-id
+
+            // Solo hacer la petición si se selecciona un color
+            if (colorSeleccionado !== '') {
+
+
+                // Hacer la solicitud AJAX al controlador
+                $.ajax({
+                    url: url, // La URL donde se encuentra el controlador
+                    type: 'GET', // El método de la solicitud (GET o POST)
+                    dataType: 'json',
+                    data: { color: colorSeleccionado, product_id: productId }, // Enviar el color y el ID del producto al controlador
+                    success: function (response) {
+
+                        // Intentar parsear la respuesta a JSON
+                        try {
+                            // var tallas = JSON.parse(response); // Suponemos que la respuesta contiene las tallas en formato JSON
+
+                            // Limpiar las opciones de talla anteriores
+                            $('select[name="talla"]').empty();
+
+                            // Añadir una opción por defecto
+                            $('select[name="talla"]').append('<option value="">Escoge una Talla</option>');
+
+                            // Recorrer las tallas y agregarlas como opciones
+                            $.each(response, function (index, talla) {
+                                $('select[name="talla"]').append('<option value="' + talla + '">' + talla + '</option>');
+                            });
+                        } catch (e) {
+                            console.error('Error al parsear el JSON:', e);
+                            console.log('Respuesta recibida (no es JSON válido):', response);
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.log('Error en la solicitud:', error);
+                    }
+                });
+            } else {
+                // Limpiar las tallas si no se selecciona un color
+                $('select[name="talla"]').empty();
+                $('select[name="talla"]').append('<option value="">Escoge una Talla</option>');
             }
         });
     });

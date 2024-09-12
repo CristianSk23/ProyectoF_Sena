@@ -69,7 +69,9 @@
 
 				<?php if (isset($_SESSION['nombre'])): ?>
 					<div class="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 icon-header-noti js-show-cart"
-						data-notify="1" data-id-usuario="<?php echo $_SESSION['usu_id']; ?>">
+						data-notify="1"
+						data-url="<?php echo getUrl("CarroDeCompras", "CarroDeCompras", "obtenerCarro", false, 'ajax'); ?>"
+						data-id-usuario="<?php echo $_SESSION['usu_id']; ?>">
 						<i class="zmdi zmdi-shopping-cart"></i>
 					</div>
 				<?php endif; ?>

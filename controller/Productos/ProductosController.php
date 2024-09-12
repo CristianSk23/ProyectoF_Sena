@@ -10,12 +10,14 @@ class ProductosController
         $obj = new ProductosModel();
         $resultados = $obj->getProductos();
         $productosConDetalle = [];
+        ;
         if ($resultados) {
             foreach ($resultados as $producto) {
                 $product_id = $producto['product_id']; // Suponiendo que el campo del ID se llama 'product_id'
 
                 // Obtener los detalles del producto usando el ID
                 $detalles = $obj->getStock($product_id);
+                $fotos_prod = $obj->getFoto($product_id);
 
                 // Verifica si se han encontrado detalles
                 if ($detalles) {
@@ -23,6 +25,13 @@ class ProductosController
 
                 } else {
                     $producto['detalles'] = null;
+                }
+
+                if ($fotos_prod) {
+                    $producto["fotos"] = $fotos_prod;
+
+                } else {
+                    $producto["fotos"] = null;
                 }
                 $productosConDetalle[] = $producto;
             }
@@ -95,11 +104,29 @@ class ProductosController
 
     public function obtenerTalla()
     {
-        $id = $_GET['id'];
-        $color = $_GET['color'];
-        $obj = new ProductosModel();
-        $resultado = $obj->getTalla($id, $color);
-        return $resultado;
+
+        if (isset($_GET['color'])) {
+            $colorSeleccionado = $_GET['color'];
+            $productId = $_GET['product_id'];
+
+
+            $obj = new ProductosModel();
+            $detalles = $obj->getTalla($productId, $colorSeleccionado); // Filtrar por color
+
+            // Crear un array para las tallas
+            $tallas = [];
+
+            // Recorrer los detalles filtrados y obtener las tallas únicas
+            foreach ($detalles as $detalle) {
+                if (!in_array($detalle['stock_talla'], $tallas)) {
+                    $tallas[] = $detalle['stock_talla'];
+                }
+            }
+
+            // Devolver las tallas en formato JSON
+            echo json_encode($tallas);
+        }
+
     }
 
 
