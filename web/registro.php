@@ -27,11 +27,22 @@
                             if (isset($_SESSION["error"])) {
                                 ?>
                                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                    <?= $_SESSION['error'] ?>
+                                    <?= $_SESSION['error']?>
                                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                 </div>
                                 <?php
                                 unset($_SESSION["error"]);
+                            
+                            }
+                            if (isset($_SESSION['success'])) {
+                                ?>
+                                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                    <?= $_SESSION['success']?>
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                                <?php
+                                unset($_SESSION["success"]);
+                            
                             }
 
                             if (isset($_SESSION["errorEmpty"])) {
@@ -72,14 +83,14 @@
 
                                 <!-- Contraseña -->
                                 <div data-mdb-input-init class="form-outline mb-4">
-                                    <label class="form-label" for="password">Contraseña</label>
-                                    <input type="password" id="password" name="password" class="form-control" required autocomplete="new-password" />
+                                    <label class="form-label" for="password1">Contraseña</label>
+                                    <input type="password" id="password1" name="password" class="form-control" required autocomplete="new-password" />
                                 </div>
 
                                 <!-- Confirmar Contraseña -->
                                 <div data-mdb-input-init class="form-outline mb-4">
-                                    <label class="form-label" for="repeatPassword">Confirmar Contraseña</label>
-                                    <input type="password" id="repeatPassword" name="repeatPassword" class="form-control" required autocomplete="new-password" />
+                                    <label class="form-label" for="repeatPassword1">Confirmar Contraseña</label>
+                                    <input type="password" id="repeatPassword1" name="repeatPassword" class="form-control" required autocomplete="new-password" />
                                 </div>
 
                                 <!-- Términos -->

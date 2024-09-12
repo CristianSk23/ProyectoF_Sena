@@ -4,7 +4,7 @@
 		<nav class="limiter-menu-desktop container">
 			<!-- Logo desktop -->
 			<a href="#" class="logo">
-				<img src="images/icons/logo-01.png" alt="IMG-LOGO">
+				<img src="images/icons/naturalsport_logo.png" alt="IMG-LOGO">
 			</a>
 
 			<!-- Botón toggle para pantallas pequeñas -->
@@ -22,21 +22,13 @@
 					<li>
 						<a href="product.php">Comprar</a>
 					</li>
-
-					<li class="label1" data-label1="hot">
-						<a href="shoping-cart.html">Features</a>
+	
+					<li>
+						<a href="about.php">Nosotros</a>
 					</li>
 
 					<li>
-						<a href="blog.html">Blog</a>
-					</li>
-
-					<li>
-						<a href="about.html">About</a>
-					</li>
-
-					<li>
-						<a href="contact.html">Contact</a>
+						<a href="contact.html">Contacto</a>
 					</li>
 
 					<?php if (isset($_SESSION['usu_id']) && $_SESSION['rol_id'] == 1): ?>

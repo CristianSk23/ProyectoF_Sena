@@ -1,8 +1,10 @@
     <!-- Content page -->
     <section class="bg0 p-t-62 p-b-60">
-        <div class="mt-6">
-            <h4 class="display-4">Registro de usuario</h4>
-        </div>
+        <div class="container">
+            <div class="mt-6">
+                <h4 class="display-4">Registro de usuario</h4>
+            </div>
+        
         <?php
         if (isset($_SESSION['mensajes']) && !empty($_SESSION['mensajes'])) {
             foreach ($_SESSION['mensajes'] as $msg) {
@@ -17,6 +19,7 @@
             unset($_SESSION['mensajes']);
         }
         ?>
+        </div>
         <div class="container">
             <div class="row">
                 <div class="col-md-12 col-lg-12 p-t-60">
@@ -69,7 +72,7 @@
                             </div>
 
                             <div class="col-md-10 mb-3">
-                                <button class="btn btn-primary" type="submit" >Registrar</button>
+                                <button class="btn btn-primary" type="submit">Registrar</button>
 
                             </div>
                             <div class="col-md-10 mb-3">

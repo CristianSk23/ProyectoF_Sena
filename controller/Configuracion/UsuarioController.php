@@ -24,7 +24,8 @@ class UsuarioController
         if (!isset($_SESSION['mensajes'])) {
             $_SESSION['mensajes'] = [];
         }
-
+        
+        $flag = false;
 
         if (empty($rol_id) || empty($usu_cedula) || empty($usu_nombre) || empty($usu_apellido) || empty($usu_telefono) || empty($usu_correo) || empty($usu_contrasenia)) {
             $_SESSION['errorEmpty'] = "Todos los campos son requeridos.";
@@ -39,6 +40,8 @@ class UsuarioController
                 'alert' => "alert-warning"
             ];
         
+            $flag = true;
+        
         }
         $documento = $obj->VerificarDocumento($usu_cedula);
         if($documento){
@@ -46,10 +49,27 @@ class UsuarioController
                 'mensaje' => "El documento ya existe.",
                 'alert' => "alert-warning"
             ];
-          
+          $flag = true;
         }
+
+
+        $pattern = '/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/';
+
+        if (!preg_match($pattern, $usu_contrasenia)) {
+
+            $_SESSION['mensajes'][] = [
+                'mensaje' => "La contraseña debe tener al menos 8 caracteres, incluyendo una letra mayúscula, una letra minúscula, un número y un carácter especial.",
+                'alert' => "alert-warning"
+            ];
+          $flag = true;
+
+        }
+
+        if($flag){
+            redirect(getUrl("Configuracion","Usuario","registrarUsuario"));
+         }
+       
         
-        redirect(getUrl("Configuracion", "Usuario", "registrarUsuario"));
       
         $sql = sprintf(
             "INSERT INTO usuario (rol_id, usu_cedula, usu_nombre, usu_apellido, usu_telefono, usu_correo, usu_contrasenia) 
@@ -71,7 +91,7 @@ class UsuarioController
              $_SESSION['usu_id'] = $id;
              $_SESSION['mensajes'][] = [
                 'mensaje' => "El usuario $usu_nombre ha sido registrado.",
-                'alert' => "alert-warning"
+                'alert' => "alert-success"
             ];
           
             
@@ -132,11 +152,19 @@ class UsuarioController
         if ($usu_id == "" || $rol_id == "" || $usu_cedula == "" || $usu_nombre == "" || $usu_apellido == "" || $usu_telefono == "" || $usu_correo == "" || $usu_contrasenia == "") {
             $_SESSION['editarUsuario'] = "Por favor diligencie los datos";
             redirect(getUrl("Configuracion", "Usuario", "getUpdate", array("usu_id" => $usu_id)));
-        } else {
+        }
+        $pattern = '/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/';
+        if (!preg_match($pattern, $usu_contrasenia)) {
+            $_SESSION['editarUsuario'] = "La contraseña debe tener al menos 8 caracteres, incluyendo una letra mayúscula, una letra minúscula, un número y un carácter especial.";
+            redirect(getUrl("Configuracion", "Usuario", "getUpdate", array("usu_id" => $usu_id)));
+        } 
+        
+        else {
             $sql = "UPDATE usuario SET rol_id=$rol_id, usu_cedula=$usu_cedula, usu_nombre='$usu_nombre', usu_apellido='$usu_apellido', 
             usu_telefono=$usu_telefono, usu_correo='$usu_correo', usu_contrasenia='$usu_contrasenia' WHERE usu_id =$usu_id";
             $ejecutar = $obj->editar($sql);
             if ($ejecutar) {
+                $_SESSION['success'] = "El usuario $usu_nombre ha sido editado.";
                 redirect(getUrl("Configuracion", "Usuario", "consultarUsuario"));
             } else {
                 echo "La edicion fallo";
@@ -165,14 +193,24 @@ class UsuarioController
     {
         $obj = new UsuarioModel();
         $usu_id = $_POST['usu_id'];
-        $sql = "UPDATE usuario SET usu_estado=0 WHERE usu_id =$usu_id";
+        $usuActual = $_SESSION['usu_id'];
+    
+        if ($usu_id == $usuActual) {
+            echo json_encode(['status' => 'error', 'message' => 'El usuario no se puede eliminar']);
+            return;
+        }
+    
+        $sql = "UPDATE usuario SET usu_estado = 0 WHERE usu_id = $usu_id";
+      
         $ejecutar = $obj->editar($sql);
+        
         if ($ejecutar) {
-            echo 1;
+            echo json_encode(['status' => 'success']);
         } else {
-            echo 2;
+            echo json_encode(['status' => 'error', 'message' => 'No se pudo eliminar el registro.']);
         }
     }
+    
     /////////////////Clientes//////////////////
 
     public function consultarCliente()
@@ -215,72 +253,83 @@ class UsuarioController
     }
 
     public function postActualizarClave()
-{
-    include_once "../view/configuracion/clientes/ViewCambioClave.php";
-    $obj = new UsuarioModel();
-    $usu_id = $_SESSION['usu_id'];
-
-    // Verifica si las claves existen en $_POST
-    $claveActual = isset($_POST['claveActual']) ? $_POST['claveActual'] : '';
-    $claveNueva = isset($_POST['claveNueva']) ? $_POST['claveNueva'] : '';
-    $repeatClaveNueva = isset($_POST['repeatClaveNueva']) ? $_POST['repeatClaveNueva'] : '';
-
-    if (!isset($_SESSION['mensajesC'])) {
-        $_SESSION['mensajesC'] = [];
-    }
-
-    $flag = false;
-
-    // Validaciones
-    if (empty($claveActual) || empty($claveNueva) || empty($repeatClaveNueva)) {
-        $_SESSION['errorEmpty'] = "Todos los campos son requeridos.";
-            return;
-    }
-
-
-    $clave = $obj->verificarClave($claveActual);
-    // Verificar si la contraseña actual es correcta
-    if ($clave == 0) {
-        $_SESSION['mensajesC'][] = [
-            'mensaje' => "Clave actual errónea.",
-            'alert' => "alert-warning"
-        ];
-     $flag = true;
-    }
-    // Verificar si las nuevas contraseñas coinciden
-    if ($claveNueva !== $repeatClaveNueva) {
-        $_SESSION['mensajesC'][] = [
-            'mensaje' => "La nueva contraseña no coincide.",
-            'alert' => "alert-warning"
-        ];
-      $flag = true;
-    }
-
-    if($flag){
-
+    {
         include_once "../view/configuracion/clientes/ViewCambioClave.php";
-        return;
+        $obj = new UsuarioModel();
+        $usu_id = $_SESSION['usu_id'];
+    
+        // Verifica si las claves existen en $_POST
+        $claveActual = isset($_POST['claveActual']) ? $_POST['claveActual'] : '';
+        $claveNueva = isset($_POST['claveNueva']) ? $_POST['claveNueva'] : '';
+        $repeatClaveNueva = isset($_POST['repeatClaveNueva']) ? $_POST['repeatClaveNueva'] : '';
+    
+        if (!isset($_SESSION['mensajesC'])) {
+            $_SESSION['mensajesC'] = [];
+        }
+    
+        $flag = false;
+    
+        // Validaciones
+        if (empty($claveActual) || empty($claveNueva) || empty($repeatClaveNueva)) {
+            $_SESSION['errorEmpty'] = "Todos los campos son requeridos.";
+                return;
+        }
+    
+    
+        $clave = $obj->verificarClave($claveActual);
+        // Verificar si la contraseña actual es correcta
+        if ($clave ==0) {
+            $_SESSION['mensajesC'][] = [
+                'mensaje' => "Clave actual errónea.",
+                'alert' => "alert-warning"
+            ];
+         $flag = true;
+        }
+        // Verificar si las nuevas contraseñas coinciden
+        if ($claveNueva !== $repeatClaveNueva) {
+            $_SESSION['mensajesC'][] = [
+                'mensaje' => "La nueva contraseña no coincide.",
+                'alert' => "alert-warning"
+            ];
+          $flag = true;
+        }
+
+        $pattern = '/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/';
+
+        if (!preg_match($pattern, $claveNueva)) {
+
+            $_SESSION['mensajesC'][] = [
+                'mensaje' => "La contraseña debe tener al menos 8 caracteres, incluyendo una letra mayúscula, una letra minúscula, un número y un carácter especial.",
+                'alert' => "alert-warning"
+            ];
+          $flag = true;
+
+        }
+    
+        if($flag){
+    
+           redirect(getUrl("Configuracion","Usuario","postActualizarClave"));
+        }
+      
+        $sql = "UPDATE usuario SET usu_contrasenia = '$claveNueva' WHERE usu_id = $usu_id";
+        $resultado = $obj->editar($sql);
+    
+        if ($resultado) {
+            $_SESSION['mensajesC'][] = [
+                'mensaje' => "La clave se actualizo.",
+                'alert' => "alert-success"
+            ];
+    
+        } else {
+            $_SESSION['mensajesC'][] = [
+                'mensaje' => "Error al actualizar la contraseña.",
+                'alert' => "alert-danger"
+            ];
+        }
+    
+        redirect(getUrl("Configuracion", "Usuario", "postActualizarClave"));
+    
+      
     }
-  
-    $sql = "UPDATE usuario SET usu_contrasenia = '$claveNueva' WHERE usu_id = $usu_id";
-    $resultado = $obj->editar($sql);
-
-    if ($resultado) {
-        $_SESSION['mensajesC'][] = [
-            'mensaje' => "La clave se actualizo.",
-            'alert' => "alert-success"
-        ];
-
-    } else {
-        $_SESSION['mensajesC'][] = [
-            'mensaje' => "Error al actualizar la contraseña.",
-            'alert' => "alert-danger"
-        ];
-    }
-
-    redirect(getUrl("Configuracion", "Usuario", "postActualizarClave"));
-
-  
-}
 
 }
