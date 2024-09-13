@@ -21,23 +21,37 @@ class UsuarioController
         // Sanitizar datos de entrada
         extract($_POST);
 
+        if (!isset($_SESSION['mensajes'])) {
+            $_SESSION['mensajes'] = [];
+        }
 
 
         if (empty($rol_id) || empty($usu_cedula) || empty($usu_nombre) || empty($usu_apellido) || empty($usu_telefono) || empty($usu_correo) || empty($usu_contrasenia)) {
             $_SESSION['errorEmpty'] = "Todos los campos son requeridos.";
             return;
         }
-
-        /*  $_SESSION['errorEmpty'] = "Todos los campos son requeridos.";
-         */
-        /*  $correo = $obj->VerificarCorreo($usu_correo);
-         if ($correo) {
-             $_SESSION['error'] = "El correo ya existe.";
-             redirect(getUrl("Configuracion", "Usuario", "registrarUsuario"));
-             return;
-         } */
-
-        // Prepara la consulta reemplazando manualmente los parámetros
+     
+        $correo = $obj->VerificarCorreo($usu_correo);
+     
+        if ($correo) {
+            $_SESSION['mensajes'][] = [
+                'mensaje' => "El correo ya existe.",
+                'alert' => "alert-warning"
+            ];
+            // $_SESSION['mensaje'] = "El correo ya existe.";
+            // $_SESSION['alert'] = "alert-warning";
+        
+        }
+        $documento = $obj->VerificarDocumento($usu_cedula);
+        if($documento){
+            $_SESSION['mensajes'][] = [
+                'mensaje' => "El documento ya existe.",
+                'alert' => "alert-warning"
+            ];
+        }
+        
+        redirect(getUrl("Configuracion", "Usuario", "registrarUsuario"));
+      
         $sql = sprintf(
             "INSERT INTO usuario (rol_id, usu_cedula, usu_nombre, usu_apellido, usu_telefono, usu_correo, usu_contrasenia) 
         VALUES ('%d', '%d', '%s', '%s', '%d', '%s', '%s')",
@@ -50,17 +64,18 @@ class UsuarioController
             $usu_contrasenia
         );
 
-        //dd($sql);
-
 
         $ejecutar = $obj->insertar($sql);
 
         if ($ejecutar) {
-            // $id = $obj->lastInsertId('usuario', 'usu_id');
-            // $_SESSION['id'] = $id;
+             $id = $obj->lastInsertId('usuario', 'usu_id');
+             $_SESSION['usu_id'] = $id;
+             $_SESSION['mensaje'] = "El usuario $usu_nombre ha sido registrado";
+             $_SESSION['alert'] = "alert-success";
             redirect(getUrl("Configuracion", "Usuario", "registrarUsuario"));
         } else {
-            $_SESSION['error'] = "Error al registrar el usuario. Inténtalo de nuevo.";
+            $_SESSION['mensaje'] = "Error al registrar el usuario. Inténtalo de nuevo.";
+            $_SESSION['alert'] = "alert-danger";
         }
     }
 
@@ -155,6 +170,8 @@ class UsuarioController
             echo 2;
         }
     }
+
+
     /////////////////Clientes//////////////////
 
     public function consultarCliente()
@@ -194,6 +211,65 @@ class UsuarioController
         } else {
             echo 'error';
         }
+    }
+
+
+    public function ActualizarClave()
+    {
+
+        $obj = new UsuarioModel();
+        $usu_id = $_SESSION['usu_id'];
+        extract($_POST);
+
+        // Validaciones
+        if (empty($claveActual) || empty($claveNueva) || empty($reapeatClaveNueva)) {
+            $_SESSION['mensaje'] = "Los campos no pueden estar vacíos.";
+            header("Location: ../view/configuracion/clientes/ViewCambioClave.php");
+            exit();
+        }
+
+        // Verificar si la contraseña actual es correcta
+        if (!$obj->verificarClave($claveActual)) {
+            $_SESSION['mensaje'] = "La contraseña actual no coincide.";
+            header("Location: ../view/configuracion/clientes/ViewCambioClave.php");
+            exit();
+        }
+
+        // Verificar si las nuevas contraseñas coinciden
+        if ($claveNueva !== $reapeatClaveNueva) {
+            $_SESSION['mensaje'] = "Las nuevas contraseñas no coinciden.";
+            header("Location: ../view/configuracion/clientes/ViewCambioClave.php");
+            exit();
+        }
+
+
+        // if(empty ($claveActual) || empty ($claveNueva) || empty ($reapeatClaveNueva)){
+        //     $_SESSION ['mensaje'] = "Los campos no pueden estar vacios";
+        //   }
+
+        // if($clave){
+        //     $_SESSION ['mensaje'] = "La clave actual no coincide";
+        // }
+        // if($claveNueva!= $reapeatClaveNueva){
+        //     $_SESSION ['mensaje'] = "Las claves nuevas no coinciden";
+        // }
+        $sql = "UPDATE usuario SET usu_contrasenia = $claveNueva WHERE usu_id = $usu_id";
+
+        // Ejecutar la consulta
+        $resultado = $obj->editar($sql);
+
+        if ($resultado) {
+            $_SESSION['mensaje'] = "Contraseña actualizada exitosamente.";
+            header("Location: ../view/configuracion/clientes/ViewCambioClave.php");
+            exit();
+        } else {
+            $_SESSION['mensaje'] = "Error al actualizar la contraseña.";
+            header("Location: ../view/configuracion/clientes/ViewCambioClave.php");
+            exit();
+        }
+
+
+        include_once "../view/configuracion/clientes/ViewCambioClave.php";
     }
 
 
