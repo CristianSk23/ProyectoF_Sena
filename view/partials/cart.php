@@ -1,11 +1,6 @@
-<?php
-    
-
-
-?>
-
-
 <!-- Cart -->
+
+
 <div class="wrap-header-cart js-panel-cart">
     <div class="s-full js-hide-cart"></div>
 
@@ -35,6 +30,8 @@
                         <span class="header-cart-item-info">
                             1 x $19.00
                         </span>
+                        ?>
+
                     </div>
                 </li>
 

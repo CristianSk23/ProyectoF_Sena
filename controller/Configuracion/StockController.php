@@ -17,47 +17,107 @@ Class StockController{
         $obj2 = new StockModel();
 
         $idprenda = $_POST['idPrenda'];
-        $talla = $_POST['talla'];
-        $color = $_POST['color'];
         $precio = $_POST['precio'];
-        $cantidad = $_POST['cantidad'];
+        $datos = $_POST['datos-organizados'];
+
         
-        if(empty($idprenda ) || empty($talla) || empty($color) || ($precio == "" && !is_numeric($precio) ) || ($cantidad == "" && !is_numeric($cantidad) )  || empty($_FILES  )) {
+        $datos2 = json_decode($datos, true);
+
+              // Inicializamos el array para almacenar errores
+        $errores = array();
+
+        // //! Validar que el array de colores no esté vacío
+        if (empty($datos2['color']) || !is_array($datos2['color'])) {
+            $errores[] = "El campo de colores no puede estar vacío.";
+        } else {
+            // Recorremos los colores
+            foreach ($datos2['color'] as $color) {
+                // Validar que el color no esté vacío
+                if (empty($color)) {
+                    $errores[] = "Uno de los colores está vacío.";
+                    
+                }
+
+                // Validar que existan tallas para ese color
+                if (empty($datos2['talla'][$color]) || !is_array($datos2['talla'][$color])) {
+                    $errores[] = "No hay tallas para el color $color.";
+                    
+                }
+
+                // Validar que existan cantidades para ese color
+                if (empty($datos2['cantidad'][$color]) || !is_array($datos2['cantidad'][$color])) {
+                    $errores[] = "No hay cantidades para el color $color.";
+                    
+                }
+
+                // Recorremos las tallas y las cantidades para cada color
+                foreach ($datos2['talla'][$color] as $tallaIndex => $talla) {
+                    // Validar que la talla no esté vacía
+                    if (empty($talla)) {
+                        $errores[] = "La talla para el color $color está vacía.";
+                        
+                    }
+
+                    // Validar que la cantidad correspondiente a esa talla sea numérica
+                    if (!isset($datos2['cantidad'][$color][$tallaIndex]) || !is_numeric($datos2['cantidad'][$color][$tallaIndex])) {
+                        $errores[] = "La cantidad para la talla $talla del color $color debe ser un valor numérico.";
+                    }
+                }
+            }
+        }
+        
+            
+            // Mostrar los errores si hay alguno
+            if (!empty($errores)) {
+                // Puedes almacenar los errores en una sesión o mostrarlos directamente
+                $_SESSION['errores'] = $errores;
+                foreach ($errores as $error) {
+                    echo "<p>$error</p>";
+                }
+                exit;
+            }
+        //!aqui termina la validacion de codigo
+
+        $productosOrganizados = array();
+
+        // Recorremos los colores
+        foreach ($datos2['color'] as $index => $color) {
+            $producto = array(
+                'color' => $color,
+                'talla' => array()
+            );
+
+            // Recorremos las tallas y cantidades para cada color
+            foreach ($datos2['talla'][$color] as $tallaIndex => $talla) {
+                $producto['talla'][$talla] = $datos2['cantidad'][$color][$tallaIndex];
+            }
+
+            $productosOrganizados[] = $producto;
+        }
+
+        // se validan los inputs de nombre y precio
+        if(empty($idprenda )  || !filter_var($precio, FILTER_VALIDATE_INT) ) {
             $_SESSION['datosIncorrectos'] = "Por favor complete el formulario.";
             redirect(getUrl("Configuracion",  "Stock", "getInsert"));
+        }                
+
+            foreach($productosOrganizados as $producto){ 
+            $color = $producto['color'];  // Guardamos el color
+
+            // Recorrer el array de tallas dentro de cada producto
+                foreach ($producto['talla'] as $talla => $cantidad) {
+                    // Construir la consulta SQL
+                    $sql = "INSERT INTO stock  VALUES (null, '$idprenda','$talla','$color', '$precio','$cantidad',1)";
+            
+                    // Ejecutar la consulta
+
+                    $ejecutar = $obj->insertar($sql);
+
+            }
         }
-
-        $sql = "INSERT INTO stock VALUES(null, '$idprenda','$talla', '$color', '$precio',
-        '$cantidad', 1 )";
-        echo $sql;
-        $ejecutar = $obj->insertar($sql);
-        
-
-
-        if($ejecutar){
-            //redirect(getUrl("Configuracion", "Stock", "getInsert"));
-            $imagenes = $_FILES['stock_img'];
-            $idStock = $this->consultarUltimoId();
-            for ($i = 0; $i < count($imagenes['name']); $i++){
-                $tmp_img = $imagenes['name'][$i];
-                $nombre = $imagenes['tmp_name'][$i];
-
-                $ruta = "images/$tmp_img";
-                move_uploaded_file($nombre, $ruta);
-
-                $sql2 = "INSERT INTO fotos VALUES(null, '$ruta','$idStock', 1)"; 
-                $ejecutar2 = $obj2->insertar($sql2);
-
-            } 
-        
-            dd($_FILES);
-        }else{
-            $_SESSION['error'] = "Error al registrar el proucto. Inténtalo de nuevo.";
-        }
-
-        
-    
+        redirect(getUrl("Configuracion",  "Stock", "getInsert"));
     }
+
 
     public function consultarUltimoId(){
         $obj = new StockModel();
@@ -72,7 +132,7 @@ Class StockController{
 
 
 
-    public function obtenerNombreProducto(){
+    public function obtenerNombreProducto($nombreProducto = false){
         $obj = new StockModel();
        // extract($_POST);
 
@@ -137,18 +197,44 @@ Class StockController{
 
     public function modificacion() {
         $obj = new StockModel();
-        
 
+        $idStock = $_POST['idStock'];
+        $idprenda = $_POST['idPrenda'];
+        $talla = $_POST['talla'];
+        $color = $_POST['color'];
+        $precio = $_POST['precio'];
+        $cantidad = $_POST['cantidad'];
+
+        if (
+            empty($idStock) ||  empty($idprenda) || empty($talla) || empty($color)
+            || empty($precio) || empty($cantidad)
+        ) {
+            $_SESSION['datosIncorrectos'] = "Por favor complete el formulario.";
+            redirect(getUrl("Configuracion", "stock", "modificar", array("stock_id" => $idStock)));
+        }
+
+        //dd($_POST);
         
+        $sql = "UPDATE stock 
+        SET product_id = '$idprenda', 
+            stock_talla = '$talla',  
+            stock_color = '$color', 
+            stock_precio = '$precio', 
+            stock_cantidad = '$cantidad' 
+        WHERE stock_id = $idStock";
+
+        //dd($sql);
+        $ejecutar = $obj->editar($sql);
+        redirect(getUrl("Configuracion", "Stock", "consultar"));
 
 
     }
     
     public function eliminar(){
-        $obj = new ProductoModel();
+        $obj = new StockModel();
         $id = $_POST['id'];
         echo $id;
-        $sql  = "UPDATE producto SET product_estado = 0 WHERE product_id =$id";
+        $sql  = "UPDATE stock SET stock_estado = 0 WHERE stock_id =$id";
         $ejecutar = $obj->editar($sql);
         if($ejecutar){
             echo 1;

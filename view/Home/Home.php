@@ -258,39 +258,70 @@
             $resultados = $controller->productos();
             ?>
 
-            <div class="row isotope-grid">
-                <div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item women">
 
-                    <!-- Block2 -->
-                    <?php foreach ($resultados as $resultado): ?>
-                        <div class="block2">
-                            <div class="block2-pic hov-img0">
-                                <img src="<?= $resultado['product_img']; ?>" alt="IMG-PRODUCT">
-                                <a href="<?php echo getUrl('Productos', 'Productos', 'detalleProducto', array('id' => $resultado['product_id'])); ?>"
-                                    class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1">
-                                    Ver detalle
-                                </a>
+            <div class="row">
+                <?php foreach ($resultados as $resultado): ?>
+                    <?php
+                    $precio = "";
+                    $mostrarProducto = false; // Variable para controlar si el producto tiene stock mayor a 1
+                
+                    // Verifica si hay detalles del producto
+                    if ($resultado["detalles"]) {
+                        $prod_detalle = $resultado["detalles"];
+                        foreach ($prod_detalle as $detalle) {
+                            // Si el stock es mayor a 1, se marca para mostrar
+                            if (isset($detalle["stock_precio"]) && $detalle["stock_precio"] > 1) {
+                                $precio = $detalle["stock_precio"];
+                                $mostrarProducto = true; // Marcamos que este producto debe mostrarse
+                                break; // No es necesario seguir revisando si ya encontramos un detalle con stock
+                            }
+                        }
+                    }
 
-                                <!--  <button type="button"
-                                    
-                                    class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1">
-                                    Ver detalle
-                                </button> -->
-                            </div>
+                    // Solo mostramos el producto si $mostrarProducto es verdadero
+                    if ($mostrarProducto):
+                        ?>
+                        <div class="col-sm-6 col-md-4 col-lg-3 p-b-35">
 
-                            <div class="block2-txt flex-w flex-t p-t-14">
-                                <div class="block2-txt-child1 flex-col-l ">
-                                    <a href="product-detail.html" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
-                                        <?= $resultado['product_nombre']; ?>
+                            <?php
+
+                            //var_dump($resultado);
+
+                            ?>
+                            <!-- Block2 -->
+                            <div class="block2">
+                                <div class="block2-pic hov-img0">
+                                    <img src="<?= $resultado['product_img']; ?>" alt="IMG-PRODUCT">
+                                    <a href="<?php echo getUrl('Productos', 'Productos', 'detalleProducto', array('id' => $resultado['product_id'])); ?>"
+                                        class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1">
+                                        Ver detalle
                                     </a>
-
-                                    <span class="stext-105 cl3">
-                                        <?= $resultado['product_precio']; ?>
-
-                                    </span>
                                 </div>
 
-                                <!--    <div class="block2-txt-child2 flex-r p-t-3">
+                                <div class="block2-txt flex-w flex-t p-t-14">
+                                    <div class="block2-txt-child1 flex-col-l">
+                                        <a href="product-detail.html" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
+                                            <?= $resultado['product_nombre']; ?>
+                                        </a>
+
+                                        <span class="stext-105 cl3">
+                                            $
+                                            <?php
+                                            $precioConvertido = floatval($precio);
+                                            echo number_format($precioConvertido);
+                                            ?>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endif; ?>
+                <?php endforeach; ?>
+            </div>
+
+
+
+            <!--    <div class="block2-txt-child2 flex-r p-t-3">
                          <a href="#" class="btn-addwish-b2 dis-block pos-relative js-addwish-b2">
                              <img class="icon-heart1 dis-block trans-04" src="images/icons/icon-heart-01.png"
                                  alt="ICON">
@@ -298,14 +329,6 @@
                                  src="images/icons/icon-heart-02.png" alt="ICON">
                          </a>
                      </div> -->
-                            </div>
-                        </div>
-                    <?php endforeach ?>
-                </div>
-
-            </div>
-
-
             <!-- Pagination -->
             <div class="flex-c-m flex-w w-full p-t-38">
                 <a href="#" class="flex-c-m how-pagination1 trans-04 m-all-7 active-pagination1">

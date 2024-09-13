@@ -44,7 +44,7 @@ $(document).ready(function () {
                         $('.messageSuccess').css('display', 'block');
                         setTimeout(() => {
                             location.reload();
-                        }, 3000);
+                        }, 500);
                     }
                 }
             })

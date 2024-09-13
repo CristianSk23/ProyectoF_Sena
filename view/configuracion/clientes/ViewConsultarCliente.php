@@ -21,7 +21,7 @@
                         </div>
                         <div class="col-md-6">
                             <label for="apellido" class="labels">Apellido</label>
-                            <input type="text" id="apellido" class="form-control" value="<?= htmlspecialchars($usuario['usu_apellido']); ?>" placeholder="Apellido" readonly>
+                            <input type="text" id="apellido" class="form-control " value="<?= htmlspecialchars($usuario['usu_apellido']); ?>" placeholder="Apellido" readonly>
                         </div>
                     </div>
                     <div class="row mt-3">
