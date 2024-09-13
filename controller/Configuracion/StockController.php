@@ -132,7 +132,7 @@ Class StockController{
 
 
 
-    public function obtenerNombreProducto($nombreProducto){
+    public function obtenerNombreProducto($nombreProducto = false){
         $obj = new StockModel();
        // extract($_POST);
 
