@@ -1,7 +1,10 @@
-<div class="mt-5">
-    <h4 class="display-4">Consulta Productos</h4>
-</div>
+
+
+
 <div class="container">
+    <div class="mt-5">
+        <h4 class="display-4">Consulta Productos</h4>
+    </div>
     <div class="row mt-12">
 
         <table class="table  table-bordered " id="tablaUsuario">

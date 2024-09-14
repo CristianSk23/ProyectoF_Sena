@@ -229,7 +229,6 @@ class ProductoController
         // Continuar con la actualización si la imagen se sube correctamente
         $sql = "UPDATE producto SET tipo_id ='$tipo', product_nombre ='$nombre', product_descripcion ='$descripcion', 
         genero_id ='$genero', categoria_id ='$categoria' WHERE product_id = $id";
-        dd($sql);
         $ejecutar = $obj->editar($sql);
 
             //Insercion de las imagenes con su respectivas validaciones
