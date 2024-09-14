@@ -4,13 +4,9 @@
     <div class="mt-5">
         <h4 class="display-4">Consulta de usuarios</h4>
     </div>
-    <?php if (isset($_SESSION['error'])): ?>
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            <?= $_SESSION['error'] ?>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        <div class="alert alert-danger alert-dismissible fade show" id="errorEliminarUsuario" style="display: none;" role="alert">
+            No puede eliminar su cuenta.
         </div>
-        <?php unset($_SESSION["error"]); ?>
-    <?php endif; ?>
     <?php if (isset($_SESSION['success'])): ?>
         <div class="alert alert-success alert-dismissible fade show" role="alert">
             <?= $_SESSION['success'] ?>
@@ -51,7 +47,7 @@
                                     </button>
                                 </a>
                                 <a title="Eliminar">
-                                    <button class="btn btn-danger eliminarU" data-url="<?php echo getUrl("Configuracion", "Usuario", "delete") ?>">
+                                    <button class="btn btn-danger eliminarU" data-url="<?php echo getUrl("Configuracion", "Usuario", "delete",false,"ajax") ?>">
                                         <i class="fa-sharp fa-solid fa-trash-can fa-lg" style="color: #fb6a6a;"></i>
                                     </button>
                                 </a>
@@ -104,10 +100,14 @@
                             usuActual: usuActual
                         },
                         success: function(response) {
-                            debugger;
-                            if (response == 1) {
+                            // debugger;
+                            if (response == "1") {
                                 console.log(response);
-                                // debugger;
+                                $("#errorEliminarUsuario").css("display", "block");
+                                setTimeout(() => {
+                                    $("#errorEliminarUsuario").css("display", "none");
+                                }, 3000);
+                            }else if(response == "2"){
                                 $('.messageSuccess').css('display', 'block');
                                 setTimeout(() => {
                                     location.reload();

@@ -196,9 +196,6 @@ class UsuarioController
         $usuActual = $_POST['usuActual'];
         // dd($usuActual);
         if ($usu_id == $usuActual) {
-        //    $_SESSION['error'] = 'No puede eliminar su cuenta.';
-        //     echo "3";
-        //    return;
             echo 1;
         }else{
             $sql = "UPDATE usuario SET usu_estado = 0 WHERE usu_id = $usu_id";
@@ -206,9 +203,9 @@ class UsuarioController
             $ejecutar = $obj->editar($sql);
             
             if ($ejecutar) {
-                echo 1;
-            } else {
                 echo 2;
+            } else {
+                echo 3;
             }
         }
     }
