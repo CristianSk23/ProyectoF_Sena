@@ -23,7 +23,7 @@
                     </div>
 
                     <div class="header-cart-item-txt p-t-8">
-                        <a href="#" class="header-cart-item-name m-b-18 hov-cl1 trans-04">
+                        <a class="header-cart-item-name m-b-18 hov-cl1 trans-04">
                             White Shirt Pleat
                         </a>
 

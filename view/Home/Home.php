@@ -263,8 +263,10 @@
                 <?php foreach ($resultados as $resultado): ?>
                     <?php
                     $precio = "";
-                    $mostrarProducto = false; // Variable para controlar si el producto tiene stock mayor a 1
-                
+                    $mostrarProducto = false;
+                    $fotos_prod = $resultado['fotos'];
+
+
                     // Verifica si hay detalles del producto
                     if ($resultado["detalles"]) {
                         $prod_detalle = $resultado["detalles"];
@@ -272,8 +274,8 @@
                             // Si el stock es mayor a 1, se marca para mostrar
                             if (isset($detalle["stock_precio"]) && $detalle["stock_precio"] > 1) {
                                 $precio = $detalle["stock_precio"];
-                                $mostrarProducto = true; // Marcamos que este producto debe mostrarse
-                                break; // No es necesario seguir revisando si ya encontramos un detalle con stock
+                                $mostrarProducto = true;
+                                break;
                             }
                         }
                     }
@@ -285,13 +287,13 @@
 
                             <?php
 
-                            //var_dump($resultado);
+
 
                             ?>
                             <!-- Block2 -->
                             <div class="block2">
                                 <div class="block2-pic hov-img0">
-                                    <img src="<?= $resultado['product_img']; ?>" alt="IMG-PRODUCT">
+                                    <img src="<?= $fotos_prod; ?>" alt="IMG-PRODUCT">
                                     <a href="<?php echo getUrl('Productos', 'Productos', 'detalleProducto', array('id' => $resultado['product_id'])); ?>"
                                         class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1">
                                         Ver detalle
@@ -300,7 +302,7 @@
 
                                 <div class="block2-txt flex-w flex-t p-t-14">
                                     <div class="block2-txt-child1 flex-col-l">
-                                        <a href="product-detail.html" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
+                                        <a class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
                                             <?= $resultado['product_nombre']; ?>
                                         </a>
 

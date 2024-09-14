@@ -19,41 +19,35 @@ $precio = "";
                             <div class="wrap-slick3-arrows flex-sb-m flex-w"></div>
 
                             <div class="slick3 gallery-lb">
-                                <div class="item-slick3" data-thumb="<?php echo $resultado['product_img']; ?>">
-                                    <div class="wrap-pic-w pos-relative">
-                                        <img src="<?php echo $resultado['product_img']; ?>" alt="IMG-PRODUCT">
-
-                                        <a class="flex-c-m size-108 how-pos1 bor0 fs-16 cl10 bg0 hov-btn3 trans-04"
-                                            href="<?php echo $resultado['product_img']; ?>">
-                                            <i class="fa fa-expand"></i>
-                                        </a>
+                                <?php
+                                // Verificar que $fotosProducto sea un array y que tenga elementos
+                                if (!empty($fotosProducto) && is_array($fotosProducto)):
+                                    foreach ($fotosProducto as $foto): ?>
+                                        <div class="item-slick3" data-thumb="<?php echo $foto; ?>">
+                                            <div class="wrap-pic-w pos-relative">
+                                                <img src="<?php echo $foto; ?>" alt="IMG-PRODUCT">
+                                                <a class="flex-c-m size-108 how-pos1 bor0 fs-16 cl10 bg0 hov-btn3 trans-04"
+                                                    href="<?php echo $foto; ?>">
+                                                    <i class="fa fa-expand"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    <?php endforeach;
+                                else: ?>
+                                    <div class="item-slick3" data-thumb="<?php echo $resultado['product_img']; ?>">
+                                        <div class="wrap-pic-w pos-relative">
+                                            <img src="<?php echo $resultado['product_img']; ?>" alt="IMG-PRODUCT">
+                                            <a class="flex-c-m size-108 how-pos1 bor0 fs-16 cl10 bg0 hov-btn3 trans-04"
+                                                href="<?php echo $resultado['product_img']; ?>">
+                                                <i class="fa fa-expand"></i>
+                                            </a>
+                                        </div>
                                     </div>
-                                </div>
-
-                                <div class="item-slick3" data-thumb="<?php echo $resultado['product_img']; ?>">
-                                    <div class="wrap-pic-w pos-relative">
-                                        <img src="<?php echo $resultado['product_img']; ?>" alt="IMG-PRODUCT">
-
-                                        <a class="flex-c-m size-108 how-pos1 bor0 fs-16 cl10 bg0 hov-btn3 trans-04"
-                                            href="images/product-detail-02.jpg">
-                                            <i class="fa fa-expand"></i>
-                                        </a>
-                                    </div>
-                                </div>
-
-                                <div class="item-slick3" data-thumb="<?php echo $resultado['product_img']; ?>">
-                                    <div class="wrap-pic-w pos-relative">
-                                        <img src="<?php echo $resultado['product_img']; ?>" alt="IMG-PRODUCT">
-
-                                        <a class="flex-c-m size-108 how-pos1 bor0 fs-16 cl10 bg0 hov-btn3 trans-04"
-                                            href="images/product-detail-03.jpg">
-                                            <i class="fa fa-expand"></i>
-                                        </a>
-                                    </div>
-                                </div>
+                                <?php endif; ?>
                             </div>
                         </div>
                     </div>
+
                 </div>
 
                 <div class="col-md-6 col-lg-5 p-b-30">
