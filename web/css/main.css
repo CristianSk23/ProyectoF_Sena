@@ -2119,7 +2119,12 @@ input.num-product::-webkit-inner-spin-button {
 /*//////////////////////////////////////////////////////////////////
 [ Block2 ]*/
 .block2-pic {
-  position: relative;
+ 
+    width: 300px; /* Tamaño fijo para el contenedor de la imagen */
+    height: 300px; /* Tamaño fijo para el contenedor de la imagen */
+    overflow: hidden; /* Oculta cualquier parte de la imagen que se desborde del contenedor */
+    position: relative; /* Posicionamiento relativo para permitir que el botón esté dentro del contenedor */
+
 }
 
 .block2-btn {

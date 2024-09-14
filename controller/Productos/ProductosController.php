@@ -10,33 +10,33 @@ class ProductosController
         $obj = new ProductosModel();
         $resultados = $obj->getProductos();
         $productosConDetalle = [];
-        ;
         if ($resultados) {
             foreach ($resultados as $producto) {
                 $product_id = $producto['product_id']; // Suponiendo que el campo del ID se llama 'product_id'
 
                 // Obtener los detalles del producto usando el ID
+                
                 $detalles = $obj->getStock($product_id);
-                $fotos_prod = $obj->getFoto($product_id);
-                foreach ($fotos_prod as $foto) {
+                $fotos_prod= $obj->getFoto($product_id);
 
+                foreach ($fotos_prod as $foto) {
                     $fotoProd = $foto['foto_img'];
                 }
 
                 // Verifica si se han encontrado detalles
                 if ($detalles) {
                     $producto["detalles"] = $detalles;
-
                 } else {
                     $producto['detalles'] = null;
                 }
 
                 if ($fotos_prod) {
                     $producto["fotos"] = $fotoProd;
-
                 } else {
+                    
                     $producto["fotos"] = null;
                 }
+                $producto['category']=$producto['categoria_id'];
                 $productosConDetalle[] = $producto;
             }
             //var_dump($productosConDetalle[]);
@@ -46,8 +46,6 @@ class ProductosController
         }
 
         return null;
-
-
     }
 
 
@@ -107,7 +105,6 @@ class ProductosController
 
                         // Agregar el detalle filtrado
                         $detallesFiltrados[] = $detalle;
-
                     }
                 }
             }
@@ -117,8 +114,6 @@ class ProductosController
             // Pasar los datos a la vista
             include_once "../view/Productos/detalleProductoModal.php";
         }
-
-
     }
 
 
@@ -146,14 +141,7 @@ class ProductosController
             // Devolver las tallas en formato JSON
             echo json_encode($tallas);
         }
-
     }
-
-
-
-
-
-
 }
 //return $resultado;
 /*  echo "<pre>";

@@ -81,7 +81,7 @@ class ProductosModel extends MasterModel
             //* Convierte el resultado a un array asociativo
             return $respuesta->fetch_all(MYSQLI_ASSOC);
         } else {
-            return null;
+            return [];
         }
     }
 
