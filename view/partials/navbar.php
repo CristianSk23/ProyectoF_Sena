@@ -1,5 +1,3 @@
-
-
 <div class="container-menu-desktop">
 	<!-- Topbar -->
 	<div class="wrap-menu-desktop">
@@ -24,7 +22,7 @@
 					<li>
 						<a href="product.php">Comprar</a>
 					</li>
-	
+
 					<li>
 						<a href="about.php">Nosotros</a>
 					</li>
@@ -61,9 +59,20 @@
 					<i class="zmdi zmdi-search"></i>
 				</div>
 
-				<?php if (isset($_SESSION['nombre'])): ?>
+				<?php if (isset($_SESSION['nombre'])):
+					// Llamar al método para obtener la cantidad de productos en el carrito
+					include_once "../controller/CarroDeCompras/carroDeComprasController.php";
+
+					// Crear una instancia del modelo
+					$objCarrito = new CarroDeComprasController();
+
+					$cantidadProductos = $objCarrito->contarProductosCarro($_SESSION['usu_id']);
+
+		
+
+					?>
 					<div class="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 icon-header-noti js-show-cart"
-						data-notify="1"
+						data-notify="<?php echo $cantidadProductos; ?>"
 						data-url="<?php echo getUrl("CarroDeCompras", "CarroDeCompras", "obtenerCarro", false, 'ajax'); ?>"
 						data-id-usuario="<?php echo $_SESSION['usu_id']; ?>">
 						<i class="zmdi zmdi-shopping-cart"></i>
@@ -75,7 +84,7 @@
 
 			<ul class="navbar-nav">
 				<li class="nav-item dropdown">
-					<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownPerfil" role="button"
+					<a class="nav-link dropdown-toggle" id="navbarDropdownPerfil" role="button"
 						data-bs-toggle="dropdown" aria-expanded="false">
 						<?php if (isset($_SESSION['nombre'])): ?>
 							<?= $_SESSION['nombre'] ?>
@@ -100,4 +109,3 @@
 		</nav>
 	</div>
 </div>
-

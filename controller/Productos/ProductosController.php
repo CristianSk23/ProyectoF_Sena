@@ -18,6 +18,10 @@ class ProductosController
                 // Obtener los detalles del producto usando el ID
                 $detalles = $obj->getStock($product_id);
                 $fotos_prod = $obj->getFoto($product_id);
+                foreach ($fotos_prod as $foto) {
+
+                    $fotoProd = $foto['foto_img'];
+                }
 
                 // Verifica si se han encontrado detalles
                 if ($detalles) {
@@ -28,7 +32,7 @@ class ProductosController
                 }
 
                 if ($fotos_prod) {
-                    $producto["fotos"] = $fotos_prod;
+                    $producto["fotos"] = $fotoProd;
 
                 } else {
                     $producto["fotos"] = null;
@@ -61,10 +65,20 @@ class ProductosController
             // Obtener los detalles del stock asociado al producto
 
             $detalles = $obj->getStock($product_id);
+            $fotos = $obj->getFoto($product_id);
 
             $coloresUnicos = [];
             $tallasUnicas = [];
             $detallesFiltrados = [];
+            $fotosProducto = [];
+
+            if (!empty($fotos)) {
+                foreach ($fotos as $foto) {
+                    $fotosProducto[] = $foto['foto_img']; // Guardamos todas las imágenes en el array
+                }
+            }
+
+
 
             foreach ($detalles as $detalle) {
                 // Verificar que tanto el color como la talla estén definidos
@@ -87,7 +101,13 @@ class ProductosController
                         !in_array($color, array_column($detallesFiltrados, 'stock_color')) ||
                         !in_array($talla, array_column($detallesFiltrados, 'stock_talla'))
                     ) {
+                        // Agregar las fotos al detalle del producto
+                        $detalle['fotos'] = $fotosProducto;
+
+
+                        // Agregar el detalle filtrado
                         $detallesFiltrados[] = $detalle;
+
                     }
                 }
             }

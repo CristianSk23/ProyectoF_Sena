@@ -46,7 +46,7 @@ class ProductosModel extends MasterModel
 
     public function getStockCarro($id, $color, $talla)
     {
-        $sql = "SELECT * FROM stock WHERE product_id = '$id' AND stock_color = '$color' AND stock_talla = '$talla'";
+        $sql = "SELECT * FROM stock WHERE product_id = $id AND stock_color = '$color' AND stock_talla = '$talla'";
         $respuesta = $this->consultar($sql);
         if ($respuesta && $respuesta->num_rows > 0) {
             //* Convierte el resultado a un array asociativo

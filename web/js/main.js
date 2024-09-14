@@ -369,28 +369,34 @@
 
                         let total = 0;
                         let precio = 0.0;
+                        let urlFoto = "";
+
                         let formatter = new Intl.NumberFormat('es-CO', {
                             style: 'currency',
                             currency: 'COP',
                             minimumFractionDigits: 0
                         });
 
+                        let cantidadProductosUnicos = 0;
                         // Recorrer los productos y agregar cada uno al carrito
                         productos.forEach(function (item) {
                             let producto = item.producto;
                             let stock = item.stock;
+                            let fotos = item.fotosProd;
                             stock.forEach(element => {
 
                                 precio = element.stock_precio;
                             });
+                            fotos.forEach(element => {
 
-                            /* let stock = producto.stock[0]; // Accede al primer elemento del array de stock
-                            let precio = stock.stock_precio; */
+                                urlFoto = element.foto_img;
+                                return
+                            });
 
                             let itemHtml = `
                             <li class="header-cart-item flex-w flex-t m-b-12">
                                 <div class="header-cart-item-img">
-                                    <img src="${producto.imagen_url}" alt="IMG">
+                                    <img src="${urlFoto}" alt="IMG">
                                 </div>
                                 <div class="header-cart-item-txt p-t-8">
                                     <a href="#" class="header-cart-item-name m-b-18 hov-cl1 trans-04">
@@ -406,12 +412,14 @@
 
                             // Actualizar el total
                             total += precio * item.cantidad;
+                            cantidadProductosUnicos++;
                         });
 
 
 
                         // Actualizar el total en el HTML
                         $('.header-cart-total').text(`Total: ${formatter.format(total)}`);
+                        $('.icon-header-item.icon-header-noti').attr('data-notify', cantidadProductosUnicos);
 
                         // Mostrar el panel del carrito
                         $('.js-panel-cart').addClass('show-header-cart');

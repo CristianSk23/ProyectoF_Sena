@@ -30,12 +30,22 @@ class CarroDeComprasModel extends MasterModel
 
     public function getProdCarro($carro_id)
     {
-        
+
         $sql = "SELECT * FROM detalle_carrito WHERE carroId = $carro_id";
         $respuesta = $this->consultar($sql);
 
         if ($respuesta) {
             return $respuesta->fetch_all(MYSQLI_ASSOC);
+        }
+    }
+
+    public function getCantProductos($carro_id)
+    {
+        $sql = "SELECT COUNT(*) AS total_productos FROM detalle_carrito WHERE carroId = $carro_id";
+        $respuesta = $this->consultar($sql);
+        if ($respuesta) {
+            $row = $respuesta->fetch_assoc();
+            return $row['total_productos'] ?: 0; // Retorna 0 si no hay productos
         }
     }
 
