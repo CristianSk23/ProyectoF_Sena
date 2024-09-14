@@ -61,5 +61,67 @@
         </form>
     </div>
 </section>
+<script>
 
+function togglePasswordVisibility(inputId, iconId) {
+        const passwordField = document.getElementById(inputId);
+        const eyeIcon = document.getElementById(iconId);
+
+        if (passwordField.type === 'password') {
+            passwordField.type = 'text';
+            eyeIcon.classList.remove('bi-eye');
+            eyeIcon.classList.add('bi-eye-slash');
+        } else {
+            passwordField.type = 'password';
+            eyeIcon.classList.remove('bi-eye-slash');
+            eyeIcon.classList.add('bi-eye');
+        }
+    }
+
+    document.getElementById('toggleActualClave').addEventListener('click', function () {
+        togglePasswordVisibility('actualClave', 'iconActualClave');
+    });
+
+    document.getElementById('toggleCambioClave').addEventListener('click', function () {
+        togglePasswordVisibility('cambioClave', 'iconCambioClave');
+    });
+
+    document.getElementById('toggleConfirmarClave').addEventListener('click', function () {
+        togglePasswordVisibility('nuevaClaveConfirmar', 'iconConfirmarClave');
+    });
+
+
+
+
+    var headerDesktop = $('.container-menu-desktop');
+    var wrapMenu = $('.wrap-menu-desktop');
+
+    if ($('.top-bar').length > 0) {
+        var posWrapHeader = $('.top-bar').height();
+    }
+    else {
+        var posWrapHeader = 0;
+    }
+
+
+    if ($(window).scrollTop() > posWrapHeader) {
+        $(headerDesktop).addClass('fix-menu-desktop');
+        $(wrapMenu).css('top', 0);
+    }
+    else {
+        $(headerDesktop).removeClass('fix-menu-desktop');
+        $(wrapMenu).css('top', posWrapHeader - $(this).scrollTop());
+    }
+
+    $(window).on('scroll', function () {
+        if ($(this).scrollTop() > posWrapHeader) {
+            $(headerDesktop).addClass('fix-menu-desktop');
+            $(wrapMenu).css('top', 0);
+        }
+        else {
+            $(headerDesktop).removeClass('fix-menu-desktop');
+            $(wrapMenu).css('top', posWrapHeader - $(this).scrollTop());
+        }
+    });
+</script>
 

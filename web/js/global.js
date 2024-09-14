@@ -52,33 +52,6 @@ $(document).ready(function () {
             alert("Se ha cancelado la eliminación")
         }
     })
- ////////////////// Cambia los iconos y visualiza u oculta la contraseña cliente////////////////
-    function togglePasswordVisibility(inputId, iconId) {
-        const passwordField = document.getElementById(inputId);
-        const eyeIcon = document.getElementById(iconId);
-
-        if (passwordField.type === 'password') {
-            passwordField.type = 'text';
-            eyeIcon.classList.remove('bi-eye');
-            eyeIcon.classList.add('bi-eye-slash');
-        } else {
-            passwordField.type = 'password';
-            eyeIcon.classList.remove('bi-eye-slash');
-            eyeIcon.classList.add('bi-eye');
-        }
-    }
-
-    document.getElementById('toggleActualClave').addEventListener('click', function () {
-        togglePasswordVisibility('actualClave', 'iconActualClave');
-    });
-
-    document.getElementById('toggleCambioClave').addEventListener('click', function () {
-        togglePasswordVisibility('cambioClave', 'iconCambioClave');
-    });
-
-    document.getElementById('toggleConfirmarClave').addEventListener('click', function () {
-        togglePasswordVisibility('nuevaClaveConfirmar', 'iconConfirmarClave');
-    });
-
+ 
 
 })

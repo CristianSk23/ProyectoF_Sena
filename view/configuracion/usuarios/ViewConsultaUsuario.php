@@ -1,3 +1,5 @@
+
+
 <div class="container">
     <div class="mt-5">
         <h4 class="display-4">Consulta de usuarios</h4>
@@ -16,8 +18,8 @@
         </div>
         <?php unset($_SESSION["success"]); ?>
     <?php endif; ?>
-    <div id="usuActual" data-usu_idA="<?= $_SESSION['usu_id']; ?>"></div>
 
+    <div id="usuarioActual" data-idUsu="<?= $_SESSION['usu_id'] ?>" style="display: none;"></div>
     <div class="row mt-12">
         <table class="table table-bordered" id="tablaUsuario">
             <thead>
@@ -72,65 +74,85 @@
     </a>
 </div>
 <script>
-    $(document).ready(function() {
+      $(document).ready(function() {
+        $(document).off('click', '.eliminarU');
         $(document).on('click', '.eliminarU', function() {
-            // Confirmar la acción
+            
             const aviso = confirm("¿Está seguro de que desea eliminar el registro?");
             if (aviso) {
+                // e.preventDefault();
                 // Encuentra la fila <tr> más cercana al botón clicado
                 const row = $(this).closest('tr');
 
                 // Obtén el ID de usuario de la celda correspondiente en la fila
                 const usu_id = row.find('.idUsuario').data('usu_id');
-
-                // Enviar el ID del usuario actual desde el servidor al cliente
-                const usuActual = $('#usuActual').data('usu_id');
-
-                if (usu_id == usuActual) {
-                    alert("El usuario no se puede eliminar.");
-                    return;
-                }
-
-                // Obtén la URL de eliminación del botón clicado
-                const url = $(this).data('url');
-
-                $.ajax({
-                    url: url,
-                    type: 'POST',
-                    data: {
-                        usu_id: usu_id
-                    },
-                    success: function(response) {
-                        let data;
-
-                        // Intenta analizar la respuesta como JSON
-                        try {
-                            data = JSON.parse(response);
-                        } catch (e) {
-                            console.error("Error al analizar la respuesta JSON:", e);
-                            alert("Hubo un problema al procesar la respuesta del servidor.");
-                            return;
+                const usuActual = $('#usuarioActual').attr('data-idUsu');
+                // console.log(usuActual);
+            //   if(usuActual == usu_id){
+            //     console.log('No se puede eliminar el usuario actual');
+            //     return;
+            //   }else{
+                    // Obtén la URL de eliminación del botón clicado
+                    const url = $(this).data('url');
+                    // console.log('ID Usuario:', usu_id);
+                    
+                    $.ajax({
+                        url: url,
+                        type: 'POST',
+                        data: {
+                            usu_id: usu_id,
+                            usuActual: usuActual
+                        },
+                        success: function(response) {
+                            debugger;
+                            if (response == 1) {
+                                console.log(response);
+                                // debugger;
+                                $('.messageSuccess').css('display', 'block');
+                                setTimeout(() => {
+                                    location.reload();
+                                }, 500);
+                            }
                         }
-
-                        // Verifica el estado de la respuesta
-                        if (data.status === "success") {
-                            $('.messageSuccess').css('display', 'block');
-                            setTimeout(() => {
-                                location.reload();
-                            }, 500);
-                        } else {
-                            alert(data.message || "No se pudo eliminar el registro.");
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        console.error("Error en la solicitud:", error);
-                        alert("Hubo un problema al intentar eliminar el registro.");
-                    }
-                });
-
+                    });
+            //   }
+              
             } else {
                 alert("Se ha cancelado la eliminación.");
             }
         });
     });
+
+    var headerDesktop = $('.container-menu-desktop');
+    var wrapMenu = $('.wrap-menu-desktop');
+
+    if ($('.top-bar').length > 0) {
+        var posWrapHeader = $('.top-bar').height();
+    }
+    else {
+        var posWrapHeader = 0;
+    }
+
+
+    if ($(window).scrollTop() > posWrapHeader) {
+        $(headerDesktop).addClass('fix-menu-desktop');
+        $(wrapMenu).css('top', 0);
+    }
+    else {
+        $(headerDesktop).removeClass('fix-menu-desktop');
+        $(wrapMenu).css('top', posWrapHeader - $(this).scrollTop());
+    }
+
+    $(window).on('scroll', function () {
+        if ($(this).scrollTop() > posWrapHeader) {
+            $(headerDesktop).addClass('fix-menu-desktop');
+            $(wrapMenu).css('top', 0);
+        }
+        else {
+            $(headerDesktop).removeClass('fix-menu-desktop');
+            $(wrapMenu).css('top', posWrapHeader - $(this).scrollTop());
+        }
+    });
+
 </script>
+

@@ -1,10 +1,12 @@
+
+
 <div class="container-menu-desktop">
 	<!-- Topbar -->
 	<div class="wrap-menu-desktop">
 		<nav class="limiter-menu-desktop container">
 			<!-- Logo desktop -->
 			<a href="#" class="logo">
-				<img src="images/icons/naturalsport_logo.png" alt="IMG-LOGO">
+				<img src="images/icons/ntrSport Logo1.png" alt="IMG-LOGO">
 			</a>
 
 			<!-- Botón toggle para pantallas pequeñas -->
@@ -28,7 +30,7 @@
 					</li>
 
 					<li>
-						<a href="contact.html">Contacto</a>
+						<a href="contacto.php">Contacto</a>
 					</li>
 
 					<?php if (isset($_SESSION['usu_id']) && $_SESSION['rol_id'] == 1): ?>
@@ -98,3 +100,4 @@
 		</nav>
 	</div>
 </div>
+
