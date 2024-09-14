@@ -346,7 +346,7 @@
 
 
 
-
+    //* Carga la información obtenida de la base en el modal del carro de compras
 
     $(document).ready(function () {
         $('.js-show-cart').on('click', function () {
@@ -368,12 +368,21 @@
                         $('.header-cart-wrapitem').empty();
 
                         let total = 0;
+                        let precio = 0.0;
+                        let formatter = new Intl.NumberFormat('es-CO', {
+                            style: 'currency',
+                            currency: 'COP',
+                            minimumFractionDigits: 0
+                        });
 
                         // Recorrer los productos y agregar cada uno al carrito
                         productos.forEach(function (item) {
                             let producto = item.producto;
                             let stock = item.stock;
-                            console.log(stock);
+                            stock.forEach(element => {
+
+                                precio = element.stock_precio;
+                            });
 
                             /* let stock = producto.stock[0]; // Accede al primer elemento del array de stock
                             let precio = stock.stock_precio; */
@@ -388,19 +397,21 @@
                                         ${producto.product_nombre}
                                     </a>
                                     <span class="header-cart-item-info">
-                                        ${item.cantidad} x $${precio}
+                                        ${item.cantidad} x ${formatter.format(precio)}
                                     </span>
                                 </div>
                             </li>`;
+
                             $('.header-cart-wrapitem').append(itemHtml);
 
                             // Actualizar el total
-                            total += producto.product_precio * item.cantidad;
+                            total += precio * item.cantidad;
                         });
 
 
+
                         // Actualizar el total en el HTML
-                        $('.header-cart-total').text(`Total: $${total.toFixed(2)}`);
+                        $('.header-cart-total').text(`Total: ${formatter.format(total)}`);
 
                         // Mostrar el panel del carrito
                         $('.js-panel-cart').addClass('show-header-cart');

@@ -84,13 +84,11 @@ class CarroDeComprasController
             $obj = new CarroDeComprasModel();
             $objProd = new ProductosModel();
             $carro_id = $obj->obtenerIdCarro($usu_id);
-
             $productoDetalle = [];
 
-            foreach ($carro_id as $carro) {
-                $id = $carro["carro_id"];
-            }
-            $prodCarroCompra = $obj->getProdCarro($id);
+            $carro_id = (int) $carro_id;
+            $prodCarroCompra = $obj->getProdCarro($carro_id);
+
 
             foreach ($prodCarroCompra as $prod) {
                 $producto = $objProd->getDetalleProducto($prod['product_id']);
