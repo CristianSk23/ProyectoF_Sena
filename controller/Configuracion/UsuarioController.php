@@ -87,8 +87,8 @@ class UsuarioController
         $ejecutar = $obj->insertar($sql);
 
         if ($ejecutar) {
-             $id = $obj->lastInsertId('usuario', 'usu_id');
-             $_SESSION['usu_id'] = $id;
+            //  $id = $obj->lastInsertId('usuario', 'usu_id');
+            //  $_SESSION['usu_id'] = $id;
              $_SESSION['mensajes'][] = [
                 'mensaje' => "El usuario $usu_nombre ha sido registrado.",
                 'alert' => "alert-success"
@@ -193,21 +193,23 @@ class UsuarioController
     {
         $obj = new UsuarioModel();
         $usu_id = $_POST['usu_id'];
-        $usuActual = $_SESSION['usu_id'];
-    
+        $usuActual = $_POST['usuActual'];
+        // dd($usuActual);
         if ($usu_id == $usuActual) {
-            echo json_encode(['status' => 'error', 'message' => 'El usuario no se puede eliminar']);
-            return;
-        }
-    
-        $sql = "UPDATE usuario SET usu_estado = 0 WHERE usu_id = $usu_id";
+        //    $_SESSION['error'] = 'No puede eliminar su cuenta.';
+        //     echo "3";
+        //    return;
+            echo 1;
+        }else{
+            $sql = "UPDATE usuario SET usu_estado = 0 WHERE usu_id = $usu_id";
       
-        $ejecutar = $obj->editar($sql);
-        
-        if ($ejecutar) {
-            echo json_encode(['status' => 'success']);
-        } else {
-            echo json_encode(['status' => 'error', 'message' => 'No se pudo eliminar el registro.']);
+            $ejecutar = $obj->editar($sql);
+            
+            if ($ejecutar) {
+                echo 1;
+            } else {
+                echo 2;
+            }
         }
     }
     

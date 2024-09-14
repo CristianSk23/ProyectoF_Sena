@@ -18,6 +18,7 @@ class AccesoController
         // Verifica si los campos de correo y contraseña no están vacíos
         if (!empty($usu_email) && !empty($usu_password)) {
             if (mysqli_num_rows($usuarios) > 0) {
+                
                 foreach ($usuarios as $usuario) {
                     // Guarda los datos del usuario en la sesión
                     $_SESSION['auth'] = "ok";

@@ -4,21 +4,21 @@
             <div class="mt-6">
                 <h4 class="display-4">Registro de usuario</h4>
             </div>
-        
-        <?php
-        if (isset($_SESSION['mensajes']) && !empty($_SESSION['mensajes'])) {
-            foreach ($_SESSION['mensajes'] as $msg) {
-        ?>
-                <div class="alert">
-                    <div class='alert <?= $msg['alert'] ?>' role="alert">
-                        <?= $msg['mensaje'] ?>
+
+            <?php
+            if (isset($_SESSION['mensajes']) && !empty($_SESSION['mensajes'])) {
+                foreach ($_SESSION['mensajes'] as $msg) {
+            ?>
+                    <div class="alert">
+                        <div class='alert <?= $msg['alert'] ?>' role="alert">
+                            <?= $msg['mensaje'] ?>
+                        </div>
                     </div>
-                </div>
-            <?php } ?>
-        <?php
-            unset($_SESSION['mensajes']);
-        }
-        ?>
+                <?php } ?>
+            <?php
+                unset($_SESSION['mensajes']);
+            }
+            ?>
         </div>
         <?php
         if (isset($_SESSION['mensajes']) && !empty($_SESSION['mensajes'])) {
@@ -86,7 +86,7 @@
                             </div>
 
                             <div class="col-md-10 mb-3">
-                                <button class="btn btn-primary" type="submit" >Registrar</button>
+                                <button class="btn btn-primary" type="submit">Registrar</button>
 
                             </div>
                             <div class="col-md-10 mb-3">
@@ -98,6 +98,37 @@
                             <script>
                                 document.getElementById('btnConsultar').addEventListener('click', function() {
                                     window.location.href = '<?php echo getUrl("Configuracion", "Usuario", "consultarUsuario"); ?>';
+                                });
+
+
+
+
+                                var headerDesktop = $('.container-menu-desktop');
+                                var wrapMenu = $('.wrap-menu-desktop');
+
+                                if ($('.top-bar').length > 0) {
+                                    var posWrapHeader = $('.top-bar').height();
+                                } else {
+                                    var posWrapHeader = 0;
+                                }
+
+
+                                if ($(window).scrollTop() > posWrapHeader) {
+                                    $(headerDesktop).addClass('fix-menu-desktop');
+                                    $(wrapMenu).css('top', 0);
+                                } else {
+                                    $(headerDesktop).removeClass('fix-menu-desktop');
+                                    $(wrapMenu).css('top', posWrapHeader - $(this).scrollTop());
+                                }
+
+                                $(window).on('scroll', function() {
+                                    if ($(this).scrollTop() > posWrapHeader) {
+                                        $(headerDesktop).addClass('fix-menu-desktop');
+                                        $(wrapMenu).css('top', 0);
+                                    } else {
+                                        $(headerDesktop).removeClass('fix-menu-desktop');
+                                        $(wrapMenu).css('top', posWrapHeader - $(this).scrollTop());
+                                    }
                                 });
                             </script>
                         </form>
