@@ -1,6 +1,3 @@
-
-
-
 <div class="container">
     <div class="mt-5">
         <h4 class="display-4">Consulta Productos</h4>
@@ -10,14 +7,14 @@
         <table class="table  table-bordered " id="tablaUsuario">
             <thead>
                 <tr>
-                <th scope="col">Numero</th>
-                <th scope="col">tipo</th>
-                <th scope="col">Nombre</th>
-                <th scope="col">Descripcion</th>
-                <th scope="col">Categoría</th>
-                <th scope="col">Género</th>
-                <th scope="col">Acciones de edicción</th>
-                
+                    <th scope="col">Numero</th>
+                    <th scope="col">tipo</th>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Descripcion</th>
+                    <th scope="col">Categoría</th>
+                    <th scope="col">Género</th>
+                    <th scope="col">Acciones de edicción</th>
+
 
                 </tr>
             </thead>
@@ -25,14 +22,14 @@
                 <?php if (!empty($productos)): ?>
                     <?php foreach ($productos as $producto): ?>
                         <tr>
-                            <td  data-id="<?= $producto['product_id'] ?>" style="display: none;"><?= $producto['producto_id'] ?> </td>
+                            <td data-id="<?= $producto['product_id'] ?>" style="display: none;"><?= $producto['producto_id'] ?> </td>
                             <td><?= $producto['product_id']; ?></td>
                             <td><?= $producto['tipo_nombre']; ?></td>
                             <td><?= $producto['product_nombre']; ?></td>
                             <td><?= $producto['product_descripcion']; ?></td>
                             <td><?= $producto['categoria_nombre']; ?></td>
                             <td><?= $producto['genero_nombre']; ?></td>
-                            
+
                             <td>
                                 <a title="Editar" href="<?php echo getUrl("Configuracion", "Producto", "modificar", array("product_id" => $producto['product_id'])); ?>">
                                     <button class="btn btn-primary actualizar"> <i class="fa-solid fa-pen-to-square fa-lg me-1" style="color: #0fcedb;"></i></button>
@@ -58,3 +55,32 @@
         </div>
     </div>
 </div>
+<script>
+    var headerDesktop = $('.container-menu-desktop');
+    var wrapMenu = $('.wrap-menu-desktop');
+
+    if ($('.top-bar').length > 0) {
+        var posWrapHeader = $('.top-bar').height();
+    } else {
+        var posWrapHeader = 0;
+    }
+
+
+    if ($(window).scrollTop() > posWrapHeader) {
+        $(headerDesktop).addClass('fix-menu-desktop');
+        $(wrapMenu).css('top', 0);
+    } else {
+        $(headerDesktop).removeClass('fix-menu-desktop');
+        $(wrapMenu).css('top', posWrapHeader - $(this).scrollTop());
+    }
+
+    $(window).on('scroll', function() {
+        if ($(this).scrollTop() > posWrapHeader) {
+            $(headerDesktop).addClass('fix-menu-desktop');
+            $(wrapMenu).css('top', 0);
+        } else {
+            $(headerDesktop).removeClass('fix-menu-desktop');
+            $(wrapMenu).css('top', posWrapHeader - $(this).scrollTop());
+        }
+    });
+</script>

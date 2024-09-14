@@ -3,8 +3,8 @@
         <h4 class="display-4">Editar Stock</h4>
     </div>
 
-    <?php foreach($stocks as $stock): ?>
-        <form class="row g-3 mt-5" method="post" action="<?php echo getUrl("Configuracion","Stock","modificacion") ?>" >
+    <?php foreach ($stocks as $stock): ?>
+        <form class="row g-3 mt-5" method="post" action="<?php echo getUrl("Configuracion", "Stock", "modificacion") ?>">
 
             <!-- Nombre de prenda -->
             <div class="form-group col-md-4">
@@ -15,10 +15,10 @@
                         <option value="<?= $producto['product_id']; ?>"><?= $producto['product_nombre']; ?></option>
                     <?php endforeach; ?>
                 </select>
-                
+
             </div>
 
-            
+
             <!-- Talla -->
             <div class="form-group col-md-4">
                 <label for="talla">Talla</label>
@@ -37,8 +37,8 @@
             <div class="col-md-4">
                 <label for="color" class="form-label">Color</label>
                 <input type="text" class="form-control" id="color" name="color" value="<?= $stock['stock_color']; ?>">
-                <input type="hidden" name="idStock"  value="<?= $stock['stock_id']; ?>" >
-                
+                <input type="hidden" name="idStock" value="<?= $stock['stock_id']; ?>">
+
             </div>
 
             <!-- Precio -->
@@ -57,8 +57,37 @@
             <div class="col-12 mt-4">
                 <button class="btn btn-primary" type="submit">Actualizar Stock</button>
             </div>
-            <div class="col-12 mt-4" >
+            <div class="col-12 mt-4">
             </div>
         </form>
     <?php endforeach; ?>
 </div>
+<script>
+    var headerDesktop = $('.container-menu-desktop');
+    var wrapMenu = $('.wrap-menu-desktop');
+
+    if ($('.top-bar').length > 0) {
+        var posWrapHeader = $('.top-bar').height();
+    } else {
+        var posWrapHeader = 0;
+    }
+
+
+    if ($(window).scrollTop() > posWrapHeader) {
+        $(headerDesktop).addClass('fix-menu-desktop');
+        $(wrapMenu).css('top', 0);
+    } else {
+        $(headerDesktop).removeClass('fix-menu-desktop');
+        $(wrapMenu).css('top', posWrapHeader - $(this).scrollTop());
+    }
+
+    $(window).on('scroll', function() {
+        if ($(this).scrollTop() > posWrapHeader) {
+            $(headerDesktop).addClass('fix-menu-desktop');
+            $(wrapMenu).css('top', 0);
+        } else {
+            $(headerDesktop).removeClass('fix-menu-desktop');
+            $(wrapMenu).css('top', posWrapHeader - $(this).scrollTop());
+        }
+    });
+</script>
