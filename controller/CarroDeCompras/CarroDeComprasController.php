@@ -47,7 +47,8 @@ class CarroDeComprasController
     public function obtenerCarro()
     {
         ob_start(); // Iniciar el buffer de salida
-
+        $modal = isset($_GET['modal']) ? $_GET['modal'] : null;
+        var_dump($modal);
         header('Content-Type: application/json'); // Configura el tipo de contenido como JSON
 
         if (isset($_POST['usu_id'])) {
@@ -80,9 +81,46 @@ class CarroDeComprasController
 
             // Enviar la respuesta JSON
             echo json_encode(['success' => true, 'productos' => $productoDetalle]);
+            if ($modal != 0) {
+                include_once "../web/CarroDeCompras.php";
+            }
         } else {
             ob_end_clean();
             echo json_encode(['success' => false, 'message' => 'Usuario no encontrado.']);
+        }
+    }
+
+
+    public function obtenerCarroDetalle()
+    {
+
+        if (isset($_GET['usu_id'])) {
+            $usu_id = $_GET['usu_id'];
+            $obj = new CarroDeComprasModel();
+            $objProd = new ProductosModel();
+            $carro_id = $obj->obtenerIdCarro($usu_id);
+            $productoDetalle = [];
+
+            $carro_id = (int) $carro_id;
+            $prodCarroCompra = $obj->getProdCarro($carro_id);
+
+
+            foreach ($prodCarroCompra as $prod) {
+                $producto = $objProd->getDetalleProducto($prod['product_id']);
+                $stockProd = $objProd->getStockCarro($prod['product_id'], $prod['color'], $prod['talla']);
+                $fotos = $objProd->getFoto($prod['product_id']);
+                $productoDetalle[] = [
+                    'producto' => $producto,
+                    'cantidad' => $prod['cantidad'],
+                    'color' => $prod['color'],
+                    'talla' => $prod['talla'],
+                    'stock' => $stockProd,
+                    'fotosProd' => $fotos
+                ];
+            }
+
+            include_once "../web/CarroDeCompras.php";
+
         }
     }
 
@@ -95,7 +133,7 @@ class CarroDeComprasController
         $idCarro = $obj->obtenerIdCarro($usu_id);
         $carro_id = (int) $idCarro;
         $cantidad = $obj->getCantProductos($carro_id);
-       
+
         return $cantidad;
     }
 

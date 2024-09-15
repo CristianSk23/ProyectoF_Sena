@@ -352,7 +352,6 @@
         $('.js-show-cart').on('click', function () {
             let userId = $(this).data('id-usuario');
             let url = $(this).data('url');
-
             if (userId) {
                 // Enviar el ID del usuario al servidor mediante AJAX
                 $.ajax({
@@ -362,7 +361,6 @@
                     success: function (response) {
                         // Suponiendo que la respuesta es JSON y contiene los productos
                         let productos = response.productos;
-
 
                         // Limpiar la lista actual del carrito
                         $('.header-cart-wrapitem').empty();
@@ -399,7 +397,7 @@
                                     <img src="${urlFoto}" alt="IMG">
                                 </div>
                                 <div class="header-cart-item-txt p-t-8">
-                                    <a href="#" class="header-cart-item-name m-b-18 hov-cl1 trans-04">
+                                    <a class="header-cart-item-name m-b-18 hov-cl1 trans-04">
                                         ${producto.product_nombre}
                                     </a>
                                     <span class="header-cart-item-info">
@@ -433,6 +431,67 @@
             }
         });
     });
+
+
+    //* Actualiza el precio total por todos los productos en el detalle del carro de compras:
+
+    $(document).ready(function () {
+
+        // Escuchar clic en el botón de aumentar cantidad
+        $('.btn-num-product-up').on('click', function () {
+            // Obtener el input de cantidad dentro de la fila actual
+            var inputCantidad = $(this).closest('.wrap-num-product').find('.num-product');
+            var cantidadActual = parseInt(inputCantidad.val());
+
+
+            actualizarTotalProducto(inputCantidad); // Actualizar total para ese producto
+        });
+
+        // Escuchar clic en el botón de disminuir cantidad
+        $('.btn-num-product-down').on('click', function () {
+            // Obtener el input de cantidad dentro de la fila actual
+            var inputCantidad = $(this).closest('.wrap-num-product').find('.num-product');
+            var cantidadActual = parseInt(inputCantidad.val());
+            if (cantidadActual > 1) {
+
+                actualizarTotalProducto(inputCantidad); // Actualizar total para ese producto
+            }
+        });
+
+        // Escuchar cambios manuales en el input de cantidad
+        $('.num-product').on('input', function () {
+            actualizarTotalProducto($(this)); // Actualizar total para ese producto
+        });
+
+        // Función para actualizar el total de un producto
+        function actualizarTotalProducto(inputCantidad) {
+            var cantidad = parseFloat(inputCantidad.val()); // Cantidad seleccionada
+            var precio = parseFloat(inputCantidad.closest('tr').find('.precio').data('precio')); // Precio del producto
+            var totalProducto = cantidad * precio; // Recalcular total del producto
+
+
+            // Actualizar el total del producto en el HTML
+            inputCantidad.closest('tr').find('.total-producto').text(totalProducto.toLocaleString());
+
+            // Actualizar el total general
+            actualizarTotal();
+        }
+
+        // Función para actualizar el total general
+        function actualizarTotal() {
+            var totalPrecio = 0;
+
+            // Recalcular el total sumando todos los productos
+            $('.table_row').each(function () {
+                var totalProducto = parseFloat($(this).find('.total-producto').text().replace(/,/g, ''));
+                totalPrecio += totalProducto;
+            });
+
+            // Actualizar el total general en el HTML
+            $('#total-precio').text(totalPrecio.toLocaleString());
+        }
+    });
+
 
 
 

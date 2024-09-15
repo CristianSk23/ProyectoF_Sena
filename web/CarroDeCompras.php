@@ -1,28 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
 <TITle>Carro de compras</TITle>
 <?php
 include_once "../view/partials/header.php";
 ?>
 
 <body class="animsition">
-
-
-
-    <!-- breadcrumb -->
-    <div class="container">
-        <div class="bread-crumb flex-w p-l-25 p-r-15 p-t-30 p-lr-0-lg">
-            <a href="index.html" class="stext-109 cl8 hov-cl1 trans-04">
-                Home
-                <i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i>
-            </a>
-
-            <span class="stext-109 cl4">
-                Shoping Cart
-            </span>
-        </div>
-    </div>
-
 
     <!-- Shoping Cart -->
     <form class="bg0 p-t-75 p-b-85">
@@ -40,62 +21,65 @@ include_once "../view/partials/header.php";
                                     <th class="column-5">Total</th>
                                 </tr>
 
-                                <tr class="table_row">
-                                    <td class="column-1">
-                                        <div class="how-itemcart1">
-                                            <img src="images/item-cart-04.jpg" alt="IMG">
-                                        </div>
-                                    </td>
-                                    <!-- Cargaría la información de los productos almacenados en la BD -->
-                                    <td class="column-2">Fresh Strawberries</td>
-                                    <td class="column-3">$ 36.00</td>
-                                    <td class="column-4">
-                                        <div class="wrap-num-product flex-w m-l-auto m-r-0">
-                                            <div class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m">
-                                                <i class="fs-16 zmdi zmdi-minus"></i>
+                                <?php
+                                $total = 0;
+                                foreach ($productoDetalle as $item) {
+                                    $producto = $item['producto'];
+                                    $stock = $item['stock'][0];
+                                    $cantidad = $item['cantidad'];
+                                    $precio = $stock['stock_precio'];
+                                    $foto = $item['fotosProd'][0]['foto_img'];
+                                    $totalProducto = $precio * $cantidad;
+                                    $total += $totalProducto;
+                                    ?>
+
+                                    <tr class="table_row">
+                                        <td class="column-1">
+                                            <div class="how-itemcart1">
+                                                <img src="<?php echo $foto; ?>" alt="IMG">
                                             </div>
+                                        </td>
+                                        <td class="column-2"><?php echo htmlspecialchars($producto['product_nombre']); ?>
+                                        </td>
+                                        <td class="column-3">$ <span class="precio" data-precio="<?php echo $precio; ?>">
+                                                <?php echo number_format($precio); ?>
+                                            </span></td>
+                                        <td class="column-4">
+                                            <div class="wrap-num-product flex-w m-l-auto m-r-0">
+                                                <div class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m">
+                                                    <i class="fs-16 zmdi zmdi-minus"></i>
+                                                </div>
 
-                                            <input class="mtext-104 cl3 txt-center num-product" type="number"
-                                                name="num-product1" value="1">
+                                                <input class="mtext-104 cl3 txt-center num-product" type="number"
+                                                    data-cantidad="<?php echo $cantidad; ?>"
+                                                    value="<?php echo htmlspecialchars($cantidad); ?>"
+                                                    data-producto-id="<?php echo $producto['product_id']; ?>" min="1">
 
-                                            <div class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m">
-                                                <i class="fs-16 zmdi zmdi-plus"></i>
+                                                <div class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m">
+                                                    <i class="fs-16 zmdi zmdi-plus"></i>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </td>
-                                    <td class="column-5">$ 36.00</td>
-                                </tr>
+                                        </td>
+                                        <td class="column-5">$ <span
+                                                class="total-producto"><?php echo number_format($totalProducto); ?></span>
+                                        </td>
+                                    </tr>
 
-                                <tr class="table_row">
-                                    <td class="column-1">
-                                        <div class="how-itemcart1">
-                                            <img src="images/item-cart-05.jpg" alt="IMG">
-                                        </div>
-                                    </td>
-                                    <td class="column-2">Lightweight Jacket</td>
-                                    <td class="column-3">$ 16.00</td>
-                                    <td class="column-4">
-                                        <div class="wrap-num-product flex-w m-l-auto m-r-0">
-                                            <div class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m">
-                                                <i class="fs-16 zmdi zmdi-minus"></i>
-                                            </div>
+                                <?php } ?>
 
-                                            <input class="mtext-104 cl3 txt-center num-product" type="number"
-                                                name="num-product2" value="1">
 
-                                            <div class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m">
-                                                <i class="fs-16 zmdi zmdi-plus"></i>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="column-5">$ 16.00</td>
-                                </tr>
+
+
                             </table>
                         </div>
 
 
+
+
                     </div>
                 </div>
+
+
 
                 <div class="col-sm-10 col-lg-7 col-xl-5 m-lr-auto m-b-50">
                     <div class="bor10 p-lr-40 p-t-30 p-b-40 m-l-63 m-r-40 m-lr-0-xl p-lr-15-sm">
@@ -112,7 +96,7 @@ include_once "../view/partials/header.php";
 
                             <div class="size-209">
                                 <span class="mtext-110 cl2">
-                                    $79.65
+                                    <span id="total-precio"><?php echo number_format($total); ?></span>
                                 </span>
                             </div>
                         </div>
@@ -137,20 +121,22 @@ include_once "../view/partials/header.php";
                                     <div class="rs1-select2 rs2-select2 bor8 bg0 m-b-12 m-t-9">
                                         <select class="js-select2" name="time">
                                             <option>Selecciona tu pais</option>
-                                            <option>USA</option>
-                                            <option>UK</option>
+                                            <option>Argentina</option>
+                                            <option>Bolivia</option>
+                                            <option>Colombia</option>
+                                            <option>Chile</option>
                                         </select>
                                         <div class="dropDownSelect2"></div>
                                     </div>
 
                                     <div class="bor8 bg0 m-b-12">
                                         <input class="stext-111 cl8 plh3 size-111 p-lr-15" type="text" name="state"
-                                            placeholder="State /  country">
+                                            placeholder="Ciudad">
                                     </div>
 
                                     <div class="bor8 bg0 m-b-22">
                                         <input class="stext-111 cl8 plh3 size-111 p-lr-15" type="text" name="postcode"
-                                            placeholder="Postcode / Zip">
+                                            placeholder="Código postal">
                                     </div>
 
                                     <div class="flex-w">
@@ -243,5 +229,3 @@ include_once "../view/partials/header.php";
     <script src="js/main.js"></script>
 
 </body>
-
-</html>

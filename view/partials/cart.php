@@ -57,7 +57,7 @@
                     </div>
 
                     <div class="header-cart-item-txt p-t-8">
-                        <a href="#" class="header-cart-item-name m-b-18 hov-cl1 trans-04">
+                        <a class="header-cart-item-name m-b-18 hov-cl1 trans-04">
                             Nixon Porter Leather
                         </a>
 
@@ -73,16 +73,16 @@
                     Total: $75.00
                 </div>
 
-                <div class="header-cart-buttons flex-w w-full">
-                    <a href="shoping-cart.html"
-                        class="flex-c-m stext-101 cl0 size-107 bg3 bor2 hov-btn3 p-lr-15 trans-04 m-r-8 m-b-10">
-                        View Cart
-                    </a>
 
-                    <a href="shoping-cart.html"
-                        class="flex-c-m stext-101 cl0 size-107 bg3 bor2 hov-btn3 p-lr-15 trans-04 m-b-10">
-                        Check Out
+
+                <div class="header-cart-buttons flex-w w-full">
+
+                    <a href="<?php echo getUrl('CarroDeCompras', 'CarroDeCompras', 'obtenerCarroDetalle', array('usu_id' => $_SESSION['usu_id'])) ?>"
+                        class="flex-c-m stext-101 cl0 size-107 bg3 bor2 hov-btn3 p-lr-15 trans-04 m-r-8 m-b-10">
+                        Ver carro
                     </a>
+                    <!-- Botón que envía el formulario -->
+
                 </div>
             </div>
         </div>
