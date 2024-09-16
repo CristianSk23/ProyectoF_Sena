@@ -10,8 +10,6 @@ include_once "../view/partials/header.php";
 
 ?>
 
-
-
 <body class="animsition">
 	<?php
 

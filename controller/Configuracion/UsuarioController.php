@@ -141,7 +141,6 @@ class UsuarioController
 
         $usu_id = $_POST['usu_id'];
         $rol_id = $_POST['rol_id'];
-        $usu_cedula = $_POST['usu_cedula'];
         $usu_nombre = $_POST['usu_nombre'];
         $usu_apellido = $_POST['usu_apellido'];
         $usu_telefono = $_POST['usu_telefono'];
@@ -149,7 +148,7 @@ class UsuarioController
         $usu_contrasenia = $_POST['usu_contrasenia'];
 
 
-        if ($usu_id == "" || $rol_id == "" || $usu_cedula == "" || $usu_nombre == "" || $usu_apellido == "" || $usu_telefono == "" || $usu_correo == "" || $usu_contrasenia == "") {
+        if ($usu_id == "" || $rol_id == ""  || $usu_nombre == "" || $usu_apellido == "" || $usu_telefono == "" || $usu_correo == "" || $usu_contrasenia == "") {
             $_SESSION['editarUsuario'] = "Por favor diligencie los datos";
             redirect(getUrl("Configuracion", "Usuario", "getUpdate", array("usu_id" => $usu_id)));
         }
@@ -160,7 +159,7 @@ class UsuarioController
         } 
         
         else {
-            $sql = "UPDATE usuario SET rol_id=$rol_id, usu_cedula=$usu_cedula, usu_nombre='$usu_nombre', usu_apellido='$usu_apellido', 
+            $sql = "UPDATE usuario SET rol_id=$rol_id,  usu_nombre='$usu_nombre', usu_apellido='$usu_apellido', 
             usu_telefono=$usu_telefono, usu_correo='$usu_correo', usu_contrasenia='$usu_contrasenia' WHERE usu_id =$usu_id";
             $ejecutar = $obj->editar($sql);
             if ($ejecutar) {

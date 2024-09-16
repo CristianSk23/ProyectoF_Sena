@@ -42,7 +42,7 @@
                 <div class="col-md-4">
                     <label for="documento" class="form-label">No. Documento</label>
                     <input type="text" class="form-control" id="documento" name="usu_cedula" value="<?php echo $usuario['usu_cedula'] ?>"
-                        required>
+                        readonly>
                 </div>
                 <div class="col-md-4">
                     <label for="nombreUsuario" class="form-label">Nombres</label>

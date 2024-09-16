@@ -31,7 +31,7 @@ include_once "../view/partials/header.php";
                                     $foto = $item['fotosProd'][0]['foto_img'];
                                     $totalProducto = $precio * $cantidad;
                                     $total += $totalProducto;
-                                    ?>
+                                ?>
 
                                     <tr class="table_row">
                                         <td class="column-1">
@@ -199,7 +199,7 @@ include_once "../view/partials/header.php";
     <!--===============================================================================================-->
     <script src="vendor/select2/select2.min.js"></script>
     <script>
-        $(".js-select2").each(function () {
+        $(".js-select2").each(function() {
             $(this).select2({
                 minimumResultsForSearch: 20,
                 dropdownParent: $(this).next('.dropDownSelect2')
@@ -211,7 +211,7 @@ include_once "../view/partials/header.php";
     <!--===============================================================================================-->
     <script src="vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
     <script>
-        $('.js-pscroll').each(function () {
+        $('.js-pscroll').each(function() {
             $(this).css('position', 'relative');
             $(this).css('overflow', 'hidden');
             var ps = new PerfectScrollbar(this, {
@@ -220,7 +220,7 @@ include_once "../view/partials/header.php";
                 wheelPropagation: false,
             });
 
-            $(window).on('resize', function () {
+            $(window).on('resize', function() {
                 ps.update();
             })
         });
