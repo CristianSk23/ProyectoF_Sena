@@ -87,12 +87,14 @@
             <div class="col-12 mt-4">
                 <button class="btn btn-primary" type="submit">Registrar</button>
             </div>
+        </div>
     </form>
+    <div class="col-12 mt-1">
+        <a href="<?php echo getUrl('Configuracion', 'Stock', 'consultar'); ?>" class="btn btn-primary">Consultar Stock</a>
+    </div><br>
 </div>
-<div class="col-12 mt-1">
-    <a href="<?php echo getUrl('Configuracion', 'Stock', 'consultar'); ?>" class="btn btn-primary">Consultar Stock</a>
-</div>
-<div class="col-12 mt-4"></div>
+
+
 
 
 <script>
