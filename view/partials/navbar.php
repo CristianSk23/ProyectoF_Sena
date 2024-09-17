@@ -61,14 +61,11 @@
 
 				<?php if (isset($_SESSION['nombre'])):
 					// Llamar al método para obtener la cantidad de productos en el carrito
-					include_once "../controller/CarroDeCompras/carroDeComprasController.php";
-
+					include_once "../controller/CarroDeCompras/CarroDeComprasController.php";
 					// Crear una instancia del modelo
 					$objCarrito = new CarroDeComprasController();
 
 					$cantidadProductos = $objCarrito->contarProductosCarro($_SESSION['usu_id']);
-
-
 
 					?>
 					<div class="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 icon-header-noti js-show-cart"

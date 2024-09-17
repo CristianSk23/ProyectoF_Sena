@@ -16,7 +16,7 @@ class CarroDeComprasModel extends MasterModel
 
     public function obtenerIdCarro($usu_id)
     {
-        $sql = "SELECT carro_id FROM carrito_compras WHERE usu_id = $usu_id";
+        $sql = "SELECT carro_id FROM carrito_compras WHERE usu_id = '$usu_id'";
         $respuesta = $this->consultar($sql);
 
         if ($respuesta) {
