@@ -16,7 +16,7 @@
         </div>
 
         <div class="header-cart-content flex-w js-pscroll">
-            <ul class="header-cart-wrapitem w-full">
+             <ul class="header-cart-wrapitem w-full">
                 <li class="header-cart-item flex-w flex-t m-b-12">
                     <div class="header-cart-item-img">
                         <img src="images/item-cart-01.jpg" alt="IMG">
@@ -75,22 +75,22 @@
             </ul>
 
             <div class=" w-full">
-                            <div class="header-cart-total w-full p-tb-40">
-                                Total: $75.00
-                            </div>
+                <div class="header-cart-total w-full p-tb-40">
+                    Total: $75.00
+                </div>
 
 
 
-                            <div class="header-cart-buttons flex-w w-full">
+                <div class="header-cart-buttons flex-w w-full">
 
-                                <a href="<?php echo getUrl('CarroDeCompras', 'CarroDeCompras', 'obtenerCarroDetalle', array('usu_id' => $_SESSION['usu_id'])) ?>"
-                                    class="flex-c-m stext-101 cl0 size-107 bg3 bor2 hov-btn3 p-lr-15 trans-04 m-r-8 m-b-10">
-                                    Ver carro
-                                </a>
-                                <!-- Botón que envía el formulario -->
+                    <a href="<?php echo getUrl('CarroDeCompras', 'CarroDeCompras', 'obtenerCarroDetalle', array('usu_id' => $_SESSION['usu_id'])) ?>"
+                        class="flex-c-m stext-101 cl0 size-107 bg3 bor2 hov-btn3 p-lr-15 trans-04 m-r-8 m-b-10">
+                        Ver carro
+                    </a>
+                    <!-- Botón que envía el formulario -->
 
-                            </div>
-                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

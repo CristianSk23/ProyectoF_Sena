@@ -4,10 +4,10 @@ include_once "../model/MasterModel.php";
 
 class CarroDeComprasModel extends MasterModel
 {
-    public function guardarProducto($product_id, $carroId, $cantidad, $color, $talla, $total)
+    public function guardarProducto($product_id, $carro_id, $cantidad, $color, $talla, $total)
     {
 
-        $sql = "INSERT INTO detalle_carrito VALUES($product_id, $carroId, $cantidad, null, '$color', '$talla', $total)";
+        $sql = "INSERT INTO detalle_carrito VALUES($product_id, $carro_id, $cantidad, null, '$color', '$talla', $total)";
         $respuesta = $this->consultar($sql);
         return $respuesta;
 
@@ -31,7 +31,7 @@ class CarroDeComprasModel extends MasterModel
     public function getProdCarro($carro_id)
     {
 
-        $sql = "SELECT * FROM detalle_carrito WHERE carroId = $carro_id";
+        $sql = "SELECT * FROM detalle_carrito WHERE carro_id = $carro_id";
         $respuesta = $this->consultar($sql);
 
         if ($respuesta) {
@@ -41,7 +41,7 @@ class CarroDeComprasModel extends MasterModel
 
     public function getCantProductos($carro_id)
     {
-        $sql = "SELECT COUNT(*) AS total_productos FROM detalle_carrito WHERE carroId = $carro_id";
+        $sql = "SELECT COUNT(*) AS total_productos FROM detalle_carrito WHERE carro_id = $carro_id";
         $respuesta = $this->consultar($sql);
         if ($respuesta) {
             $row = $respuesta->fetch_assoc();
@@ -84,7 +84,7 @@ class CarroDeComprasModel extends MasterModel
     public function validarExistenciaProd($product_id, $carro_id, $color, $talla)
     {
         $sql = "SELECT cantidad FROM detalle_carrito WHERE product_id = $product_id
-         AND carroId = $carro_id
+         AND carro_id = $carro_id
          AND color = '$color'
          AND talla = '$talla'";
 

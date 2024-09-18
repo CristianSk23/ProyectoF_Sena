@@ -32,7 +32,7 @@ include_once "../view/partials/header.php";
                                     $totalProducto = $precio * $cantidad;
                                     $total += $totalProducto;
 
-                                   /*  var_dump($stock); */
+                                    var_dump($stock['stock_cantidad']);
                                     ?>
 
                                     <tr class="table_row">
