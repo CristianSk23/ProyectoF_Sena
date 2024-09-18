@@ -25,6 +25,7 @@ Class StockController{
 
               // Inicializamos el array para almacenar errores
         $errores = array();
+        dd($datos);
 
         // //! Validar que el array de colores no esté vacío
         if (empty($datos2['color']) || !is_array($datos2['color'])) {
@@ -95,6 +96,8 @@ Class StockController{
             $productosOrganizados[] = $producto;
         }
 
+        dd($productosOrganizados);
+
         // se validan los inputs de nombre y precio
         if(empty($idprenda )  || !filter_var($precio, FILTER_VALIDATE_INT) ) {
             $_SESSION['datosIncorrectos'] = "Por favor complete el formulario.";
@@ -119,16 +122,7 @@ Class StockController{
     }
 
 
-    public function consultarUltimoId(){
-        $obj = new StockModel();
-        $sql = "SELECT MAX(stock_id) FROM stock";
-        $ejecutar = $obj->consultar($sql);
-        $fila = $ejecutar->fetch_array();
-        $ultimo_id = $fila[0];
-        echo $ultimo_id;
 
-        return $ultimo_id;
-    }
 
 
 
