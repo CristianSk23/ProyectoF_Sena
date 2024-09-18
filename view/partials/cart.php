@@ -64,27 +64,33 @@
                         <span class="header-cart-item-info">
                             1 x $17.00
                         </span>
+                        <span ">
+                            color: info
+                        </span>
+                        <span >
+                            talla: info
+                        </span>
                     </div>
                 </li>
             </ul>
 
-            <div class="w-full">
-                <div class="header-cart-total w-full p-tb-40">
-                    Total: $75.00
-                </div>
+            <div class=" w-full">
+                            <div class="header-cart-total w-full p-tb-40">
+                                Total: $75.00
+                            </div>
 
 
 
-                <div class="header-cart-buttons flex-w w-full">
+                            <div class="header-cart-buttons flex-w w-full">
 
-                    <a href="<?php echo getUrl('CarroDeCompras', 'CarroDeCompras', 'obtenerCarroDetalle', array('usu_id' => $_SESSION['usu_id'])) ?>"
-                        class="flex-c-m stext-101 cl0 size-107 bg3 bor2 hov-btn3 p-lr-15 trans-04 m-r-8 m-b-10">
-                        Ver carro
-                    </a>
-                    <!-- Botón que envía el formulario -->
+                                <a href="<?php echo getUrl('CarroDeCompras', 'CarroDeCompras', 'obtenerCarroDetalle', array('usu_id' => $_SESSION['usu_id'])) ?>"
+                                    class="flex-c-m stext-101 cl0 size-107 bg3 bor2 hov-btn3 p-lr-15 trans-04 m-r-8 m-b-10">
+                                    Ver carro
+                                </a>
+                                <!-- Botón que envía el formulario -->
 
-                </div>
-            </div>
+                            </div>
+                    </div>
         </div>
     </div>
 </div>

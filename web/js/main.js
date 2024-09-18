@@ -214,28 +214,39 @@
     });
 
     /*==================================================================
-    [ +/- num product ]*/
+    [ +/- num product ]*/ //*Incremento y decremento de los input´s para la cantidad del producto
     $('.btn-num-product-down').on('click', function () {
-        var numProduct = Number($(this).next().val());
-        if (numProduct > 0) $(this).next().val(numProduct - 1);
+        let $input = $(this).next(); // Selecciona el campo de entrada
+        let numProduct = Number($input.val());
+
+        if (numProduct > 1) {
+            $input.val(numProduct - 1);
+        }
     });
 
     $('.btn-num-product-up').on('click', function () {
-        var numProduct = Number($(this).prev().val());
-        $(this).prev().val(numProduct + 1);
+        let $input = $(this).prev(); // Selecciona el campo de entrada
+        let numProduct = Number($input.val());
+        let maxStock = Number($input.attr('max'));
+        let maxStockparse = maxStock - 1;
+
+
+        if (numProduct < maxStockparse) {
+            $input.val(numProduct + 1);
+        }
     });
 
     /*==================================================================
     [ Rating ]*/
     $('.wrap-rating').each(function () {
-        var item = $(this).find('.item-rating');
-        var rated = -1;
-        var input = $(this).find('input');
+        let item = $(this).find('.item-rating');
+        let rated = -1;
+        let input = $(this).find('input');
         $(input).val(0);
 
         $(item).on('mouseenter', function () {
-            var index = item.index(this);
-            var i = 0;
+            let index = item.index(this);
+            let i = 0;
             for (i = 0; i <= index; i++) {
                 $(item[i]).removeClass('zmdi-star-outline');
                 $(item[i]).addClass('zmdi-star');
@@ -248,13 +259,13 @@
         });
 
         $(item).on('click', function () {
-            var index = item.index(this);
+            let index = item.index(this);
             rated = index;
             $(input).val(index + 1);
         });
 
         $(this).on('mouseleave', function () {
-            var i = 0;
+            let i = 0;
             for (i = 0; i <= rated; i++) {
                 $(item[i]).removeClass('zmdi-star-outline');
                 $(item[i]).addClass('zmdi-star');
@@ -266,28 +277,6 @@
             }
         });
     });
-
-    /*==================================================================
-    [ Show modal1 ]*/
-    /* document.querySelectorAll('.js-show-modal1').forEach(button => {
-        button.addEventListener('click', function (event) {
-            event.preventDefault();
-            window.location.href = this.getAttribute('href'); // Redirige manualmente
-        });
-    });
-
-
-    $('.js-hide-modal1').on('click', function () {
-        $('.wrap-modal1').removeClass('show-modal');
-    }) */
-
-
-
-    /*  document.querySelectorAll('.js-show-modal1').addEventListener('click', function () {
- 
-         $('.wrap-modal1').addClass('show-modal');
-     }); */
-
 
 
     //Los que se estan utilizando
@@ -367,6 +356,8 @@
 
                         let total = 0;
                         let precio = 0.0;
+                        let colorPrenda = "";
+                        let tallaPrenda = "";
                         let urlFoto = "";
 
                         let formatter = new Intl.NumberFormat('es-CO', {
@@ -384,6 +375,9 @@
                             stock.forEach(element => {
 
                                 precio = element.stock_precio;
+                                colorPrenda = element.stock_color;
+                                tallaPrenda = element.stock_talla;
+
                             });
                             fotos.forEach(element => {
 
@@ -397,11 +391,17 @@
                                     <img src="${urlFoto}" alt="IMG">
                                 </div>
                                 <div class="header-cart-item-txt p-t-8">
-                                    <a class="header-cart-item-name m-b-18 hov-cl1 trans-04">
+                                    <a class="header-cart-item-name m-b-5 hov-cl1 trans-04">
                                         ${producto.product_nombre}
                                     </a>
                                     <span class="header-cart-item-info">
                                         ${item.cantidad} x ${formatter.format(precio)}
+                                    </span>
+                                    <span class="header-cart-item-txt p-t-5">
+                                        color :${colorPrenda}
+                                    </span>
+                                    <span class="header-cart-item-info">
+                                        talla : ${tallaPrenda}
                                     </span>
                                 </div>
                             </li>`;
@@ -436,64 +436,70 @@
     //* Actualiza el precio total por todos los productos en el detalle del carro de compras:
 
     $(document).ready(function () {
+        function actualizarEstadoBotones() {
+            $('.wrap-num-product').each(function () {
+                let inputCantidad = $(this).find('.num-product');
+                let cantidadActual = parseInt(inputCantidad.val());
+                let maxValue = parseInt(inputCantidad.attr('max'));
+                let btnUp = $(this).find('.btn-num-product-up');
 
-        // Escuchar clic en el botón de aumentar cantidad
+                if (!isNaN(cantidadActual) && cantidadActual >= maxValue) {
+                    btnUp.prop('disabled', true); // Deshabilitar el botón
+                } else {
+                    btnUp.prop('disabled', false); // Habilitar el botón
+                }
+            });
+        }
+
         $('.btn-num-product-up').on('click', function () {
             let inputCantidad = $(this).closest('.wrap-num-product').find('.num-product');
-            var cantidadActual = parseInt(inputCantidad.val());
+            let cantidadActual = parseInt(inputCantidad.val());
+            let maxValue = parseInt(inputCantidad.attr('max'));
 
-            if (!isNaN(cantidadActual)) {
-                // Aumentar cantidad
-                inputCantidad.val(cantidadActual);  // Actualizar valor del input
+
+            if (!isNaN(cantidadActual) && cantidadActual < maxValue) {
                 actualizarTotalProducto(inputCantidad); // Actualizar total para ese producto
+                actualizarEstadoBotones(); // Actualizar el estado de los botones
+            } else {
+                alert('No puedes agregar más productos. Has alcanzado el límite de stock.');
+                return;
             }
         });
 
-        // Escuchar clic en el botón de disminuir cantidad
         $('.btn-num-product-down').on('click', function () {
-            var inputCantidad = $(this).closest('.wrap-num-product').find('.num-product');
-            var cantidadActual = parseInt(inputCantidad.val());
+            let inputCantidad = $(this).closest('.wrap-num-product').find('.num-product');
+            let cantidadActual = parseInt(inputCantidad.val());
+            let minValue = parseInt(inputCantidad.attr('min'));
 
-            if (!isNaN(cantidadActual) && cantidadActual > 0) {
-                // Disminuir cantidad
-                inputCantidad.val(cantidadActual);  // Actualizar valor del input
+            if (!isNaN(cantidadActual) && cantidadActual > minValue) {
                 actualizarTotalProducto(inputCantidad); // Actualizar total para ese producto
+                actualizarEstadoBotones(); // Actualizar el estado de los botones
             }
         });
 
-        // Función para actualizar el total de un producto
         function actualizarTotalProducto(inputCantidad) {
-            var cantidad = parseFloat(inputCantidad.val());
+            let cantidad = parseFloat(inputCantidad.val());
 
             if (!isNaN(cantidad) && cantidad > 0) {
-                var precio = parseFloat(inputCantidad.closest('tr').find('.precio').data('precio')); // Precio del producto
-                let totalProducto = cantidad * precio; // Recalcular total del producto
+                let precio = parseFloat(inputCantidad.closest('tr').find('.precio').data('precio'));
+                let totalProducto = cantidad * precio;
 
-                // Actualizar el total del producto en el HTML con formato
                 inputCantidad.closest('tr').find('.total-producto').text(totalProducto.toLocaleString());
-
-                // Actualizar el total general
                 actualizarTotal();
             }
         }
 
-        // Función para actualizar el total general
         function actualizarTotal() {
-            var totalPrecio = 0.0;
+            let totalPrecio = 0.0;
 
-            // Iterar por cada fila de producto en la tabla
             $('.table_row').each(function () {
-                var precio = parseFloat($(this).find('.precio').data('precio'));
-                var cantidad = parseInt($(this).find('.num-product').val());
+                let precio = parseFloat($(this).find('.precio').data('precio'));
+                let cantidad = parseInt($(this).find('.num-product').val());
 
                 if (!isNaN(cantidad) && cantidad > 0) {
                     let totalProducto = precio * cantidad;
                     totalProducto = Math.round(totalProducto);
-
-                    // Actualizar el total de ese producto en formato miles
                     $(this).find('.total-producto').text(totalProducto.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','));
-
-                    // Sumar al total general
                     totalPrecio += totalProducto;
                 }
             });
@@ -501,7 +507,13 @@
             totalPrecio = Math.round(totalPrecio);
             $('#total-precio').text(totalPrecio.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','));
         }
+
+        actualizarEstadoBotones();
     });
+
+
+
+
 
 
 
@@ -594,13 +606,13 @@
                             // Acceder al primer elemento del array y luego al campo 'ciu_precioenvio'
                             let precioEnvio = response.precioEnvio[0].ciu_precioenvio;
 
-                           
+
 
                             // Actualizar el campo del valor de envío con el precio obtenido
                             $('#valor-envio').val(formatter.format(precioEnvio) || 'No disponible');
                             let totalProducto = parseFloat($('#total-precio').text().replace(/,/g, '')) || 0;
                             let precioEnvioconver = parseFloat(precioEnvio);
-                       
+
 
                             // Calcular el nuevo total sumando el valor del envío
                             totalConEnvio = totalProducto + precioEnvioconver;

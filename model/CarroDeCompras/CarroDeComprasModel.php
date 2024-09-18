@@ -71,6 +71,42 @@ class CarroDeComprasModel extends MasterModel
         }
     }
 
+    public function eliminarProductoCarrito($idProducto)
+    {
+        $sql = "DELETE FROM detalle_carrito WHERE product_id = " . $idProducto;
+        $respuesta = $this->consultar($sql);
+
+        if ($respuesta) {
+            return $respuesta->fetch_all(MYSQLI_ASSOC);
+        }
+    }
+
+    public function validarExistenciaProd($product_id, $carro_id, $color, $talla)
+    {
+        $sql = "SELECT cantidad FROM detalle_carrito WHERE product_id = $product_id
+         AND carroId = $carro_id
+         AND color = '$color'
+         AND talla = '$talla'";
+
+        $respuesta = $this->consultar($sql);
+
+        if ($respuesta) {
+            return $respuesta->fetch_assoc();
+        }
+
+    }
+    public function actualizarCantidadProducto($product_id, $carro_id, $nuevaCantidad, $nuevoTotal)
+    {
+        $sql = "UPDATE detalle_carrito SET cantidad = $nuevaCantidad, total = $nuevoTotal WHERE product_id = $product_id AND carroId =  $carro_id ";
+        $respuesta = $this->consultar($sql);
+
+        if ($respuesta) {
+            return $respuesta->fetch_assoc();
+        }
+
+
+    }
+
 
 
 }

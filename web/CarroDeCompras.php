@@ -32,6 +32,7 @@ include_once "../view/partials/header.php";
                                     $totalProducto = $precio * $cantidad;
                                     $total += $totalProducto;
 
+                                   /*  var_dump($stock); */
                                     ?>
 
                                     <tr class="table_row">
@@ -55,7 +56,7 @@ include_once "../view/partials/header.php";
                                                     data-cantidad="<?php echo $cantidad; ?>"
                                                     value="<?php echo htmlspecialchars($cantidad) ?>"
                                                     data-producto-id="<?php echo $producto['product_id']; ?>" min="1"
-                                                    readonly>
+                                                    max="<?php echo $stock['stock_cantidad']; ?>" readonly>
 
                                                 <div class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m">
                                                     <i class="fs-16 zmdi zmdi-plus"></i>
