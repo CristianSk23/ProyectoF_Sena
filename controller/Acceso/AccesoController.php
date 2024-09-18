@@ -27,12 +27,13 @@ class AccesoController
                     $_SESSION['nombre'] = $usuario["usu_nombre"];
                     $_SESSION['email'] = $usuario["usu_correo"];
                     $_SESSION['rol_id'] = $usuario["rol_id"]; 
-                    
+                   
      
                 }
-                $carrito = $obj->carrito($usuario['usu_id']);
-                 $_SESSION['carro_id'] = $carrito["carro_id"];
+              
                 redirect("index.php"); 
+                $carrito = $obj->carrito($usuario['usu_id']);
+                $_SESSION['carro_id'] = $carrito["carro_id"];
             } else {
                 // Si no hay coincidencias, muestra un mensaje de error
                 $_SESSION['error'] = "Email y/o contraseña incorrectas";
