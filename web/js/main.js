@@ -439,56 +439,67 @@
 
         // Escuchar clic en el botón de aumentar cantidad
         $('.btn-num-product-up').on('click', function () {
-            // Obtener el input de cantidad dentro de la fila actual
-            var inputCantidad = $(this).closest('.wrap-num-product').find('.num-product');
+            let inputCantidad = $(this).closest('.wrap-num-product').find('.num-product');
             var cantidadActual = parseInt(inputCantidad.val());
 
-
-            actualizarTotalProducto(inputCantidad); // Actualizar total para ese producto
-        });
-
-        // Escuchar clic en el botón de disminuir cantidad
-        $('.btn-num-product-down').on('click', function () {
-            // Obtener el input de cantidad dentro de la fila actual
-            var inputCantidad = $(this).closest('.wrap-num-product').find('.num-product');
-            var cantidadActual = parseInt(inputCantidad.val());
-            if (cantidadActual > 1) {
-
+            if (!isNaN(cantidadActual)) {
+                // Aumentar cantidad
+                inputCantidad.val(cantidadActual);  // Actualizar valor del input
                 actualizarTotalProducto(inputCantidad); // Actualizar total para ese producto
             }
         });
 
-        // Escuchar cambios manuales en el input de cantidad
-        $('.num-product').on('input', function () {
-            actualizarTotalProducto($(this)); // Actualizar total para ese producto
+        // Escuchar clic en el botón de disminuir cantidad
+        $('.btn-num-product-down').on('click', function () {
+            var inputCantidad = $(this).closest('.wrap-num-product').find('.num-product');
+            var cantidadActual = parseInt(inputCantidad.val());
+
+            if (!isNaN(cantidadActual) && cantidadActual > 0) {
+                // Disminuir cantidad
+                inputCantidad.val(cantidadActual);  // Actualizar valor del input
+                actualizarTotalProducto(inputCantidad); // Actualizar total para ese producto
+            }
         });
 
         // Función para actualizar el total de un producto
         function actualizarTotalProducto(inputCantidad) {
-            var cantidad = parseFloat(inputCantidad.val()); // Cantidad seleccionada
-            var precio = parseFloat(inputCantidad.closest('tr').find('.precio').data('precio')); // Precio del producto
-            var totalProducto = cantidad * precio; // Recalcular total del producto
+            var cantidad = parseFloat(inputCantidad.val());
 
+            if (!isNaN(cantidad) && cantidad > 0) {
+                var precio = parseFloat(inputCantidad.closest('tr').find('.precio').data('precio')); // Precio del producto
+                let totalProducto = cantidad * precio; // Recalcular total del producto
 
-            // Actualizar el total del producto en el HTML
-            inputCantidad.closest('tr').find('.total-producto').text(totalProducto.toLocaleString());
+                // Actualizar el total del producto en el HTML con formato
+                inputCantidad.closest('tr').find('.total-producto').text(totalProducto.toLocaleString());
 
-            // Actualizar el total general
-            actualizarTotal();
+                // Actualizar el total general
+                actualizarTotal();
+            }
         }
 
         // Función para actualizar el total general
         function actualizarTotal() {
-            var totalPrecio = 0;
+            var totalPrecio = 0.0;
 
-            // Recalcular el total sumando todos los productos
+            // Iterar por cada fila de producto en la tabla
             $('.table_row').each(function () {
-                var totalProducto = parseFloat($(this).find('.total-producto').text().replace(/,/g, ''));
-                totalPrecio += totalProducto;
+                var precio = parseFloat($(this).find('.precio').data('precio'));
+                var cantidad = parseInt($(this).find('.num-product').val());
+
+                if (!isNaN(cantidad) && cantidad > 0) {
+                    let totalProducto = precio * cantidad;
+                    totalProducto = Math.round(totalProducto);
+
+                    // Actualizar el total de ese producto en formato miles
+                    $(this).find('.total-producto').text(totalProducto.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','));
+
+                    // Sumar al total general
+                    totalPrecio += totalProducto;
+                }
             });
 
-            // Actualizar el total general en el HTML
-            $('#total-precio').text(totalPrecio.toLocaleString());
+            totalPrecio = Math.round(totalPrecio);
+            $('#total-precio').text(totalPrecio.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','));
         }
     });
 
@@ -502,7 +513,7 @@
     $(document).ready(function () {
         // Escuchar el evento de cambio en el select de color
         $('select[name="color"]').change(function () {
-            var colorSeleccionado = $(this).val(); // Obtener el valor seleccionado
+            let colorSeleccionado = $(this).val(); // Obtener el valor seleccionado
             let url = $(this).attr('data-url'); // Obtener la URL del atributo data-url
             let productId = $(this).data('product-id'); // Obtener el ID del producto del atributo data-product-id
 
@@ -520,8 +531,6 @@
 
                         // Intentar parsear la respuesta a JSON
                         try {
-                            // var tallas = JSON.parse(response); // Suponemos que la respuesta contiene las tallas en formato JSON
-
                             // Limpiar las opciones de talla anteriores
                             $('select[name="talla"]').empty();
 
@@ -548,6 +557,79 @@
             }
         });
     });
+
+
+
+
+    //*Retorna el valor del envío dependiendo de la ciudad
+
+    $(document).ready(function () {
+        // Escuchar el evento de cambio en el select de ciudad usando jQuery
+        $('#select-ciudad').on('change', function () {
+            console.log('Evento change disparado'); // Para verificar si el evento se dispara
+
+            let ciu_id = $(this).val(); // Obtener el valor seleccionado con jQuery
+            let url = $(this).data('url'); // Obtener la URL del atributo data-url
+            let totalConEnvio = 0.0;
+
+            let formatter = new Intl.NumberFormat('es-CO', {
+                style: 'currency',
+                currency: 'COP',
+                minimumFractionDigits: 0
+            });
+
+            // Solo hacer la petición si se selecciona una ciudad
+            if (ciu_id) {
+                // Hacer la solicitud AJAX al controlador
+                $.ajax({
+                    url: url, // La URL donde se encuentra el controlador
+                    type: 'POST', // El método de la solicitud (POST)
+                    dataType: 'json',
+                    data: { ciu_id: ciu_id }, // Enviar el ID de la ciudad al controlador
+                    success: function (response) {
+                        console.log('Respuesta completa del servidor:', response);
+
+                        // Verifica que el array 'precioEnvio' contenga al menos un elemento
+                        if (response.precioEnvio && response.precioEnvio.length > 0) {
+                            // Acceder al primer elemento del array y luego al campo 'ciu_precioenvio'
+                            let precioEnvio = response.precioEnvio[0].ciu_precioenvio;
+
+                           
+
+                            // Actualizar el campo del valor de envío con el precio obtenido
+                            $('#valor-envio').val(formatter.format(precioEnvio) || 'No disponible');
+                            let totalProducto = parseFloat($('#total-precio').text().replace(/,/g, '')) || 0;
+                            let precioEnvioconver = parseFloat(precioEnvio);
+                            console.log(precioEnvioconver);
+                            console.log(precioEnvioconver);
+
+                            // Calcular el nuevo total sumando el valor del envío
+                            totalConEnvio = totalProducto + precioEnvioconver;
+                            console.log(totalConEnvio);
+
+                            $('.size-209.p-t-1 .mtext-110.cl2').text(formatter.format(totalConEnvio));
+
+                        } else {
+                            console.log('No se encontró información para el envío.');
+                            $('#valor-envio').val('No disponible');
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error en la solicitud:', error);
+                        $('#valor-envio').val(''); // Usar jQuery para cambiar el valor en caso de error
+                    }
+                });
+            } else {
+                // Limpiar el valor si no se selecciona una ciudad
+                $('#valor-envio').val('');
+            }
+        });
+    });
+
+
+
+
+
 
 
 

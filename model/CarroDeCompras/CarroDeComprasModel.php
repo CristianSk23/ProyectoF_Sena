@@ -49,6 +49,28 @@ class CarroDeComprasModel extends MasterModel
         }
     }
 
+    public function getCiudades()
+    {
+        $sql = "SELECT * FROM ciudades";
+        $respuesta = $this->consultar($sql);
+
+        if ($respuesta) {
+            return $respuesta->fetch_all(MYSQLI_ASSOC);
+        }
+    }
+
+
+    public function getPrecioPorCiudad($id_ciudad)
+    {
+
+        $sql = "SELECT * FROM ciudades WHERE ciu_id = " . $id_ciudad;
+        $respuesta = $this->consultar($sql);
+
+        if ($respuesta) {
+            return $respuesta->fetch_all(MYSQLI_ASSOC);
+        }
+    }
+
 
 
 }
