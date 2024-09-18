@@ -600,8 +600,7 @@
                             $('#valor-envio').val(formatter.format(precioEnvio) || 'No disponible');
                             let totalProducto = parseFloat($('#total-precio').text().replace(/,/g, '')) || 0;
                             let precioEnvioconver = parseFloat(precioEnvio);
-                            console.log(precioEnvioconver);
-                            console.log(precioEnvioconver);
+                       
 
                             // Calcular el nuevo total sumando el valor del envío
                             totalConEnvio = totalProducto + precioEnvioconver;
