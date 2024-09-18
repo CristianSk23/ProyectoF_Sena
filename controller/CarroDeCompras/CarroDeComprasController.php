@@ -32,7 +32,12 @@ class CarroDeComprasController
 
             // Guardar el producto en el carrito
             $obj = new CarroDeComprasModel();
-            $obj->guardarProducto($product_id, 1, $cantidad, $color, $talla, $total);
+            if (isset($_SESSION['usu_id'])) {
+                $id_usuario = $_SESSION['usu_id'];
+                $carro_id = $obj->obtenerIdCarro($id_usuario);
+                $idParse = (int) $carro_id;
+                $obj->guardarProducto($product_id, $idParse, $cantidad, $color, $talla, $total);
+            }
 
         } else {
             echo json_encode(['success' => false, 'message' => 'Faltan datos para agregar el producto al carrito.']);

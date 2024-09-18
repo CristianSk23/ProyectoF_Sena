@@ -31,7 +31,7 @@ include_once "../view/partials/header.php";
                                     $foto = $item['fotosProd'][0]['foto_img'];
                                     $totalProducto = $precio * $cantidad;
                                     $total += $totalProducto;
-                                    var_dump($cantidad);
+
                                     ?>
 
                                     <tr class="table_row">
@@ -159,7 +159,7 @@ include_once "../view/partials/header.php";
 
                             <div class="size-209 p-t-1">
                                 <span class="mtext-110 cl2">
-                                    $79.65
+                                    $
                                 </span>
                             </div>
                         </div>
