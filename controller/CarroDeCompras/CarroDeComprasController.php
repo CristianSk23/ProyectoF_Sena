@@ -47,8 +47,8 @@ class CarroDeComprasController
     public function obtenerCarro()
     {
         ob_start(); // Iniciar el buffer de salida
-        $modal = isset($_GET['modal']) ? $_GET['modal'] : null;
-        var_dump($modal);
+
+
         header('Content-Type: application/json'); // Configura el tipo de contenido como JSON
 
         if (isset($_POST['usu_id'])) {
@@ -81,9 +81,7 @@ class CarroDeComprasController
 
             // Enviar la respuesta JSON
             echo json_encode(['success' => true, 'productos' => $productoDetalle]);
-            if ($modal != 0) {
-                include_once "../web/CarroDeCompras.php";
-            }
+
         } else {
             ob_end_clean();
             echo json_encode(['success' => false, 'message' => 'Usuario no encontrado.']);
@@ -99,8 +97,8 @@ class CarroDeComprasController
             $obj = new CarroDeComprasModel();
             $objProd = new ProductosModel();
             $carro_id = $obj->obtenerIdCarro($usu_id);
+            $ciudades = $obj->getCiudades();
             $productoDetalle = [];
-
             $carro_id = (int) $carro_id;
             $prodCarroCompra = $obj->getProdCarro($carro_id);
 
@@ -119,8 +117,22 @@ class CarroDeComprasController
                 ];
             }
 
+
             include_once "../web/CarroDeCompras.php";
 
+        }
+    }
+
+    public function precioEnvioPorCiudad()
+    {
+
+        header('Content-Type: application/json');
+        $obj = new CarroDeComprasModel();
+        if (isset($_POST['ciu_id'])) {
+            $ciu_id = $_POST['ciu_id'];
+            $precioEnvio = $obj->getPrecioPorCiudad($ciu_id);
+
+            echo json_encode(['precioEnvio' => $precioEnvio]);
         }
     }
 

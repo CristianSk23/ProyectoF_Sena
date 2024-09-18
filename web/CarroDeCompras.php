@@ -31,6 +31,7 @@ include_once "../view/partials/header.php";
                                     $foto = $item['fotosProd'][0]['foto_img'];
                                     $totalProducto = $precio * $cantidad;
                                     $total += $totalProducto;
+                                    var_dump($cantidad);
                                     ?>
 
                                     <tr class="table_row">
@@ -52,8 +53,9 @@ include_once "../view/partials/header.php";
 
                                                 <input class="mtext-104 cl3 txt-center num-product" type="number"
                                                     data-cantidad="<?php echo $cantidad; ?>"
-                                                    value="<?php echo htmlspecialchars($cantidad); ?>"
-                                                    data-producto-id="<?php echo $producto['product_id']; ?>" min="1">
+                                                    value="<?php echo htmlspecialchars($cantidad) ?>"
+                                                    data-producto-id="<?php echo $producto['product_id']; ?>" min="1"
+                                                    readonly>
 
                                                 <div class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m">
                                                     <i class="fs-16 zmdi zmdi-plus"></i>
@@ -72,9 +74,6 @@ include_once "../view/partials/header.php";
 
                             </table>
                         </div>
-
-
-
 
                     </div>
                 </div>
@@ -119,32 +118,33 @@ include_once "../view/partials/header.php";
                                     </span>
 
                                     <div class="rs1-select2 rs2-select2 bor8 bg0 m-b-12 m-t-9">
-                                        <select class="js-select2" name="time">
-                                            <option>Selecciona tu pais</option>
-                                            <option>Argentina</option>
-                                            <option>Bolivia</option>
-                                            <option>Colombia</option>
-                                            <option>Chile</option>
+                                        <select class="js-select2" name="ciudad" id="select-ciudad"
+                                            data-url="<?= getUrl('CarroDeCompras', 'CarroDeCompras', 'precioEnvioPorCiudad', false, 'ajax') ?>">
+                                            <option>Selecciona tu Ciudad</option>
+                                            <?php foreach ($ciudades as $ciudad): ?>
+                                                <option value="<?php echo htmlspecialchars($ciudad['ciu_id']); ?>">
+                                                    <?php echo htmlspecialchars($ciudad['ciu_nombre']); ?>
+                                                </option>
+                                            <?php endforeach; ?>
                                         </select>
                                         <div class="dropDownSelect2"></div>
                                     </div>
 
+
+
                                     <div class="bor8 bg0 m-b-12">
                                         <input class="stext-111 cl8 plh3 size-111 p-lr-15" type="text" name="state"
-                                            placeholder="Ciudad">
+                                            id="valor-envio" placeholder="Valor de Envío" readonly>
                                     </div>
 
                                     <div class="bor8 bg0 m-b-22">
                                         <input class="stext-111 cl8 plh3 size-111 p-lr-15" type="text" name="postcode"
-                                            placeholder="Código postal">
+                                            placeholder="Dirección de entrega">
                                     </div>
 
-                                    <div class="flex-w">
-                                        <div
-                                            class="flex-c-m stext-101 cl2 size-115 bg8 bor13 hov-btn3 p-lr-15 trans-04 pointer">
-                                            Actualizar total
-                                        </div>
-                                    </div>
+
+
+
 
                                 </div>
                             </div>
@@ -164,8 +164,9 @@ include_once "../view/partials/header.php";
                             </div>
                         </div>
 
-                        <button class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer">
-                            Proceed to Checkout
+                        <button class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer"
+                            data-url="<?php ?>">
+                            Procesar Pago
                         </button>
                     </div>
                 </div>
