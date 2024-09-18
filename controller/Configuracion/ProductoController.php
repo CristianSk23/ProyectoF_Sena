@@ -87,12 +87,13 @@ class ProductoController
                 $ejecutar2 = $obj2->insertar($sql2);
 
             }
-            redirect(getUrl("Configuracion", "Producto", "getInsert"));
-            $_SESSION['success'] = "Registro exitoso.";
-        } else {
-            $_SESSION['error'] = "Error al registrar el producto. Inténtalo de nuevo.";
+            
         }
-    }
+        redirect(getUrl("Configuracion", "Producto", "getInsert"));
+            $_SESSION['success'] = "Registro exitoso.";
+    } 
+
+    
 
     public function consultarUltimoId()
     {

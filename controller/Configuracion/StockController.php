@@ -199,6 +199,8 @@ Class StockController{
         $precio = $_POST['precio'];
         $cantidad = $_POST['cantidad'];
 
+        //dd($_POST);
+
         if (
             empty($idStock) ||  empty($idprenda) || empty($talla) || empty($color)
             || empty($precio) || empty($cantidad)
@@ -207,7 +209,7 @@ Class StockController{
             redirect(getUrl("Configuracion", "stock", "modificar", array("stock_id" => $idStock)));
         }
 
-        //dd($_POST);
+        
         
         $sql = "UPDATE stock 
         SET product_id = '$idprenda', 
@@ -218,7 +220,7 @@ Class StockController{
         WHERE stock_id = $idStock";
 
         //dd($sql);
-        $ejecutar = $obj->editar($sql);
+        $obj->editar($sql);
         redirect(getUrl("Configuracion", "Stock", "consultar"));
 
 

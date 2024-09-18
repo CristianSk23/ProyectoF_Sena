@@ -70,6 +70,17 @@
         endif;
         ?>
         <br>
+        <br>
+        <?php if (isset($_SESSION['success'])): ?>
+            <div class="alert alert-success alert-dismissible fade show col-md-12" role="alert">
+                <?= $_SESSION['success'] ?>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        <?php
+            unset($_SESSION['success']);
+        endif;
+        ?>
+        <br>
 
         <!-- Botón de Registro -->
         <div class="col-12 mt-4">

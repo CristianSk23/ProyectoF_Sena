@@ -23,7 +23,7 @@
             <div class="form-group col-md-4">
                 <label for="talla">Talla</label>
                 <select class="form-control" name="talla">
-                    <option value="0"><?= $stock['stock_talla']; ?></option>
+                    <option ><?= $stock['stock_talla']; ?></option>
                     <option>S</option>
                     <option>M</option>
                     <option>L</option>
