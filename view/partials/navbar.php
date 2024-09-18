@@ -64,8 +64,14 @@
 					include_once "../controller/CarroDeCompras/CarroDeComprasController.php";
 					// Crear una instancia del modelo
 					$objCarrito = new CarroDeComprasController();
-
-					$cantidadProductos = $objCarrito->contarProductosCarro($_SESSION['usu_id']);
+				 // Verificar si carro_id está definido en la sesión
+				 if (isset($_SESSION['carro_id'])) {
+					$carro_id = $_SESSION['carro_id'];
+					$cantidadProductos = $objCarrito->contarProductosCarro($carro_id);
+				} else {
+					// Si no está definido, establecer la cantidad de productos a 0
+					$cantidadProductos = 0; // O manejarlo de otra forma
+				}
 
 					?>
 					<div class="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 icon-header-noti js-show-cart"

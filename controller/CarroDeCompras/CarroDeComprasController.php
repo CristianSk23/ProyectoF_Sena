@@ -3,6 +3,7 @@ include_once "../model/Acceso/AccesoModel.php";
 include_once "../model/CarroDeCompras/CarroDeComprasModel.php";
 include_once "../model/Productos/ProductosModel.php";
 include_once "../model/Acceso/AccesoModel.php";
+include_once "../model/CarroDeCompras/VentaModel.php";
 
 class CarroDeComprasController
 {
@@ -36,6 +37,7 @@ class CarroDeComprasController
                 $id_usuario = $_SESSION['usu_id'];
                 $carro_id = $obj->obtenerIdCarro($id_usuario);
                 $idParse = (int) $carro_id;
+                print_r ($idParse);
                 $obj->guardarProducto($product_id, $idParse, $cantidad, $color, $talla, $total);
             }
 
@@ -56,8 +58,8 @@ class CarroDeComprasController
 
         header('Content-Type: application/json'); // Configura el tipo de contenido como JSON
 
-        if (isset($_POST['usu_id'])) {
-            $usu_id = $_POST['usu_id'];
+        if (isset($_SESSION['usu_id'])) {
+            $usu_id = $_SESSION['usu_id'];
             $obj = new CarroDeComprasModel();
             $objProd = new ProductosModel();
             $carro_id = $obj->obtenerIdCarro($usu_id);
@@ -97,17 +99,21 @@ class CarroDeComprasController
     public function obtenerCarroDetalle()
     {
 
+
+
         if (isset($_GET['usu_id'])) {
             $usu_id = $_GET['usu_id'];
             $obj = new CarroDeComprasModel();
             $objProd = new ProductosModel();
+            $objMetodo = new VentaModel();
             $carro_id = $obj->obtenerIdCarro($usu_id);
             $ciudades = $obj->getCiudades();
+            $metodos=$objMetodo->getMetodoPago();
             $productoDetalle = [];
             $carro_id = (int) $carro_id;
             $prodCarroCompra = $obj->getProdCarro($carro_id);
 
-
+       
             foreach ($prodCarroCompra as $prod) {
                 $producto = $objProd->getDetalleProducto($prod['product_id']);
                 $stockProd = $objProd->getStockCarro($prod['product_id'], $prod['color'], $prod['talla']);
@@ -127,6 +133,7 @@ class CarroDeComprasController
 
         }
     }
+    
 
     public function precioEnvioPorCiudad()
     {
@@ -144,10 +151,11 @@ class CarroDeComprasController
 
 
 
-    public function contarProductosCarro($usu_id)
-    {
+    public function contarProductosCarro($carro_id)
+    { 
+
         $obj = new CarroDeComprasModel();
-        $idCarro = $obj->obtenerIdCarro($usu_id);
+        $idCarro = $_SESSION['carro_id'];
         $carro_id = (int) $idCarro;
         $cantidad = $obj->getCantProductos($carro_id);
 

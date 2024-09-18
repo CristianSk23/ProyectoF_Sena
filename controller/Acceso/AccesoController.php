@@ -11,9 +11,10 @@ class AccesoController
 
         $usu_email = $_POST["email"];
         $usu_password = $_POST["password"];
-
+       
         // Consulta para verificar si el usuario existe
         $usuarios = $obj->Login1($usu_email, $usu_password);
+      
 
         // Verifica si los campos de correo y contraseña no están vacíos
         if (!empty($usu_email) && !empty($usu_password)) {
@@ -26,8 +27,11 @@ class AccesoController
                     $_SESSION['nombre'] = $usuario["usu_nombre"];
                     $_SESSION['email'] = $usuario["usu_correo"];
                     $_SESSION['rol_id'] = $usuario["rol_id"]; 
+                    
      
                 }
+                $carrito = $obj->carrito($usuario['usu_id']);
+                 $_SESSION['carro_id'] = $carrito["carro_id"];
                 redirect("index.php"); 
             } else {
                 // Si no hay coincidencias, muestra un mensaje de error
