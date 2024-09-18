@@ -6,8 +6,9 @@ class CarroDeComprasModel extends MasterModel
 {
     public function guardarProducto($product_id, $carro_id, $cantidad, $color, $talla, $total)
     {
-
-        $sql = "INSERT INTO detalle_carrito VALUES($product_id, $carro_id, $cantidad, null, '$color', '$talla', $total)";
+       
+        $sql = "INSERT INTO detalle_carrito (product_id, carro_id, cantidad, color, talla, total)
+        VALUES ($product_id, $carroId, $cantidad, '$color', '$talla', $total)";
         $respuesta = $this->consultar($sql);
         return $respuesta;
 
@@ -16,7 +17,8 @@ class CarroDeComprasModel extends MasterModel
 
     public function obtenerIdCarro($usu_id)
     {
-        $sql = "SELECT carro_id FROM carrito_compras WHERE usu_id = '$usu_id'";
+       
+        $sql = "SELECT carro_id FROM carrito_compras WHERE usu_id = $usu_id";
         $respuesta = $this->consultar($sql);
 
         if ($respuesta) {

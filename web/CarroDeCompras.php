@@ -1,12 +1,27 @@
 <TITle>Carro de compras</TITle>
 <?php
 include_once "../view/partials/header.php";
+
+?>
+
+<?php
+if (isset($_SESSION['error'])) {
+    ?>
+    <div class="alert">
+        <div class='alert alert-danger' role="alert">
+            <?php echo $_SESSION['error']; ?>
+        </div>
+    </div>
+<?php } ?>
+<?php
+unset($_SESSION['error']);
 ?>
 
 <body class="animsition">
-
     <!-- Shoping Cart -->
-    <form class="bg0 p-t-75 p-b-85">
+    <form class="bg0 p-t-75 p-b-85" action="<?php echo getUrl('CarroDeCompras', 'Venta', 'registroEnvio'); ?>"
+        method="POST">
+
         <div class="container">
             <div class="row">
                 <div class="col-lg-10 col-xl-7 m-lr-auto m-b-50">
@@ -25,10 +40,25 @@ include_once "../view/partials/header.php";
                                 $total = 0;
                                 foreach ($productoDetalle as $item) {
                                     $producto = $item['producto'];
-                                    $stock = $item['stock'][0];
                                     $cantidad = $item['cantidad'];
-                                    $precio = $stock['stock_precio'];
-                                    $foto = $item['fotosProd'][0]['foto_img'];
+
+                                    // Verificar si hay stock y obtener el primer elemento
+                                    if (isset($item['stock']) && is_array($item['stock']) && count($item['stock']) > 0) {
+                                        $stock = $item['stock'][0];
+                                        $precio = $stock['stock_precio'];
+                                    } else {
+                                        // Manejo del error si no hay stock
+                                        $precio = 0; // o puedes lanzar un error, dependiendo de tu lógica
+                                    }
+
+                                    // Verificar si hay fotos y obtener la primera
+                                    if (isset($item['fotosProd']) && is_array($item['fotosProd']) && count($item['fotosProd']) > 0) {
+                                        $foto = $item['fotosProd'][0]['foto_img'];
+                                    } else {
+                                        // Manejo del error si no hay fotos
+                                        $foto = 'ruta_por_defecto.jpg'; // Puedes usar una imagen por defecto
+                                    }
+
                                     $totalProducto = $precio * $cantidad;
                                     $total += $totalProducto;
 
@@ -55,9 +85,9 @@ include_once "../view/partials/header.php";
                                                 <input class="mtext-104 cl3 txt-center num-product" type="number"
                                                     data-cantidad="<?php echo $cantidad; ?>"
                                                     value="<?php echo htmlspecialchars($cantidad) ?>"
-                                                    data-producto-id="<?php echo $producto['product_id']; ?>" min="1"
+                                                    data-producto-id="<?php echo $producto['product_id']; ?>" min="1">
+                                                <input type="hidden" name="cantidad[]" class="cantidad-hidden" value=""
                                                     max="<?php echo $stock['stock_cantidad']; ?>" readonly>
-
                                                 <div class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m">
                                                     <i class="fs-16 zmdi zmdi-plus"></i>
                                                 </div>
@@ -67,6 +97,8 @@ include_once "../view/partials/header.php";
                                                 class="total-producto"><?php echo number_format($totalProducto); ?></span>
                                         </td>
                                     </tr>
+                                    <!-- Agregar campo oculto para el ID del producto -->
+                                    <input type="hidden" name="producto_ids[]" value="<?php echo $productId; ?>">
 
                                 <?php } ?>
 
@@ -96,7 +128,7 @@ include_once "../view/partials/header.php";
 
                             <div class="size-209">
                                 <span class="mtext-110 cl2">
-                                    <span id="total-precio"><?php echo number_format($total); ?></span>
+                                    <span id="total-precio" name="total"><?php echo number_format($total); ?></span>
                                 </span>
                             </div>
                         </div>
@@ -123,7 +155,8 @@ include_once "../view/partials/header.php";
                                             data-url="<?= getUrl('CarroDeCompras', 'CarroDeCompras', 'precioEnvioPorCiudad', false, 'ajax') ?>">
                                             <option>Selecciona tu Ciudad</option>
                                             <?php foreach ($ciudades as $ciudad): ?>
-                                                <option value="<?php echo htmlspecialchars($ciudad['ciu_id']); ?>">
+                                                <option value="<?php echo htmlspecialchars($ciudad['ciu_id']); ?>"
+                                                    name="ciu_id">
                                                     <?php echo htmlspecialchars($ciudad['ciu_nombre']); ?>
                                                 </option>
                                             <?php endforeach; ?>
@@ -131,20 +164,33 @@ include_once "../view/partials/header.php";
                                         <div class="dropDownSelect2"></div>
                                     </div>
 
-
-
                                     <div class="bor8 bg0 m-b-12">
                                         <input class="stext-111 cl8 plh3 size-111 p-lr-15" type="text" name="state"
                                             id="valor-envio" placeholder="Valor de Envío" readonly>
                                     </div>
 
                                     <div class="bor8 bg0 m-b-22">
-                                        <input class="stext-111 cl8 plh3 size-111 p-lr-15" type="text" name="postcode"
-                                            placeholder="Dirección de entrega">
+                                        <input class="stext-111 cl8 plh3 size-111 p-lr-15" type="text"
+                                            name="direccion_envio" placeholder="Dirección Envio">
                                     </div>
-
-
-
+                                    <span class="stext-112 cl8">
+                                        Metodo de pago
+                                    </span>
+                                    <div class="rs1-select2 rs2-select2 bor8 bg0 m-b-12 m-t-9">
+                                        <select class="js-select2" name="metodo_pago" id="select-metodo">
+                                            <option>Selecciona...</option>
+                                            <?php foreach ($metodos as $metodo): ?>
+                                                <option value="<?php echo htmlspecialchars($metodo['idMetodo_pago']); ?>">
+                                                    <?php echo htmlspecialchars($metodo['descripcionMetodo_pago']); ?>
+                                                </option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                        <div class="dropDownSelect2"></div>
+                                    </div>
+                                    <div class="bor8 bg0 m-b-22">
+                                        <input class="stext-111 cl8 plh3 size-111 p-lr-15" type="text" name="cuenta"
+                                            placeholder="No.Tarjeta/Cuenta">
+                                    </div>
 
 
                                 </div>
@@ -160,15 +206,39 @@ include_once "../view/partials/header.php";
 
                             <div class="size-209 p-t-1">
                                 <span class="mtext-110 cl2">
-                                    $79.65
+                                    $
                                 </span>
+                                <input type="hidden" name="total_con_envio" id="total-con-envio" value="">
+
                             </div>
                         </div>
 
-                        <button class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer"
-                            data-url="<?php ?>">
-                            Procesar Pago
+                        <button type="submit"
+                            class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer"
+                            data-toggle="modal" data-target="#exampleModal">
+                            Finalizar Compra
                         </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">CONFIRMACION DE COMPRA</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        ¡La compra se realizo con exito!
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     </div>
                 </div>
             </div>
@@ -207,6 +277,62 @@ include_once "../view/partials/header.php";
                 dropdownParent: $(this).next('.dropDownSelect2')
             });
         })
+
+
+
+
+        $(document).ready(function () {
+            // Evento para disminuir la cantidad
+            $('.btn-num-product-down').on('click', function () {
+                var input = $(this).siblings('.num-product');
+                var cantidad = parseInt(input.val());
+                if (cantidad > 1) {
+                    input.val(cantidad - 1);
+                }
+            });
+
+            // Evento para aumentar la cantidad
+            $('.btn-num-product-up').on('click', function () {
+                var input = $(this).siblings('.num-product');
+                var cantidad = parseInt(input.val());
+                input.val(cantidad + 1);
+            });
+
+            // Manejo del envío del formulario
+            $('form').on('submit', function (event) {
+                // Prevenir el envío del formulario por defecto
+                event.preventDefault();
+
+                // Limpiar los valores de los campos ocultos
+                $('.cantidad-hidden').remove(); // Remover campos ocultos previos
+
+                // Iterar sobre los inputs de cantidad
+                $('.num-product').each(function () {
+                    // Obtener el valor de cantidad
+                    let cantidad = $(this).val();
+                    // Obtener el id del producto
+                    let productoId = $(this).data('producto-id');
+
+                    // Crear un nuevo campo oculto para la cantidad
+                    $('<input>').attr({
+                        type: 'hidden',
+                        class: 'cantidad-hidden',
+                        name: 'cantidad[]',
+                        value: cantidad
+                    }).appendTo(this.form);
+
+                    // Crear un campo oculto para el ID del producto
+                    $('<input>').attr({
+                        type: 'hidden',
+                        name: 'product_id[]',
+                        value: productoId
+                    }).appendTo(this.form);
+                });
+
+                // Enviar el formulario después de agregar los datos
+                this.submit();
+            });
+        });
     </script>
     <!--===============================================================================================-->
     <script src="vendor/MagnificPopup/jquery.magnific-popup.min.js"></script>

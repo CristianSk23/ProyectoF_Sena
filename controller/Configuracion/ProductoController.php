@@ -28,18 +28,18 @@ class ProductoController
         $categoria = $_POST['categoria'];
         $genero = $_POST['genero'];
         $tipo = $_POST['tipo'];
-        
+
         // Validacion si el input esta vacio o no
         if (
             empty($nombre) || empty($descripcion) || empty($categoria) || empty($genero)
-            || empty($tipo) 
+            || empty($tipo)
         ) {
             $_SESSION['datosIncorrectos'] = "Por favor complete el formulario.";
             redirect(getUrl("Configuracion", "Producto", "getInsert"));
         }
 
         //dd($_FILES['stock_img']);
-        
+
 
         $sql = "INSERT INTO producto VALUES(null, '$tipo','$nombre', '$descripcion', 
         '$genero', '$categoria', 1 )";
@@ -52,7 +52,7 @@ class ProductoController
             $imagenes = $_FILES['stock_img'];
             $idProducto = $this->consultarUltimoId();
 
-            for ($i = 0; $i < count($imagenes['name']); $i++){
+            for ($i = 0; $i < count($imagenes['name']); $i++) {
                 $tmp_img = $imagenes['name'][$i];
                 $nombre = $imagenes['tmp_name'][$i];
 
@@ -83,9 +83,9 @@ class ProductoController
                 $ruta = "images/$tmp_img";
                 move_uploaded_file($nombre, $ruta);
 
-                $sql2 = "INSERT INTO fotos VALUES(null, '$ruta','$idProducto', 1)"; 
+                $sql2 = "INSERT INTO fotos VALUES(null, '$ruta','$idProducto', 1)";
                 $ejecutar2 = $obj2->insertar($sql2);
-                
+
             }
             redirect(getUrl("Configuracion", "Producto", "getInsert"));
             $_SESSION['success'] = "Registro exitoso.";
@@ -94,7 +94,8 @@ class ProductoController
         }
     }
 
-    public function consultarUltimoId(){
+    public function consultarUltimoId()
+    {
         $obj = new ProductoModel();
         $sql = "SELECT MAX(product_id) FROM producto";
         $ejecutar = $obj->consultar($sql);
@@ -106,7 +107,8 @@ class ProductoController
     }
 
 
-    public function validarNombre($nombre){
+    public function validarNombre($nombre)
+    {
         $obj = new ProductoModel();
 
         $sql = "SELECT * FROM producto WHERE product_nombre = $nombre";
@@ -220,8 +222,8 @@ class ProductoController
 
 
         if (
-            empty($id) ||  empty($descripcion) || empty($categoria) || empty($genero)
-            || empty($tipo) 
+            empty($id) || empty($descripcion) || empty($categoria) || empty($genero)
+            || empty($tipo)
         ) {
             $_SESSION['datosIncorrectos'] = "Por favor complete el formulario.";
             redirect(getUrl("Configuracion", "Producto", "modificar", array("product_id" => $id)));
@@ -232,13 +234,13 @@ class ProductoController
         genero_id ='$genero', categoria_id ='$categoria' WHERE product_id = $id";
         $ejecutar = $obj->editar($sql);
 
-            //Insercion de las imagenes con su respectivas validaciones
-            if ($ejecutar && (!empty($_FILES['stock_img']['name'][0]))) {
+        //Insercion de las imagenes con su respectivas validaciones
+        if ($ejecutar && (!empty($_FILES['stock_img']['name'][0]))) {
 
             $imagenes = $_FILES['stock_img'];
             $this->EliminarFotos($id);
 
-            for ($i = 0; $i < count($imagenes['name']); $i++){
+            for ($i = 0; $i < count($imagenes['name']); $i++) {
                 $tmp_img = $imagenes['name'][$i];
                 $nombre = $imagenes['tmp_name'][$i];
 
@@ -266,20 +268,20 @@ class ProductoController
                 }
 
                 // se mueven las imagenes a la ruta definida
-                if ($tmp_img){
+                if ($tmp_img) {
                     $ruta = "images/$tmp_img";
-                move_uploaded_file($nombre, $ruta);
-                $sql2 = "INSERT INTO fotos VALUES(null, '$ruta','$id', 1)"; 
-                $ejecutar2 = $obj2->insertar($sql2);
+                    move_uploaded_file($nombre, $ruta);
+                    $sql2 = "INSERT INTO fotos VALUES(null, '$ruta','$id', 1)";
+                    $ejecutar2 = $obj2->insertar($sql2);
                 }
-                
-                
+
+
             }
-        } 
+        }
         redirect(getUrl("Configuracion", "Producto", "consultar"));
         $_SESSION['success'] = "Registro exitoso.";
 
-        
+
     }
 
 
@@ -296,7 +298,8 @@ class ProductoController
         }
     }
 
-    public function EliminarFotos($id){
+    public function EliminarFotos($id)
+    {
         $obj = new ProductoModel();
         $sql = "DELETE FROM fotos WHERE product_id = $id";
         $ejecutar = $obj->eliminar($sql);
@@ -304,4 +307,3 @@ class ProductoController
 
 
 }
-

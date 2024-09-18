@@ -337,6 +337,7 @@
 
     //* Carga la información obtenida de la base en el modal del carro de compras
 
+    
     $(document).ready(function () {
         $('.js-show-cart').on('click', function () {
             let userId = $(this).data('id-usuario');
@@ -617,6 +618,8 @@
                             // Calcular el nuevo total sumando el valor del envío
                             totalConEnvio = totalProducto + precioEnvioconver;
                             console.log(totalConEnvio);
+                               // Actualizar el campo oculto con el total
+                            $('#total-con-envio').val(totalConEnvio);
 
                             $('.size-209.p-t-1 .mtext-110.cl2').text(formatter.format(totalConEnvio));
 

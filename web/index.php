@@ -5,6 +5,8 @@ include_once "../view/partials/navbar.php";
 
 echo "<body>";
 
+
+
 //echo "<div class='wrapper'>";  // Contenedor principal que envuelve todo el contenido
 
 // include_once "../view/partials/navbar.php";

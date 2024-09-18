@@ -49,6 +49,12 @@ class RegistroController {
         
         
         if ($resultado) {
+            $usu_id = $modelo->lastInsertId('usuario', 'usu_id'); // Asumiendo que 'usu_id' es la clave primaria
+
+            // Crear un carrito de compra asociado al nuevo usuario
+            $sqlCarrito = "INSERT INTO carrito_compras (usu_id) VALUES ($usu_id)";
+            $resultadoCarrito = $modelo->insertar($sqlCarrito);
+
             $_SESSION['success'] = "Registro exitoso. Puedes iniciar sesión.";
             redirect("login.php"); // Redirige al login después del registro
         } else {

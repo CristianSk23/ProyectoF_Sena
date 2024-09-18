@@ -76,7 +76,7 @@
 
             <div class=" w-full">
                 <div class="header-cart-total w-full p-tb-40">
-                    Total: $75.00
+                    Total: $0
                 </div>
 
 
