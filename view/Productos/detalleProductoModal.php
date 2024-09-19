@@ -145,7 +145,8 @@ $precio = "";
                                             </div>
 
                                             <input class="mtext-104 cl3 txt-center num-product" type="number"
-                                                name="cantidad" value="0" max="<?php echo $cantidad; ?>">
+                                                name="cantidad" value="1" min="1" max="<?php echo $cantidad; ?> "
+                                                id="cantidad" readonly>
 
                                             <div
                                                 class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m aumentar-detalle">
@@ -266,43 +267,6 @@ $precio = "";
                         </div>
 
                         <!-- - -->
-                        <div class="tab-pane fade" id="reviews" role="tabpanel">
-                            <div class="row">
-                                <div class="col-sm-10 col-md-8 col-lg-6 m-lr-auto">
-                                    <div class="p-b-30 m-lr-15-sm">
-                                        <!-- Review -->
-                                        <div class="flex-w flex-t p-b-68">
-                                            <div class="wrap-pic-s size-109 bor0 of-hidden m-r-18 m-t-6">
-                                                <img src="images/avatar-01.jpg" alt="AVATAR">
-                                            </div>
-
-                                            <div class="size-207">
-                                                <div class="flex-w flex-sb-m p-b-17">
-                                                    <span class="mtext-107 cl2 p-r-20">
-                                                        Ariana Grande
-                                                    </span>
-
-                                                    <span class="fs-18 cl11">
-                                                        <i class="zmdi zmdi-star"></i>
-                                                        <i class="zmdi zmdi-star"></i>
-                                                        <i class="zmdi zmdi-star"></i>
-                                                        <i class="zmdi zmdi-star"></i>
-                                                        <i class="zmdi zmdi-star-half"></i>
-                                                    </span>
-                                                </div>
-
-                                                <p class="stext-102 cl6">
-                                                    Quod autem in homine praestantissimum atque optimum est, id
-                                                    deseruit. Apud ceteros autem philosophos
-                                                </p>
-                                            </div>
-                                        </div>
-
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -338,7 +302,6 @@ $precio = "";
             </span>
         </div>
 
-        <!-- Modal1 -->
         <!-- Modal de Inicio de Sesión -->
         <div class="modal fade" id="loginModal" tabindex="2" aria-labelledby="loginModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
@@ -357,6 +320,11 @@ $precio = "";
                 </div>
             </div>
         </div>
+
+
+        <!-- Modal -->
+       
+
 
 
         <!--===============================================================================================-->
@@ -433,12 +401,7 @@ $precio = "";
 
             /*---------------------------------------------*/
 
-            /*  $('.js-addcart-detail').each(function () {
-                 var nameProduct = $(this).parent().parent().parent().parent().find('.js-name-detail').html();
-                 $(this).on('click', function () {
-                     swal(nameProduct, "Se agregó al carro de compras!", "success");
-                 });
-             }); */
+
 
 
             $(document).ready(function () {
@@ -451,12 +414,17 @@ $precio = "";
 
                         let color = $('#color').val();
                         let talla = $('#talla').val();
+                        let cantidad = $('#cantidad').val();
 
                         // Verifica si color y talla están vacíos
                         if (!color || !talla) {
-                            // Muestra un mensaje si faltan datos
+
                             swal("Faltan atributos", "Debes seleccionar tanto el color como la talla para agregar el producto al carrito.", "warning");
-                            return; // Detén la ejecución si falta información
+                            return;
+                        }
+                        if (cantidad == 0) {
+                            swal("Faltan atributos", "Debes seleccionar por lo menos un unidad del producto", "warning");
+                            return;
                         }
 
                         if (isAuthenticated) {

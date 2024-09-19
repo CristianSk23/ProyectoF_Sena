@@ -11,26 +11,31 @@ class CarroDeComprasController
 
     public function agregarProducto()
     {
-        session_start(); // Asegúrate de que la sesión esté iniciada
 
-        // Verificar si el usuario está logueado
+
+
         if (!isset($_SESSION['auth'])) {
             echo json_encode(['success' => false, 'message' => 'Debes estar logueado para agregar productos al carrito.']);
             exit();
         }
 
-        // Verificar si se recibieron los datos necesarios
+
         if (isset($_POST['product_id'], $_POST['product_precio'], $_POST['color'], $_POST['talla'], $_POST['cantidad'])) {
             $product_id = intval($_POST['product_id']);
-            $cantidad = intval($_POST['cantidad']);
-            $color = htmlspecialchars($_POST['color'], ENT_QUOTES); // Escapar los valores de texto
+            if ($_POST['cantidad'] != 0) {
+                $cantidad = intval($_POST['cantidad']);
+            } else {
+                echo json_encode(['success' => false, 'message' => 'Debes tener al menos una unidad seleccionada para guardar en el carro de compras']);
+                exit();
+            }
+            $color = htmlspecialchars($_POST['color'], ENT_QUOTES);
             $precio = doubleval($_POST['product_precio']);
             $talla = htmlspecialchars($_POST['talla'], ENT_QUOTES);
 
-            // Calcular el total para la cantidad actual
+
             $total = $cantidad * $precio;
 
-            // Guardar el producto en el carrito
+
             $obj = new CarroDeComprasModel();
             if (isset($_SESSION['usu_id'])) {
                 $id_usuario = $_SESSION['usu_id'];
@@ -42,18 +47,18 @@ class CarroDeComprasController
                 }
                 $idParse = (int) $idcarro;
 
-                // Verificar si el producto ya está en el carrito con el mismo color y talla
+
                 $productoExistente = $obj->validarExistenciaProd($product_id, $idParse, $color, $talla);
 
 
 
 
                 if ($productoExistente) {
-                    // Si el producto ya está en el carrito, actualizar la cantidad sumando la nueva
+
                     $nuevaCantidad = $productoExistente['cantidad'] + $cantidad;
                     $nuevoTotal = $nuevaCantidad * $precio;
 
-                    // Actualizar el producto con la nueva cantidad y el nuevo total
+
                     $obj->actualizarCantidadProducto($product_id, $idParse, $nuevaCantidad, $nuevoTotal);
 
                     echo json_encode(['success' => true, 'message' => 'Cantidad actualizada en el carrito.']);
@@ -74,7 +79,7 @@ class CarroDeComprasController
 
     public function obtenerCarro()
     {
-        ob_start(); // Iniciar el buffer de salida
+        ob_start();
 
 
         header('Content-Type: application/json'); // Configura el tipo de contenido como JSON
@@ -111,10 +116,10 @@ class CarroDeComprasController
                 ];
             }
 
-            // Limpiar cualquier salida previa
+
             ob_end_clean();
 
-            // Enviar la respuesta JSON
+
             echo json_encode(['success' => true, 'productos' => $productoDetalle]);
 
         } else {
