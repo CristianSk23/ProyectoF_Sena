@@ -168,14 +168,7 @@
 
 
 
-            <!--    <div class="block2-txt-child2 flex-r p-t-3">
-                         <a href="#" class="btn-addwish-b2 dis-block pos-relative js-addwish-b2">
-                             <img class="icon-heart1 dis-block trans-04" src="images/icons/icon-heart-01.png"
-                                 alt="ICON">
-                             <img class="icon-heart2 dis-block trans-04 ab-t-l"
-                                 src="images/icons/icon-heart-02.png" alt="ICON">
-                         </a>
-                     </div> -->
+
             <!-- Pagination -->
             <div class="flex-c-m flex-w w-full p-t-38">
                 <a href="#" class="flex-c-m how-pagination1 trans-04 m-all-7 active-pagination1">
@@ -310,30 +303,30 @@
     <!--===============================================================================================-->
     <script src="js/main.js"></script>
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Selecciona los botones de filtro usando la clase correcta
-        const filterButtons = document.querySelectorAll('.filter-tope-group button');
-        const items = document.querySelectorAll('.isotope-item');
+        document.addEventListener('DOMContentLoaded', function () {
+            // Selecciona los botones de filtro usando la clase correcta
+            const filterButtons = document.querySelectorAll('.filter-tope-group button');
+            const items = document.querySelectorAll('.isotope-item');
 
-        filterButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                const filterValue = this.getAttribute('data-filter');
+            filterButtons.forEach(button => {
+                button.addEventListener('click', function () {
+                    const filterValue = this.getAttribute('data-filter');
 
-                // Cambia la clase activa del botón
-                filterButtons.forEach(btn => btn.classList.remove('how-active1'));
-                this.classList.add('how-active1');
+                    // Cambia la clase activa del botón
+                    filterButtons.forEach(btn => btn.classList.remove('how-active1'));
+                    this.classList.add('how-active1');
 
-                items.forEach(item => {
-                    if (filterValue === '*' || item.classList.contains(filterValue)) {
-                        item.style.display = 'block';
-                    } else {
-                        item.style.display = 'none';
-                    }
+                    items.forEach(item => {
+                        if (filterValue === '*' || item.classList.contains(filterValue)) {
+                            item.style.display = 'block';
+                        } else {
+                            item.style.display = 'none';
+                        }
+                    });
                 });
             });
         });
-    });
-</script>
+    </script>
 
 
 </body>

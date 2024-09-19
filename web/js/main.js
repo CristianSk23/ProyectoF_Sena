@@ -215,7 +215,7 @@
 
     /*==================================================================
     [ +/- num product ]*/ //*Incremento y decremento de los input´s para la cantidad del producto
-    $('.btn-num-product-down').on('click', function () {
+    $('.reducir-detalle').on('click', function () {
         let $input = $(this).next(); // Selecciona el campo de entrada
         let numProduct = Number($input.val());
 
@@ -224,15 +224,21 @@
         }
     });
 
-    $('.btn-num-product-up').on('click', function () {
+    $('.aumentar-detalle').on('click', function () {
         let $input = $(this).prev(); // Selecciona el campo de entrada
         let numProduct = Number($input.val());
         let maxStock = Number($input.attr('max'));
         let maxStockparse = maxStock - 1;
 
-
+        //alert("Incrementando " + $input);
         if (numProduct < maxStockparse) {
-            $input.val(numProduct + 1);
+            let suma = numProduct + 1;
+            console.log($input.val());
+
+            $input.val("");
+            $input.val(suma);
+            console.log("Despues de cargar en la vista " + $input.val());
+
         }
     });
 
@@ -337,7 +343,7 @@
 
     //* Carga la información obtenida de la base en el modal del carro de compras
 
-    
+
     $(document).ready(function () {
         $('.js-show-cart').on('click', function () {
             let userId = $(this).data('id-usuario');
@@ -437,7 +443,7 @@
     //* Actualiza el precio total por todos los productos en el detalle del carro de compras:
 
     $(document).ready(function () {
-        function actualizarEstadoBotones() {
+        /* function actualizarEstadoBotones() {
             $('.wrap-num-product').each(function () {
                 let inputCantidad = $(this).find('.num-product');
                 let cantidadActual = parseInt(inputCantidad.val());
@@ -450,31 +456,34 @@
                     btnUp.prop('disabled', false); // Habilitar el botón
                 }
             });
-        }
+        } */
 
-        $('.btn-num-product-up').on('click', function () {
+        $('.aumentar-carro').on('click', function () {
             let inputCantidad = $(this).closest('.wrap-num-product').find('.num-product');
+            //debugger;
             let cantidadActual = parseInt(inputCantidad.val());
             let maxValue = parseInt(inputCantidad.attr('max'));
 
 
             if (!isNaN(cantidadActual) && cantidadActual < maxValue) {
                 actualizarTotalProducto(inputCantidad); // Actualizar total para ese producto
-                actualizarEstadoBotones(); // Actualizar el estado de los botones
+                //actualizarEstadoBotones(); // Actualizar el estado de los botones
             } else {
                 alert('No puedes agregar más productos. Has alcanzado el límite de stock.');
                 return;
             }
         });
 
-        $('.btn-num-product-down').on('click', function () {
+
+
+        $('.reducir-carro').on('click', function () {
             let inputCantidad = $(this).closest('.wrap-num-product').find('.num-product');
             let cantidadActual = parseInt(inputCantidad.val());
             let minValue = parseInt(inputCantidad.attr('min'));
 
-            if (!isNaN(cantidadActual) && cantidadActual > minValue) {
+            if (!isNaN(cantidadActual) && cantidadActual >= minValue) {
                 actualizarTotalProducto(inputCantidad); // Actualizar total para ese producto
-                actualizarEstadoBotones(); // Actualizar el estado de los botones
+                //actualizarEstadoBotones(); // Actualizar el estado de los botones
             }
         });
 
@@ -509,7 +518,7 @@
             $('#total-precio').text(totalPrecio.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','));
         }
 
-        actualizarEstadoBotones();
+        //actualizarEstadoBotones();
     });
 
 
@@ -618,7 +627,7 @@
                             // Calcular el nuevo total sumando el valor del envío
                             totalConEnvio = totalProducto + precioEnvioconver;
                             console.log(totalConEnvio);
-                               // Actualizar el campo oculto con el total
+                            // Actualizar el campo oculto con el total
                             $('#total-con-envio').val(totalConEnvio);
 
                             $('.size-209.p-t-1 .mtext-110.cl2').text(formatter.format(totalConEnvio));
@@ -640,6 +649,47 @@
         });
     });
 
+
+
+    //* Para eliminar un producto del carro de compras
+    $(document).ready(function () {
+        $('.eliminar-producto').on('click', function (e) {
+            e.preventDefault();
+
+            if (!confirm("¿Desea eliminar este producto del carrito?")) {
+                return;
+            }
+
+            let url = $(this).data('url');
+            let id = $(this).data('id');
+            let url_carro = $(this).data('url-carro');
+
+            $.ajax({
+                url: url,
+                type: 'POST',
+                data: { product_id: id },
+                success: function (response) {
+                    if (response == 1) {
+                        console.log("Producto eliminado:", response);
+                        location.reload();
+                    }
+                },
+                error: function (error) {
+                    console.error("Error al eliminar el producto:", error);
+                }
+            });
+        });
+
+
+        /* function actualizarTotal() {
+            let total = 0;
+            $('.total-producto').each(function () {
+                total += parseFloat($(this).text().replace(/,/g, ''));
+            });
+            $('#total-precio').text(total.toFixed(2));
+            // Actualizar total con envío aquí si es necesario
+        } */
+    });
 
 
 

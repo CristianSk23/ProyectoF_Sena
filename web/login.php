@@ -1,4 +1,3 @@
-
 <?php include_once "../lib/helpers.php"; ?>
 
 
@@ -33,7 +32,8 @@
                                 ?>
                                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
                                     <?= $_SESSION['error'] ?>
-                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                        aria-label="Close"></button>
                                 </div>
                                 <?php
                                 unset($_SESSION["error"]);
@@ -42,7 +42,8 @@
                                 ?>
                                 <div class="alert alert-success alert-dismissible fade show" role="alert">
                                     <?= $_SESSION['success'] ?>
-                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                        aria-label="Close"></button>
                                 </div>
                                 <?php
                                 unset($_SESSION["success"]);
@@ -52,7 +53,8 @@
                                 ?>
                                 <div class="alert alert-warning alert-dismissible fade show" role="alert">
                                     <?= $_SESSION['errorEmpty'] ?>
-                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                        aria-label="Close"></button>
                                 </div>
                                 <?php
                                 unset($_SESSION["errorEmpty"]);
@@ -61,17 +63,19 @@
                         </div>
 
                         <div class="mb-md-5 mt-md-4 pb-5">
-                            <form action="<?php echo getUrl("Acceso", "Acceso", "login"); ?>" method="POST">
+                            <form action="<?php echo getUrl("Acceso", "Acceso", "login", false); ?>" method="POST">
                                 <h2 class="fw-bold mb-2 text-uppercase">Login</h2>
                                 <p class="text-white-50 mb-5">¡Ingresa tu correo y contraseña!</p>
 
                                 <div class="form-outline form-white mb-4">
-                                    <input type="email" id="email" name="email" class="form-control form-control-lg" required />
+                                    <input type="email" id="email" name="email" class="form-control form-control-lg"
+                                        required />
                                     <label class="form-label" for="email">Correo</label>
                                 </div>
 
                                 <div class="form-outline form-white mb-4">
-                                    <input type="password" id="password" name="password" class="form-control form-control-lg" required />
+                                    <input type="password" id="password" name="password"
+                                        class="form-control form-control-lg" required />
                                     <label class="form-label" for="password">Contraseña</label>
                                 </div>
 

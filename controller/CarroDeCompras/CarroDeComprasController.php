@@ -35,12 +35,17 @@ class CarroDeComprasController
             if (isset($_SESSION['usu_id'])) {
                 $id_usuario = $_SESSION['usu_id'];
                 $carro_id = $obj->obtenerIdCarro($id_usuario);
-                $idParse = (int) $carro_id;
+                foreach ($carro_id as $carro) {
+
+                    $idcarro = $carro;
+
+                }
+                $idParse = (int) $idcarro;
 
                 // Verificar si el producto ya está en el carrito con el mismo color y talla
                 $productoExistente = $obj->validarExistenciaProd($product_id, $idParse, $color, $talla);
 
-                var_dump($productoExistente);
+
 
 
                 if ($productoExistente) {
@@ -53,7 +58,7 @@ class CarroDeComprasController
 
                     echo json_encode(['success' => true, 'message' => 'Cantidad actualizada en el carrito.']);
                 } else {
-                    // Si no existe, agregar el producto al carrito
+                    $this->contarProductosCarro($idParse);
                     $obj->guardarProducto($product_id, $idParse, $cantidad, $color, $talla, $total);
 
                     echo json_encode(['success' => true, 'message' => 'Producto agregado al carrito.']);
@@ -76,18 +81,25 @@ class CarroDeComprasController
 
         if (isset($_SESSION['usu_id'])) {
             $usu_id = $_SESSION['usu_id'];
+
             $obj = new CarroDeComprasModel();
             $objProd = new ProductosModel();
             $carro_id = $obj->obtenerIdCarro($usu_id);
             $productoDetalle = [];
+            foreach ($carro_id as $carro) {
 
-            $carro_id = (int) $carro_id;
+                $idcarro = $carro;
+
+            }
+            $carro_id = (int) $idcarro;
             $prodCarroCompra = $obj->getProdCarro($carro_id);
 
-
             foreach ($prodCarroCompra as $prod) {
+
                 $producto = $objProd->getDetalleProducto($prod['product_id']);
                 $stockProd = $objProd->getStockCarro($prod['product_id'], $prod['color'], $prod['talla']);
+                //dd($stockProd);
+
                 $fotos = $objProd->getFoto($prod['product_id']);
                 $productoDetalle[] = [
                     'producto' => $producto,
@@ -115,8 +127,6 @@ class CarroDeComprasController
     public function obtenerCarroDetalle()
     {
 
-
-
         if (isset($_GET['usu_id'])) {
             $usu_id = $_GET['usu_id'];
             $obj = new CarroDeComprasModel();
@@ -124,12 +134,19 @@ class CarroDeComprasController
             $objMetodo = new VentaModel();
             $carro_id = $obj->obtenerIdCarro($usu_id);
             $ciudades = $obj->getCiudades();
-            $metodos=$objMetodo->getMetodoPago();
+            $metodos = $objMetodo->getMetodoPago();
             $productoDetalle = [];
-            $carro_id = (int) $carro_id;
+
+            foreach ($carro_id as $carro) {
+
+                $idcarro = $carro;
+
+            }
+
+            $carro_id = (int) $idcarro;
             $prodCarroCompra = $obj->getProdCarro($carro_id);
 
-       
+
             foreach ($prodCarroCompra as $prod) {
                 $producto = $objProd->getDetalleProducto($prod['product_id']);
                 $stockProd = $objProd->getStockCarro($prod['product_id'], $prod['color'], $prod['talla']);
@@ -149,7 +166,7 @@ class CarroDeComprasController
 
         }
     }
-    
+
 
     public function precioEnvioPorCiudad()
     {
@@ -168,8 +185,7 @@ class CarroDeComprasController
 
 
     public function contarProductosCarro($carro_id)
-    { 
-
+    {
         $obj = new CarroDeComprasModel();
         $idCarro = $_SESSION['carro_id'];
         $carro_id = (int) $idCarro;
@@ -183,11 +199,23 @@ class CarroDeComprasController
     {
         $obj = new CarroDeComprasModel();
         if (isset($_POST['product_id'])) {
+            $usu_id = $_SESSION['usu_id'];
             $idProducto = $_POST['product_id'];
-            $prodEliminado = $obj->eliminarProductoCarrito($idProducto);
+            $eliminar = $obj->eliminarProductoCarrito($idProducto);
+            if ($eliminar == 1) {
+                echo 1;
+            } else {
+                echo 2;
+
+            }
         }
 
-        var_dump($prodEliminado);
+    }
+
+
+    public function actualizarCantidad()
+    {
+
 
     }
 
