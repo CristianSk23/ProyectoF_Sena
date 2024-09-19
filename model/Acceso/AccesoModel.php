@@ -10,9 +10,14 @@ class AccesoModel extends MasterModel
         return $respuesta;
     }
 
-    public function carrito($usu_id){
+    public function carrito($usu_id)
+    {
         $sql = "SELECT carro_id FROM carrito_compras WHERE usu_id = $usu_id";
         $respuesta = $this->consultar($sql);
+        //var_dump($respuesta);
+        if ($respuesta) {
+            return $respuesta->fetch_all(MYSQLI_ASSOC);
+        }
     }
 }
 

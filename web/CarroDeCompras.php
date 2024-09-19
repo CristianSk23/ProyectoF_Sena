@@ -27,85 +27,7 @@ unset($_SESSION['error']);
                 <div class="col-lg-10 col-xl-7 m-lr-auto m-b-50">
                     <div class="m-l-25 m-r--38 m-lr-0-xl">
                         <div class="wrap-table-shopping-cart">
-                            <table class="table-shopping-cart">
-                                <tr class="table_head">
-                                    <th class="column-1">Producto</th>
-                                    <th class="column-2"></th>
-                                    <th class="column-3">Precio</th>
-                                    <th class="column-4">Cantidad</th>
-                                    <th class="column-5">Total</th>
-                                </tr>
-
-                                <?php
-                                $total = 0;
-                                foreach ($productoDetalle as $item) {
-                                    $producto = $item['producto'];
-                                    $cantidad = $item['cantidad'];
-
-                                    // Verificar si hay stock y obtener el primer elemento
-                                    if (isset($item['stock']) && is_array($item['stock']) && count($item['stock']) > 0) {
-                                        $stock = $item['stock'][0];
-                                        $precio = $stock['stock_precio'];
-                                    } else {
-                                        // Manejo del error si no hay stock
-                                        $precio = 0; // o puedes lanzar un error, dependiendo de tu lógica
-                                    }
-
-                                    // Verificar si hay fotos y obtener la primera
-                                    if (isset($item['fotosProd']) && is_array($item['fotosProd']) && count($item['fotosProd']) > 0) {
-                                        $foto = $item['fotosProd'][0]['foto_img'];
-                                    } else {
-                                        // Manejo del error si no hay fotos
-                                        $foto = 'ruta_por_defecto.jpg'; // Puedes usar una imagen por defecto
-                                    }
-
-                                    $totalProducto = $precio * $cantidad;
-                                    $total += $totalProducto;
-
-                                    var_dump($stock['stock_cantidad']);
-                                    ?>
-
-                                    <tr class="table_row">
-                                        <td class="column-1">
-                                            <div class="how-itemcart1">
-                                                <img src="<?php echo $foto; ?>" alt="IMG">
-                                            </div>
-                                        </td>
-                                        <td class="column-2"><?php echo htmlspecialchars($producto['product_nombre']); ?>
-                                        </td>
-                                        <td class="column-3">$ <span class="precio" data-precio="<?php echo $precio; ?>">
-                                                <?php echo number_format($precio); ?>
-                                            </span></td>
-                                        <td class="column-4">
-                                            <div class="wrap-num-product flex-w m-l-auto m-r-0">
-                                                <div class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m">
-                                                    <i class="fs-16 zmdi zmdi-minus"></i>
-                                                </div>
-
-                                                <input class="mtext-104 cl3 txt-center num-product" type="number"
-                                                    data-cantidad="<?php echo $cantidad; ?>"
-                                                    value="<?php echo htmlspecialchars($cantidad) ?>"
-                                                    data-producto-id="<?php echo $producto['product_id']; ?>" min="1">
-                                                <input type="hidden" name="cantidad[]" class="cantidad-hidden" value=""
-                                                    max="<?php echo $stock['stock_cantidad']; ?>" readonly>
-                                                <div class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m">
-                                                    <i class="fs-16 zmdi zmdi-plus"></i>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td class="column-5">$ <span
-                                                class="total-producto"><?php echo number_format($totalProducto); ?></span>
-                                        </td>
-                                    </tr>
-                                    <!-- Agregar campo oculto para el ID del producto -->
-                                    <input type="hidden" name="producto_ids[]" value="<?php echo $productId; ?>">
-
-                                <?php } ?>
-
-
-
-
-                            </table>
+                            <?php include_once "../web/vista_parcial_carro.php"; ?>
                         </div>
 
                     </div>
@@ -244,6 +166,8 @@ unset($_SESSION['error']);
             </div>
         </div>
     </form>
+
+    <!-- Modal de Confirmación -->
 
 
 

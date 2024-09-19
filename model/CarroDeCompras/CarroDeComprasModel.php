@@ -6,9 +6,8 @@ class CarroDeComprasModel extends MasterModel
 {
     public function guardarProducto($product_id, $carro_id, $cantidad, $color, $talla, $total)
     {
-       
         $sql = "INSERT INTO detalle_carrito (product_id, carro_id, cantidad, color, talla, total)
-        VALUES ($product_id, $carroId, $cantidad, '$color', '$talla', $total)";
+        VALUES ($product_id, $carro_id, $cantidad, '$color', '$talla', $total)";
         $respuesta = $this->consultar($sql);
         return $respuesta;
 
@@ -17,7 +16,6 @@ class CarroDeComprasModel extends MasterModel
 
     public function obtenerIdCarro($usu_id)
     {
-       
         $sql = "SELECT carro_id FROM carrito_compras WHERE usu_id = $usu_id";
         $respuesta = $this->consultar($sql);
 
@@ -36,6 +34,7 @@ class CarroDeComprasModel extends MasterModel
         $sql = "SELECT * FROM detalle_carrito WHERE carro_id = $carro_id";
         $respuesta = $this->consultar($sql);
 
+        // dd($respuesta);
         if ($respuesta) {
             return $respuesta->fetch_all(MYSQLI_ASSOC);
         }
@@ -75,11 +74,11 @@ class CarroDeComprasModel extends MasterModel
 
     public function eliminarProductoCarrito($idProducto)
     {
-        $sql = "DELETE FROM detalle_carrito WHERE product_id = " . $idProducto;
+        $sql = "DELETE FROM detalle_carrito WHERE product_id =$idProducto";
         $respuesta = $this->consultar($sql);
 
         if ($respuesta) {
-            return $respuesta->fetch_all(MYSQLI_ASSOC);
+            return $respuesta;
         }
     }
 
