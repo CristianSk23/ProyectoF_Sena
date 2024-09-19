@@ -75,6 +75,8 @@ class VentaController
                         // Insertar en la tabla producto_venta
                         $sqlProductoVenta = "INSERT INTO producto_venta (stock_id, cantidad_producto, idVenta) VALUES ($stockId, $cantidad, $idVenta)";
                         $resultadoProductoVenta = $obj->insertar($sqlProductoVenta);
+                        $idproducto_venta = $obj->lastInsertId('producto_venta', 'idProducto_venta');
+
 
                         if (!$resultadoProductoVenta) {
                             $_SESSION['error'] = "Error al registrar el producto ID: $productoId.";
@@ -95,6 +97,7 @@ class VentaController
     } else {
         $_SESSION['error'] = "Datos incompletos.";
     }
+    $obj -> actualizarStock($idproducto_venta);
    
     redirect("index.php");
 }
