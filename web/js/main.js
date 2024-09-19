@@ -237,7 +237,7 @@
 
             $input.val("");
             $input.val(suma);
-            console.log("Despues de cargar en la vista " + $input.val());
+
 
         }
     });
@@ -329,10 +329,20 @@
                 type: 'POST',
                 url: url, // Usa la URL definida en el action del formulario
                 data: datos, // Serializa todos los datos del formulario
-                success: function () {
+                success: function (response) {
 
-                    $('#form-agregar-carrito')[0].reset();
-                    $('.js-select2').val('').trigger('change');
+                    let data = JSON.parse(response);
+
+                    if (data.success) {
+                        $('#customMessageModalBody').text(data.message);
+                        $('#customMessageModal').modal('show');
+                        $('#form-agregar-carrito')[0].reset();
+                        $('.js-select2').val('').trigger('change');
+                    } else {
+                        $('#customMessageModalBody').text(data.message);
+                        $('#customMessageModal').modal('show');
+                    }
+
                 },
 
             });
@@ -374,7 +384,7 @@
                         });
 
                         let cantidadProductosUnicos = 0;
-                        // Recorrer los productos y agregar cada uno al carrito
+
                         productos.forEach(function (item) {
                             let producto = item.producto;
                             let stock = item.stock;
@@ -443,32 +453,21 @@
     //* Actualiza el precio total por todos los productos en el detalle del carro de compras:
 
     $(document).ready(function () {
-        /* function actualizarEstadoBotones() {
-            $('.wrap-num-product').each(function () {
-                let inputCantidad = $(this).find('.num-product');
-                let cantidadActual = parseInt(inputCantidad.val());
-                let maxValue = parseInt(inputCantidad.attr('max'));
-                let btnUp = $(this).find('.btn-num-product-up');
 
-                if (!isNaN(cantidadActual) && cantidadActual >= maxValue) {
-                    btnUp.prop('disabled', true); // Deshabilitar el botón
-                } else {
-                    btnUp.prop('disabled', false); // Habilitar el botón
-                }
-            });
-        } */
 
-        $('.aumentar-carro').on('click', function () {
+        $('.aumentar-carro').on('click', function (e) {
             let inputCantidad = $(this).closest('.wrap-num-product').find('.num-product');
             //debugger;
             let cantidadActual = parseInt(inputCantidad.val());
             let maxValue = parseInt(inputCantidad.attr('max'));
+            maxValue = maxValue - 1;
 
 
             if (!isNaN(cantidadActual) && cantidadActual < maxValue) {
-                actualizarTotalProducto(inputCantidad); // Actualizar total para ese producto
-                //actualizarEstadoBotones(); // Actualizar el estado de los botones
+                actualizarTotalProducto(inputCantidad, maxValue);
+
             } else {
+                e.preventDefault();
                 alert('No puedes agregar más productos. Has alcanzado el límite de stock.');
                 return;
             }
@@ -483,14 +482,15 @@
 
             if (!isNaN(cantidadActual) && cantidadActual >= minValue) {
                 actualizarTotalProducto(inputCantidad); // Actualizar total para ese producto
-                //actualizarEstadoBotones(); // Actualizar el estado de los botones
+
             }
         });
 
-        function actualizarTotalProducto(inputCantidad) {
+        function actualizarTotalProducto(inputCantidad, maxValue) {
+
             let cantidad = parseFloat(inputCantidad.val());
 
-            if (!isNaN(cantidad) && cantidad > 0) {
+            if (!isNaN(cantidad) && cantidad > 0 && cantidad < maxValue) {
                 let precio = parseFloat(inputCantidad.closest('tr').find('.precio').data('precio'));
                 let totalProducto = cantidad * precio;
 
@@ -518,7 +518,7 @@
             $('#total-precio').text(totalPrecio.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','));
         }
 
-        //actualizarEstadoBotones();
+
     });
 
 

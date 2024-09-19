@@ -88,7 +88,7 @@ unset($_SESSION['error']);
 
                                     <div class="bor8 bg0 m-b-12">
                                         <input class="stext-111 cl8 plh3 size-111 p-lr-15" type="text" name="state"
-                                            id="valor-envio" placeholder="Valor de Envío" readonly>
+                                            id="valor-envio" placeholder="Valor de Envío">
                                     </div>
 
                                     <div class="bor8 bg0 m-b-22">
@@ -113,8 +113,6 @@ unset($_SESSION['error']);
                                         <input class="stext-111 cl8 plh3 size-111 p-lr-15" type="text" name="cuenta"
                                             placeholder="No.Tarjeta/Cuenta">
                                     </div>
-
-
                                 </div>
                             </div>
                         </div>
@@ -207,7 +205,7 @@ unset($_SESSION['error']);
 
         $(document).ready(function () {
             // Evento para disminuir la cantidad
-            $('.btn-num-product-down').on('click', function () {
+            $('.redicir-carro').on('click', function () {
                 var input = $(this).siblings('.num-product');
                 var cantidad = parseInt(input.val());
                 if (cantidad > 1) {
@@ -216,10 +214,17 @@ unset($_SESSION['error']);
             });
 
             // Evento para aumentar la cantidad
-            $('.btn-num-product-up').on('click', function () {
-                var input = $(this).siblings('.num-product');
-                var cantidad = parseInt(input.val());
-                input.val(cantidad + 1);
+            $('.aumentar-carro').on('click', function () {
+                let input = $(this).siblings('.num-product');
+                console.log(input);
+
+                let numProduct = Number(input.val());
+                let maxStock = Number(input.attr('max'));
+                let maxStockparse = maxStock - 1;
+                if (numProduct < maxStockparse) {
+                    let suma = numProduct + 1;
+                    input.val(suma);
+                }
             });
 
             // Manejo del envío del formulario

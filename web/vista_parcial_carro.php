@@ -45,9 +45,9 @@
 
 
                     <input class="mtext-104 cl3 txt-center num-product" type="number"
-                        data-cantidad="<?php echo $cantidad; ?>" value="<?php echo htmlspecialchars($cantidad) ?>"
+                        data-cantidad="<?php echo $cantidad; ?>" value="<?php echo $cantidad ?>"
                         data-producto-id="<?php echo $producto['product_id']; ?>" min="1"
-                        max="<?php echo $stock['stock_cantidad']; ?>">
+                        max="<?php echo $stock['stock_cantidad']; ?> " id="cantidad" readonly>
 
                     <div class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m aumentar-carro">
                         <i class="fs-16 zmdi zmdi-plus"></i>

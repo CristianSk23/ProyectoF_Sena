@@ -59,3 +59,9 @@
 .dropdown-item:hover {
     background-color: #f8f9fa;
 }
+
+.boton-deshabilitado {
+    pointer-events: none; /* No permite interacción */
+    opacity: 0; /* Opcional: Cambiar la apariencia visual */
+}
+
