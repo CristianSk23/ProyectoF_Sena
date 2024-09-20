@@ -10,7 +10,20 @@ class VentaModel extends MasterModel{
         
          return $respuesta;
         }
+        
+    public function actualizarStock($idproducto_venta){
+
+        $sql = "UPDATE stock SET stock_cantidad = stock_cantidad - ( SELECT cantidad_Producto  FROM producto_venta WHERE idProducto_venta = $idproducto_venta)
+        WHERE stock_id = (SELECT stock_id FROM producto_venta WHERE idProducto_venta = $idproducto_venta)";
+        
+        $respuesta = $this->consultar($sql);
+
+        
+        return $respuesta;
+
     }
+    }
+
 
   
 
