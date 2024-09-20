@@ -320,7 +320,7 @@
             let color = $('#color').val();
             let talla = $('#talla').val();
 
-            // Verifica si color y talla están vacíos
+
             if (!color || !talla) {
                 return;
             }
@@ -331,17 +331,9 @@
                 data: datos, // Serializa todos los datos del formulario
                 success: function (response) {
 
-                    let data = JSON.parse(response);
 
-                    if (data.success) {
-                        $('#customMessageModalBody').text(data.message);
-                        $('#customMessageModal').modal('show');
-                        $('#form-agregar-carrito')[0].reset();
-                        $('.js-select2').val('').trigger('change');
-                    } else {
-                        $('#customMessageModalBody').text(data.message);
-                        $('#customMessageModal').modal('show');
-                    }
+                    $('#form-agregar-carrito')[0].reset();
+                    $('.js-select2').val('').trigger('change');
 
                 },
 
@@ -457,20 +449,42 @@
 
         $('.aumentar-carro').on('click', function (e) {
             let inputCantidad = $(this).closest('.wrap-num-product').find('.num-product');
-            //debugger;
             let cantidadActual = parseInt(inputCantidad.val());
             let maxValue = parseInt(inputCantidad.attr('max'));
             maxValue = maxValue - 1;
 
+            let url = inputCantidad.data('url'); // Obtenemos la URL correcta
+            let productoId = inputCantidad.data('producto-id'); // Obtenemos el ID del producto correcto
+            let colorProd = inputCantidad.data('color'); // Obtenemos el color del producto
+            let tallaProd = inputCantidad.data('talla'); // Obtenemos la talla del producto
+
+
+
 
             if (!isNaN(cantidadActual) && cantidadActual < maxValue) {
-                actualizarTotalProducto(inputCantidad, maxValue);
+                actualizarTotalProducto(inputCantidad);
 
             } else {
                 e.preventDefault();
                 alert('No puedes agregar más productos. Has alcanzado el límite de stock.');
                 return;
             }
+
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: { cantidad: cantidadActual, producto_id: productoId, talla: tallaProd, color: colorProd },
+                /*    success: function (response) {
+   
+                       console.log(response);
+   
+                   }, */
+
+            });
+
+
+
+
         });
 
 
@@ -480,17 +494,37 @@
             let cantidadActual = parseInt(inputCantidad.val());
             let minValue = parseInt(inputCantidad.attr('min'));
 
+
+            let url = inputCantidad.data('url'); // Obtenemos la URL correcta
+            let productoId = inputCantidad.data('producto-id'); // Obtenemos el ID del producto correcto
+            let colorProd = inputCantidad.data('color'); // Obtenemos el color del producto
+            let tallaProd = inputCantidad.data('talla');
+
+
             if (!isNaN(cantidadActual) && cantidadActual >= minValue) {
                 actualizarTotalProducto(inputCantidad); // Actualizar total para ese producto
 
             }
+
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: { cantidad: cantidadActual, producto_id: productoId, talla: tallaProd, color: colorProd },
+                /*    success: function (response) {
+   
+                       console.log(response);
+   
+                   }, */
+
+            });
         });
 
-        function actualizarTotalProducto(inputCantidad, maxValue) {
+        function actualizarTotalProducto(inputCantidad) {
+            console.log("actualizando el total de los productos");
 
             let cantidad = parseFloat(inputCantidad.val());
 
-            if (!isNaN(cantidad) && cantidad > 0 && cantidad < maxValue) {
+            if (!isNaN(cantidad) && cantidad > 0) {
                 let precio = parseFloat(inputCantidad.closest('tr').find('.precio').data('precio'));
                 let totalProducto = cantidad * precio;
 
@@ -662,15 +696,19 @@
 
             let url = $(this).data('url');
             let id = $(this).data('id');
-            let url_carro = $(this).data('url-carro');
+            let colorProd = $(this).data('color');
+            let tallaProd = $(this).data('talla');
+
 
             $.ajax({
                 url: url,
                 type: 'POST',
-                data: { product_id: id },
+                data: { product_id: id, color: colorProd, talla: tallaProd },
                 success: function (response) {
-                    if (response == 1) {
-                        console.log("Producto eliminado:", response);
+
+
+                    if (response) {
+
                         location.reload();
                     }
                 },
@@ -681,14 +719,6 @@
         });
 
 
-        /* function actualizarTotal() {
-            let total = 0;
-            $('.total-producto').each(function () {
-                total += parseFloat($(this).text().replace(/,/g, ''));
-            });
-            $('#total-precio').text(total.toFixed(2));
-            // Actualizar total con envío aquí si es necesario
-        } */
     });
 
 

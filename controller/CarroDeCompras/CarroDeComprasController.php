@@ -50,11 +50,7 @@ class CarroDeComprasController
 
                 $productoExistente = $obj->validarExistenciaProd($product_id, $idParse, $color, $talla);
 
-
-
-
                 if ($productoExistente) {
-
                     $nuevaCantidad = $productoExistente['cantidad'] + $cantidad;
                     $nuevoTotal = $nuevaCantidad * $precio;
 
@@ -203,24 +199,37 @@ class CarroDeComprasController
     public function eliminarProd()
     {
         $obj = new CarroDeComprasModel();
-        if (isset($_POST['product_id'])) {
-            $usu_id = $_SESSION['usu_id'];
+        if (isset($_POST['product_id']) && isset($_POST['color']) && isset($_POST['talla'])) {
             $idProducto = $_POST['product_id'];
-            $eliminar = $obj->eliminarProductoCarrito($idProducto);
+            $color = $_POST['color'];
+            $talla = $_POST['talla'];
+            $idCarro = $_SESSION['carro_id'];
+            $carro_id = (int) $idCarro;
+            $eliminar = $obj->eliminarProductoCarrito($idProducto, $carro_id, $color, $talla);
+
             if ($eliminar == 1) {
                 echo 1;
             } else {
                 echo 2;
-
             }
         }
 
     }
 
 
-    public function actualizarCantidad()
+    public function actualizarCantidadCarro()
     {
-
+        if (isset($_POST['cantidad']) && $_POST['cantidad'] != 0) {
+            $cantidad = $_POST['cantidad'];
+            $producto_id = $_POST['producto_id'];
+            $talla = $_POST['talla'];
+            echo $talla;
+            $color = $_POST['color'];
+            $idCarro = $_SESSION['carro_id'];
+            $carro_id = (int) $idCarro;
+            $obj = new CarroDeComprasModel();
+            $obj->actualizarCantidadCarro($cantidad, $producto_id, $carro_id, $talla, $color);
+        }
 
     }
 
