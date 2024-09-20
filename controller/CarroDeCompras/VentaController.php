@@ -2,13 +2,18 @@
 
 include_once "../model/CarroDeCompras/VentaModel.php";
 
+
 class VentaController
 {
-  
-    public function registroEnvio()
+public function registroEnvio()
 {
     $obj = new VentaModel();
+    $carro_id = $_SESSION['carro_id'];
     
+    if (!isset($_SESSION['mensajes'])) {
+        $_SESSION['mensajes'] = [];
+    }
+    $flag = false;
     // Verifica que los datos existan
     if (isset($_POST['direccion_envio'], $_POST['ciudad'], $_POST['metodo_pago'], $_POST['total_con_envio'], $_POST['cantidad'], $_POST['product_id'])) {
         $direccion = $_POST['direccion_envio'];
@@ -19,16 +24,38 @@ class VentaController
 
         // Validación de dirección
         if (empty($direccion)) {
-            $_SESSION['error'] = "La dirección de envío no puede estar vacía.";
-            return;
+            $_SESSION['mensajes'][] = [
+                'mensaje' => "La dirección de envío no puede estar vacía.",
+                'alert' => "alert-warning"
+            ];
+            
+          $flag = true;
+            
         }
 
         // Validación de ciudad y método de pago
         if ($ciudad <= 0 || $metodo <= 0) {
-            $_SESSION['error'] = "Ciudad y método de pago deben ser válidos.";
-            return;
+            $_SESSION['mensajes'][] = [
+                'mensaje' => "Ciudad y método de pago deben ser válidos.",
+                'alert' => "alert-warning"
+            ];
+        
+            $flag = true;
+            
         }
-
+        if($cuenta <=0){
+            $_SESSION['mensajes'][] = [
+                'mensaje' => "Ingrese un numero de cuenta valido.",
+                'alert' => "alert-warning"
+            ];
+        
+            $flag = true;
+            
+        }
+            if($flag){
+                redirect(getUrl('CarroDeCompras', 'CarroDeCompras', 'obtenerCarroDetalle', array('usu_id' => $_SESSION['usu_id'])));
+                
+            }
         // Insertar el envío
         $sql = "INSERT INTO envio (direccion_envio, ciu_id, idMetodo_pago, numeroCuenta) VALUES ('$direccion', $ciudad, $metodo, '$cuenta')";
         $resultado = $obj->insertar($sql);
@@ -39,7 +66,11 @@ class VentaController
 
             // Validación del total
             if ($total <= 0) {
-                $_SESSION['error'] = "El total debe ser un valor positivo.";
+                $_SESSION['mensajes'][] = [
+                    'mensaje' => "El total debe ser un valor positivo.",
+                    'alert' => "alert-warning"
+                ];
+             
                 return;
             }
 
@@ -60,6 +91,7 @@ class VentaController
 
                     // Validación de cantidad
                     if ($cantidad <= 0) {
+                        
                         $_SESSION['error'] = "La cantidad para el producto ID: $productoId debe ser un valor positivo.";
                         return;
                     }
@@ -87,7 +119,8 @@ class VentaController
                         return; // Salir de la función si no se encuentra el stock
                     }
                 }
-                
+                $obj -> actualizarStock($idproducto_venta);
+            
             } else {
                 $_SESSION['error'] = "Error al registrar la venta.";
             }
@@ -95,13 +128,50 @@ class VentaController
             $_SESSION['error'] = "Error al registrar el envío.";
         }
     } else {
-        $_SESSION['error'] = "Datos incompletos.";
-    }
-    $obj -> actualizarStock($idproducto_venta);
+        $_SESSION['mensajes'][] = [
+            'mensaje' => "Todos los campos deben estar diligenciados",
+            'alert' => "alert-warning"
+        ];
+     
    
-    redirect("index.php");
+     
+    }
+
+    $_SESSION['mensajes'][] = [
+        'mensaje' => "¡La compra se realizo con exito!",
+        'alert' => "alert-success"
+    ];
+
+    $obj->limpiarCarrito($carro_id);
+
+    redirect(getUrl('CarroDeCompras', 'CarroDeCompras', 'obtenerCarroDetalle', array('usu_id' => $_SESSION['usu_id'])));
+   
+    
 }
- 
+
+public function compras() {
+    $obj = new VentaModel();
+    $usu_id = $_SESSION['usu_id'];
+
+    // Captura el historial de compras
+    $historial = $obj->historialCompras($usu_id);
+    //dd($historial);
+    // Asegúrate de que la ruta a tu vista es correcta
+    include_once '../view/configuracion/clientes/ViewVenta.php';
+}
+
+public function imprimir(){
+    $idVenta = $_GET['idVenta'];
+    $obj = new VentaModel();
+    $respuesta = array(); // Inicializar el array
+
+    $respuesta['factura'] = $obj->getFActura($idVenta);
+    $respuesta['usuario'] = $obj->getUsuario($idVenta);
+    $respuesta['productos'] = $obj->productos($idVenta);
+    //dd($respuesta);
+    include_once '../view/ventas/imprimir.php';
+
+}
 
   
 }

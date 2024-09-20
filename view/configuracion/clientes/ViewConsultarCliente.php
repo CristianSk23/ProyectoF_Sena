@@ -41,6 +41,9 @@
                     <button  id="btnCambioClave" class="btn btn-primary">
                         Cambiar Contraseña
                     </button>
+                    <button  id="btnConsultaCompra" class="btn btn-primary">
+                        Consultar Compras
+                    </button>
                 </div>
             </div>
         <?php endforeach; ?>
@@ -102,7 +105,9 @@
         window.location.href = '<?php echo getUrl("Configuracion", "Usuario", "postActualizarClave"); ?>';
     });
 
-
+    document.getElementById('btnConsultaCompra').addEventListener('click', function() {
+        window.location.href = '<?php echo getUrl("CarroDeCompras", "Venta", "compras"); ?>';
+    });
 
 
     var headerDesktop = $('.container-menu-desktop');

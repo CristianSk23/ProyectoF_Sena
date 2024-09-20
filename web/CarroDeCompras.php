@@ -1,26 +1,30 @@
 <TITle>Carro de compras</TITle>
+
 <?php
 include_once "../view/partials/header.php";
 
 ?>
 
-<?php
-if (isset($_SESSION['error'])) {
-    ?>
-    <div class="alert">
-        <div class='alert alert-danger' role="alert">
-            <?php echo $_SESSION['error']; ?>
-        </div>
-    </div>
-<?php } ?>
-<?php
-unset($_SESSION['error']);
-?>
-
 <body class="animsition">
+
+
     <!-- Shoping Cart -->
     <form class="bg0 p-t-75 p-b-85" action="<?php echo getUrl('CarroDeCompras', 'Venta', 'registroEnvio'); ?>"
         method="POST">
+        <?php
+        if (isset($_SESSION['mensajes']) && !empty($_SESSION['mensajes'])) {
+            foreach ($_SESSION['mensajes'] as $msg) {
+        ?>
+                <div class="alert">
+                    <div class='alert <?= $msg['alert'] ?>' role="alert">
+                        <?= $msg['mensaje'] ?>
+                    </div>
+                </div>
+            <?php } ?>
+        <?php
+            unset($_SESSION['mensajes']);
+        }
+        ?>
 
         <div class="container">
             <div class="row">
@@ -134,8 +138,7 @@ unset($_SESSION['error']);
                         </div>
 
                         <button type="submit"
-                            class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer"
-                            data-toggle="modal" data-target="#exampleModal">
+                            class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer">
                             Finalizar Compra
                         </button>
                     </div>
@@ -193,7 +196,7 @@ unset($_SESSION['error']);
     <!--===============================================================================================-->
     <script src="vendor/select2/select2.min.js"></script>
     <script>
-        $(".js-select2").each(function () {
+        $(".js-select2").each(function() {
             $(this).select2({
                 minimumResultsForSearch: 20,
                 dropdownParent: $(this).next('.dropDownSelect2')
@@ -203,9 +206,9 @@ unset($_SESSION['error']);
 
 
 
-        $(document).ready(function () {
+        $(document).ready(function() {
             // Evento para disminuir la cantidad
-            $('.redicir-carro').on('click', function () {
+            $('.redicir-carro').on('click', function() {
                 var input = $(this).siblings('.num-product');
                 var cantidad = parseInt(input.val());
                 if (cantidad > 1) {
@@ -214,7 +217,7 @@ unset($_SESSION['error']);
             });
 
             // Evento para aumentar la cantidad
-            $('.aumentar-carro').on('click', function () {
+            $('.aumentar-carro').on('click', function() {
                 let input = $(this).siblings('.num-product');
                 console.log(input);
 
@@ -228,7 +231,7 @@ unset($_SESSION['error']);
             });
 
             // Manejo del envío del formulario
-            $('form').on('submit', function (event) {
+            $('form').on('submit', function(event) {
                 // Prevenir el envío del formulario por defecto
                 event.preventDefault();
 
@@ -236,7 +239,7 @@ unset($_SESSION['error']);
                 $('.cantidad-hidden').remove(); // Remover campos ocultos previos
 
                 // Iterar sobre los inputs de cantidad
-                $('.num-product').each(function () {
+                $('.num-product').each(function() {
                     // Obtener el valor de cantidad
                     let cantidad = $(this).val();
                     // Obtener el id del producto
@@ -268,7 +271,7 @@ unset($_SESSION['error']);
     <!--===============================================================================================-->
     <script src="vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
     <script>
-        $('.js-pscroll').each(function () {
+        $('.js-pscroll').each(function() {
             $(this).css('position', 'relative');
             $(this).css('overflow', 'hidden');
             var ps = new PerfectScrollbar(this, {
@@ -277,7 +280,7 @@ unset($_SESSION['error']);
                 wheelPropagation: false,
             });
 
-            $(window).on('resize', function () {
+            $(window).on('resize', function() {
                 ps.update();
             })
         });

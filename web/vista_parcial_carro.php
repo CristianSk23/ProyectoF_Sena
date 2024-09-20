@@ -1,3 +1,4 @@
+
 <table class="table-shopping-cart">
     <tr class="table_head">
         <th class="column-1">Producto</th>
@@ -26,7 +27,7 @@
 
         $totalProducto = $precio * $cantidad;
         $total += $totalProducto;
-        ?>
+    ?>
 
         <tr class="table_row">
             <td class="column-1">

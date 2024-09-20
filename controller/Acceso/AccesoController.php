@@ -36,7 +36,7 @@ class AccesoController
                 //dd($_SESSION['usu_id']);
                 $carrito = $objC->obtenerIdCarro($usuario['usu_id']);
                 $_SESSION['carro_id'] = $carrito['carro_id'];
-                var_dump($_SESSION['usu_id']);
+               
                 redirect("index.php");
             } else {
                 // Si no hay coincidencias, muestra un mensaje de error

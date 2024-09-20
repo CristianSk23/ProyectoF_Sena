@@ -137,7 +137,7 @@ class CarroDeComprasController
             $obj = new CarroDeComprasModel();
             $objProd = new ProductosModel();
             $objMetodo = new VentaModel();
-            $carro_id = $obj->obtenerIdCarro($usu_id);
+            $carro_id= $obj->obtenerIdCarro($usu_id);
             $ciudades = $obj->getCiudades();
             $metodos = $objMetodo->getMetodoPago();
             $productoDetalle = [];
@@ -216,15 +216,6 @@ class CarroDeComprasController
         }
 
     }
-
-
-    public function actualizarCantidad()
-    {
-
-
-    }
-
-
 
 }
 
