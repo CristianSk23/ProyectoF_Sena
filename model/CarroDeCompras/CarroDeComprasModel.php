@@ -72,11 +72,12 @@ class CarroDeComprasModel extends MasterModel
         }
     }
 
-    public function eliminarProductoCarrito($idProducto)
+    public function eliminarProductoCarrito($idProducto, $carro_id, $color, $talla)
     {
-        $sql = "DELETE FROM detalle_carrito WHERE product_id =$idProducto";
-        $respuesta = $this->consultar($sql);
 
+        //echo "Lo que Llega por POST " . " CARRO_ID " . $carro_id;
+        $sql = "DELETE FROM detalle_carrito WHERE product_id =$idProducto AND carro_id =$carro_id AND color='$color' AND talla='$talla'";
+        $respuesta = $this->consultar($sql);
         if ($respuesta) {
             return $respuesta;
         }
@@ -98,14 +99,23 @@ class CarroDeComprasModel extends MasterModel
     }
     public function actualizarCantidadProducto($product_id, $carro_id, $nuevaCantidad, $nuevoTotal)
     {
-        $sql = "UPDATE detalle_carrito SET cantidad = $nuevaCantidad, total = $nuevoTotal WHERE product_id = $product_id AND carroId =  $carro_id ";
+        $sql = "UPDATE detalle_carrito SET cantidad =$nuevaCantidad, total =$nuevoTotal WHERE product_id =$product_id AND carro_id =$carro_id ";
         $respuesta = $this->consultar($sql);
 
         if ($respuesta) {
-            return $respuesta->fetch_assoc();
+            return $respuesta;
         }
+    }
 
 
+    public function actualizarCantidadCarro($cantidadNueva, $idProducto, $carroId, $talla, $color)
+    {
+        $sql = "UPDATE detalle_carrito SET cantidad=$cantidadNueva WHERE product_id=$idProducto AND carro_id=$carroId AND talla='$talla' AND color='$color'";
+        $respuesta = $this->consultar($sql);
+
+        if ($respuesta) {
+            return $respuesta;
+        }
     }
 
 

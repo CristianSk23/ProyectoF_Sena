@@ -208,7 +208,7 @@ include_once "../view/partials/header.php";
 
         $(document).ready(function() {
             // Evento para disminuir la cantidad
-            $('.redicir-carro').on('click', function() {
+            $('.reducir-carro').on('click', function () {
                 var input = $(this).siblings('.num-product');
                 var cantidad = parseInt(input.val());
                 if (cantidad > 1) {
