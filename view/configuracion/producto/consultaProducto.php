@@ -3,7 +3,28 @@
     <div class="mt-5">
         <h4 class="display-4">Consulta Productos</h4>
     </div>
+  
     <div class="row mt-12">
+
+    <br>
+        <?php
+            if (isset($_SESSION['mensajes']) && !empty($_SESSION['mensajes'])) {
+                foreach ($_SESSION['mensajes'] as $msg) {
+            ?>
+                    <div class="alert">
+                        <div class="alert <?= $msg['alert'] ?> alert-dismissible fade show col-md-12" role="alert">
+                            <?= $msg['mensaje'] ?>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    </div>
+                <?php } 
+            
+                unset($_SESSION['mensajes']);
+                
+            }
+            
+            ?>
+        <br>
 
         <table class="table  table-bordered " id="tablaUsuario">
             <thead>
@@ -57,6 +78,43 @@
     </div>
 </div>
 <script>
+
+    // Inicializar DataTable con opciones personalizadas
+    var tabla = document.querySelector("#tablaUsuario");
+    var dataTable = new DataTable(tabla, {
+        paging: true,
+        ordering: true,
+        searching: true,
+        autoWidth: false, // Desactiva el ajuste automático de ancho
+        columnDefs: [{
+                width: "40%",
+                targets: 0
+            }, // Establece el ancho de la columna 'Nombre de producto'
+            {
+                width: "10%",
+                targets: 1
+            }, // Establece el ancho de la columna 'Talla'
+            {
+                width: "15%",
+                targets: 2
+            }, // Establece el ancho de la columna 'Color prenda'
+            {
+                width: "10%",
+                targets: 3
+            }, // Establece el ancho de la columna 'Precio'
+            {
+                width: "5%",
+                targets: 4
+            }, // Establece el ancho de la columna 'Cantidad'
+            {
+                width: "10%",
+                targets: 5
+            } // Establece el ancho de la columna 'Acciones de edición'
+        ]
+    });
+
+
+
     var headerDesktop = $('.container-menu-desktop');
     var wrapMenu = $('.wrap-menu-desktop');
 
@@ -85,3 +143,33 @@
         }
     });
 </script>
+
+<!-- CSS personalizado -->
+<style>
+    /* Ajustar el borde del buscador */
+    .dataTables_filter input {
+        border: 1px solid #ced4da;
+        /* Borde personalizado */
+        border-radius: 4px;
+        /* Bordes redondeados */
+        padding: 0.375rem 0.75rem;
+        /* Espaciado interno */
+        width: 100%;
+        /* Ancho del buscador */
+    }
+
+    /* Ajuste de las celdas para que los títulos queden en una sola línea */
+    th {
+        white-space: nowrap;
+        /* Evita que los títulos de las columnas se dividan en varias líneas */
+    }
+
+    /* Ajuste del ancho mínimo de las columnas */
+    table#tablaStock th,
+    table#tablaStock td {
+        min-width: 178px;
+        /* Ancho mínimo de las celdas */
+        text-align: center;
+        /* Centra el texto de las columnas */
+    }
+</style>

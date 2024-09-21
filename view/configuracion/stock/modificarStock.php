@@ -5,7 +5,25 @@
 
     <?php foreach ($stocks as $stock): ?>
         <form class="row g-3 mt-5" method="post" action="<?php echo getUrl("Configuracion", "Stock", "modificacion") ?>">
-
+        <br>
+        <?php
+            if (isset($_SESSION['mensajes']) && !empty($_SESSION['mensajes'])) {
+                foreach ($_SESSION['mensajes'] as $msg) {
+            ?>
+                    <div class="alert">
+                        <div class="alert <?= $msg['alert'] ?> alert-dismissible fade show col-md-12" role="alert">
+                            <?= $msg['mensaje'] ?>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    </div>
+                <?php } 
+            
+                unset($_SESSION['mensajes']);
+                
+            }
+            
+            ?>
+        <br>
             <!-- Nombre de prenda -->
             <div class="form-group col-md-4">
                 <label for="nombrePrenda">Nombre de prenda</label>
@@ -23,7 +41,7 @@
             <div class="form-group col-md-4">
                 <label for="talla">Talla</label>
                 <select class="form-control" name="talla">
-                    <option value="0"><?= $stock['stock_talla']; ?></option>
+                    <option value="<?= $stock['stock_talla']; ?>"><?= $stock['stock_talla']; ?></option>
                     <option>S</option>
                     <option>M</option>
                     <option>L</option>

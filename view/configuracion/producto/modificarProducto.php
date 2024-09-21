@@ -2,6 +2,25 @@
     <div class="mt-5">
         <h4 class="display-4">Editar Producto</h4>
     </div>
+    <br>
+        <?php
+            if (isset($_SESSION['mensajes']) && !empty($_SESSION['mensajes'])) {
+                foreach ($_SESSION['mensajes'] as $msg) {
+            ?>
+                    <div class="alert">
+                        <div class="alert <?= $msg['alert'] ?> alert-dismissible fade show col-md-12" role="alert">
+                            <?= $msg['mensaje'] ?>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    </div>
+                <?php } 
+            
+                unset($_SESSION['mensajes']);
+                
+            }
+            
+            ?>
+        <br>
     <?php foreach ($productos as $producto): ?>
 
         <form class="row g-3 mt-5" method="post" action="<?php echo getUrl("Configuracion", "Producto", "modificacion", array("product_id" => $producto['product_id'])); ?>" enctype="multipart/form-data">

@@ -2,6 +2,46 @@
     <div class="mt-5">
         <h4 class="display-4">Registrar Stock</h4>
     </div>
+
+    <br>
+    <?php
+        // Comprobar si hay mensajes de error en la sesión
+        if (isset($_SESSION['mensajes']['errores']) && !empty($_SESSION['mensajes']['errores'])) {
+            foreach ($_SESSION['mensajes']['errores'] as $error) {
+        ?>
+                <div class="alert alert-danger alert-dismissible fade show col-md-12" role="alert">
+                    <?= $error ?>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+        <?php
+            }
+            // Limpiar los mensajes de la sesión
+            unset($_SESSION['mensajes']['errores']);
+        }
+?>
+        <br>
+
+        <br>
+        <?php
+            if (isset($_SESSION['mensajes']) && !empty($_SESSION['mensajes'])) {
+                foreach ($_SESSION['mensajes'] as $msg) {
+            ?>
+                    <div class="alert">
+                        <div class="alert <?= $msg['alert'] ?> alert-dismissible fade show col-md-12" role="alert">
+                            <?= $msg['mensaje'] ?>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    </div>
+                <?php } 
+            
+                unset($_SESSION['mensajes']);
+                
+            }
+            
+            ?>
+        <br>
+
+        
     <form id="formulario" class="row g-3 mt-3" method="post" action="<?php echo getUrl("Configuracion", "Stock", "postInsert"); ?>" enctype="multipart/form-data">
         <input type="hidden" id="datos-organizados" name="datos-organizados">
         <div class="container">

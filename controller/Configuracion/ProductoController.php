@@ -22,6 +22,7 @@ class ProductoController
 
         $obj = new ProductoModel();
         $obj2 = new ProductoModel();
+        
 
         $nombre = $_POST['nombreProducto'];
         $descripcion = $_POST['descripcionProducto'];
@@ -34,13 +35,28 @@ class ProductoController
             empty($nombre) || empty($descripcion) || empty($categoria) || empty($genero)
             || empty($tipo)
         ) {
-            $_SESSION['datosIncorrectos'] = "Por favor complete el formulario.";
+            $_SESSION['mensajes'][] = [
+                'mensaje' => "Por favor complete el formulario.",
+                'alert' => "alert-warning"
+            ];
             redirect(getUrl("Configuracion", "Producto", "getInsert"));
         }
 
         //dd($_FILES['stock_img']);
 
+        //validar nombre del producto
 
+        $validacionNommbre = $obj->validarNombre($nombre);
+
+        if ($validacionNommbre == 1) {
+            $_SESSION['mensajes'][] = [
+                'mensaje' => "El nombre del producto ingresado ya se encuentra registrado.",
+                'alert' => "alert-warning"
+            ];
+            redirect(getUrl("Configuracion", "Producto", "getInsert"));
+        }
+
+        
         $sql = "INSERT INTO producto VALUES(null, '$tipo','$nombre', '$descripcion', 
         '$genero', '$categoria', 1 )";
         echo $sql;
@@ -67,14 +83,20 @@ class ProductoController
 
                 // Validar tipo de archivo
                 if (!in_array($file_type, $allowed_types)) {
-                    $_SESSION['error'] = "El tipo de archivo no es válido. Solo se permiten JPEG, PNG o GIF.";
+                    $_SESSION['mensajes'][] = [
+                        'mensaje' => "El tipo de archivo no es válido. Solo se permiten JPEG, PNG o GIF.",
+                        'alert' => "alert-warning"
+                    ];
                     redirect(getUrl("Configuracion", "Producto", "getInsert"));
                     exit;
                 }
 
                 // Validar tamaño del archivo
                 if ($file_size > $max_size) {
-                    $_SESSION['error'] = "El tamaño del archivo es demasiado grande. El límite es 2 MB.";
+                    $_SESSION['mensajes'][] = [
+                        'mensaje' => "El tamaño del archivo es demasiado grande. El límite es 2 MB.",
+                        'alert' => "alert-warning"
+                    ];
                     redirect(getUrl("Configuracion", "Producto", "getInsert"));
                     exit;
                 }
@@ -87,10 +109,19 @@ class ProductoController
                 $ejecutar2 = $obj2->insertar($sql2);
 
             }
+            $_SESSION['mensajes'][] = [
+                'mensaje' => "El producto se ha registrado con éxito.",
+                'alert' => "alert-success"
+            ];
             redirect(getUrl("Configuracion", "Producto", "getInsert"));
-            $_SESSION['success'] = "Registro exitoso.";
+                    
         } else {
-            $_SESSION['error'] = "Error al registrar el producto. Inténtalo de nuevo.";
+            $_SESSION['mensajes'][] = [
+                'mensaje' => "Error al registrar el producto, inténtelo de nuevo.",
+                'alert' => "alert-warning"
+            ];
+            redirect(getUrl("Configuracion", "Producto", "getInsert"));
+                
         }
     }
 
@@ -107,12 +138,7 @@ class ProductoController
     }
 
 
-    public function validarNombre($nombre)
-    {
-        $obj = new ProductoModel();
-
-        $sql = "SELECT * FROM producto WHERE product_nombre = $nombre";
-    }
+    
 
     public function obtenerCategorias()
     {
@@ -225,7 +251,10 @@ class ProductoController
             empty($id) || empty($descripcion) || empty($categoria) || empty($genero)
             || empty($tipo)
         ) {
-            $_SESSION['datosIncorrectos'] = "Por favor complete el formulario.";
+            $_SESSION['mensajes'][] = [
+                'mensaje' => "Por favor complete el formulario.",
+                'alert' => "alert-warning"
+            ];
             redirect(getUrl("Configuracion", "Producto", "modificar", array("product_id" => $id)));
         }
 
@@ -255,14 +284,20 @@ class ProductoController
 
                 // Validar tipo de archivo
                 if (!in_array($file_type, $allowed_types)) {
-                    $_SESSION['error'] = "El tipo de archivo no es válido. Solo se permiten JPEG, PNG o GIF.";
+                    $_SESSION['mensajes'][] = [
+                        'mensaje' => "El tipo de archivo no es válido. Solo se permiten JPEG, PNG o GIF.",
+                        'alert' => "alert-warning"
+                    ];
                     redirect(getUrl("Configuracion", "Producto", "modificar", array("product_id" => $id)));
                     exit;
                 }
 
                 // Validar tamaño del archivo
                 if ($file_size > $max_size) {
-                    $_SESSION['error'] = "El tamaño del archivo es demasiado grande. El límite es 2 MB.";
+                    $_SESSION['mensajes'][] = [
+                        'mensaje' => "El tamaño del archivo es demasiado grande. El límite es 2 MB.",
+                        'alert' => "alert-warning"
+                    ];
                     redirect(getUrl("Configuracion", "Producto", "modificar", array("product_id" => $id)));
                     exit;
                 }
@@ -273,13 +308,34 @@ class ProductoController
                     move_uploaded_file($nombre, $ruta);
                     $sql2 = "INSERT INTO fotos VALUES(null, '$ruta','$id', 1)";
                     $ejecutar2 = $obj2->insertar($sql2);
+
+                    if ($ejecutar2) {
+                        $_SESSION['mensajes'][] = [
+                            'mensaje' => "La modificación ha sido exitosa",
+                            'alert' => "alert-success"
+                        ];
+                        redirect(getUrl("Configuracion", "Producto", "consultar"));
+                    }
                 }
 
 
             }
         }
-        redirect(getUrl("Configuracion", "Producto", "consultar"));
-        $_SESSION['success'] = "Registro exitoso.";
+        if ($ejecutar) {
+            $_SESSION['mensajes'][] = [
+                'mensaje' => "La modificación ha sido exitosa y las imágnes del producto se han mantenido.",
+                'alert' => "alert-success"
+            ];
+            redirect(getUrl("Configuracion", "Producto", "consultar"));
+        }else {
+            $_SESSION['mensajes'][] = [
+            'mensaje' => "Error al modificar el producto, inténtelo de nuevo.",
+            'alert' => "alert-warning"
+        ];
+        redirect(getUrl("Configuracion", "Producto", "modificar", array("product_id" => $id)));
+
+        }
+        
 
 
     }
@@ -292,10 +348,11 @@ class ProductoController
         $sql = "UPDATE producto SET product_estado = 0 WHERE product_id =$id";
         $ejecutar = $obj->editar($sql);
         if ($ejecutar) {
-            echo 1;
-        } else {
-            echo 2;
-        }
+            $_SESSION['mensajes'][] = [
+                'mensaje' => "El producto ha sido eliminado.",
+                'alert' => "alert-danger"
+            ];
+        } 
     }
 
     public function EliminarFotos($id)

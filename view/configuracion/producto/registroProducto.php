@@ -2,6 +2,25 @@
     <div class="mt-5">
         <h4 class="display-4">Registrar Producto</h4>
     </div>
+    <br>
+        <?php
+            if (isset($_SESSION['mensajes']) && !empty($_SESSION['mensajes'])) {
+                foreach ($_SESSION['mensajes'] as $msg) {
+            ?>
+                    <div class="alert">
+                        <div class="alert <?= $msg['alert'] ?> alert-dismissible fade show col-md-12" role="alert">
+                            <?= $msg['mensaje'] ?>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    </div>
+                <?php } 
+            
+                unset($_SESSION['mensajes']);
+                
+            }
+            
+            ?>
+        <br>
     <form class="row g-3 mt-5" method="post" action="<?php echo getUrl('Configuracion', 'Producto', 'postInsert'); ?>" enctype="multipart/form-data">
 
 
@@ -58,18 +77,6 @@
             <label for="imagen">Agregar fotos del producto</label>
             <input type="file" class="form-control" name="stock_img[]" id="imageInput" multiple>
         </div>
-
-        <br>
-        <?php if (isset($_SESSION['datosIncorrectos'])): ?>
-            <div class="alert alert-danger alert-dismissible fade show col-md-12" role="alert">
-                <?= $_SESSION['datosIncorrectos'] ?>
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        <?php
-            unset($_SESSION['datosIncorrectos']);
-        endif;
-        ?>
-        <br>
 
         <!-- Botón de Registro -->
         <div class="col-12 mt-4">

@@ -3,6 +3,25 @@
         <h4 class="display-4">Consulta Stock</h4>
     </div>
     <div class="row mt-12">
+    <br>
+        <?php
+            if (isset($_SESSION['mensajes']) && !empty($_SESSION['mensajes'])) {
+                foreach ($_SESSION['mensajes'] as $msg) {
+            ?>
+                    <div class="alert">
+                        <div class="alert <?= $msg['alert'] ?> alert-dismissible fade show col-md-12" role="alert">
+                            <?= $msg['mensaje'] ?>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    </div>
+                <?php } 
+            
+                unset($_SESSION['mensajes']);
+                
+            }
+            
+            ?>
+        <br>
         <table class="table table-bordered" id="tablaStock">
             <thead>
                 <tr>
@@ -42,10 +61,6 @@
                 <?php endif; ?>
             </tbody>
         </table>
-
-        <div class="alert alert-success messageSuccess" style="display:none" role="alert">
-            El registro se eliminó con éxito.
-        </div>
     </div>
 </div>
 
@@ -121,11 +136,11 @@
 <style>
     /* Ajustar el borde del buscador */
     .dataTables_filter input {
-        border: 1px solid #ced4da;
+        border: 3px solid #000000;
         /* Borde personalizado */
         border-radius: 4px;
         /* Bordes redondeados */
-        padding: 0.375rem 0.75rem;
+        padding: 10px 10px;
         /* Espaciado interno */
         width: 100%;
         /* Ancho del buscador */
